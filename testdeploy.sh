@@ -1,1 +1,1 @@
-aws s3 sync static/ s3://test.drfriendless.com --acl public-read
+aws s3 sync staging/ s3://test.drfriendless.com --acl public-read

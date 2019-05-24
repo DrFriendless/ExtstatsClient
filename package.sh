@@ -7,7 +7,7 @@ cp -R src/json staging
 cp src/*.txt staging
 cp src/*.css staging
 cp -R static/* staging
-cd gatsby-site
+cd gatsby
 npm run build
 rm public/*.js
 rm public/*.js.map
