@@ -4,14 +4,13 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import ExtstatsNavbar from "../components/navbar/extstatsNavbar";
 import GeekWidget from "../components/geekWidget";
-import LoginButton from "../components/login/loginButton";
+import PageTitleWithLogin from "../components/pageTitleWithLogin"
 
 function GeekPage(props) {
   return (<Layout>
       <SEO title="Geek Home" keywords={[`board`, `games`, `statistics`]}/>
       <ExtstatsNavbar/>
-      <LoginButton/>
-      <h1>Geek Home</h1>
+      <PageTitleWithLogin title="Geek Home"/>
       <GeekWidget/>
     </Layout>
   );

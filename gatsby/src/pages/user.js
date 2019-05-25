@@ -4,13 +4,13 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import ExtstatsNavbar from "../components/navbar/extstatsNavbar";
 import UserWidget from "../components/userWidget";
-import LoginButton from "../components/login/loginButton";
+import PageTitle from "../components/pageTitle"
 
 function UserPage(props) {
   return (<Layout>
-      <SEO title="Rankings" keywords={[`board`, `games`, `statistics`]}/>
+      <SEO title="User Page" keywords={[`board`, `games`, `statistics`]}/>
       <ExtstatsNavbar/>
-      <h1>Selector Test</h1>
+      <PageTitle title="User Page"/>
       <UserWidget/>
     </Layout>
   );

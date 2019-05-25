@@ -4,14 +4,13 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import ExtstatsNavbar from "../components/navbar/extstatsNavbar";
 import RankingsWidget from "../components/rankingsWidget";
-import LoginButton from "../components/login/loginButton";
+import PageTitleWithLogin from "../components/pageTitleWithLogin"
 
 function RankingsPage(props) {
   return (<Layout>
       <SEO title="Rankings" keywords={[`board`, `games`, `statistics`, `rankings`]}/>
       <ExtstatsNavbar/>
-      <LoginButton/>
-      <h1>Game Rankings</h1>
+      <PageTitleWithLogin title="Game Rankings"/>
       <RankingsWidget/>
     </Layout>
   );

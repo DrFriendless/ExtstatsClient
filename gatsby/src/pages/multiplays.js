@@ -4,14 +4,13 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import ExtstatsNavbar from "../components/navbar/extstatsNavbar";
 import MultiPlaysWidget from "../components/multiplaysWidget";
-import LoginButton from "../components/login/loginButton";
+import PageTitleWithLogin from "../components/pageTitleWithLogin"
 
 function MultiPlaysPage(props) {
   return (<Layout>
       <SEO title="Comparative Plays" keywords={[`board`, `games`, `statistics`, `plays`]}/>
       <ExtstatsNavbar/>
-      <LoginButton/>
-      <h1>Comparative Plays</h1>
+      <PageTitleWithLogin title="Comparative Plays"/>
       <MultiPlaysWidget/>
     </Layout>
   );
