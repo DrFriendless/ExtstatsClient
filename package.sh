@@ -2,10 +2,7 @@
 
 mkdir -p staging
 rm -rf staging/*
-cp -R src/img staging
-cp -R src/json staging
-cp src/*.txt staging
-cp src/*.css staging
+cp -R src/* staging
 cp -R static/* staging
 cd gatsby
 npm run build
