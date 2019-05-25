@@ -11,7 +11,8 @@ class ExtstatsNavbar extends Component {
     ]};
   private devMenu: SubMenu = { name: 'Developer', style: 'nav-github', items: [
       { link: "https://github.com/DrFriendless/ExtendedStatsServerless", name: "GitHub"},
-      { link: "https://github.com/DrFriendless/ExtendedStatsServerless/blob/master/misc/Dev%20Doco.pdf", name: "Dev Doc" }
+      { link: "https://github.com/DrFriendless/ExtendedStatsServerless/blob/master/misc/Dev%20Doco.pdf", name: "Dev Doc" },
+      { link: "admin.html", name: "Admin" }
     ]};
 
   render() {
