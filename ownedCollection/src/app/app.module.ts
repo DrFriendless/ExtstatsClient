@@ -9,13 +9,17 @@ import { UserOwnedComponent } from './app.component';
 import { OwnedByPublishedYearComponent } from './owned-by-published-year/owned-by-published-year.component';
 import { RatingsOfOwnedGamesComponent } from './ratings-of-owned-games/ratings-of-owned-games.component';
 import { BggRatingsOfOwnedGamesComponent } from './bgg-ratings-of-owned-games/bgg-ratings-of-owned-games.component';
+import { PlaysOfGamesOwnedComponent } from './plays-of-games-owned/plays-of-games-owned.component';
+import { PogoTableComponent } from './pogo-table/pogo-table.component';
 
 @NgModule({
   declarations: [
     UserOwnedComponent,
     OwnedByPublishedYearComponent,
     RatingsOfOwnedGamesComponent,
-    BggRatingsOfOwnedGamesComponent
+    BggRatingsOfOwnedGamesComponent,
+    PlaysOfGamesOwnedComponent,
+    PogoTableComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule, FormsModule

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { DataSourceComponent, UserDataService } from "extstats-angular";
-import { Collection } from "extstats-core";
+import { CollectionWithPlays } from "extstats-core";
 
 @Component({
   selector: 'owned-collection',
   templateUrl: './app.component.html'
 })
-export class UserOwnedComponent extends DataSourceComponent<Collection> {
+export class UserOwnedComponent extends DataSourceComponent<CollectionWithPlays> {
   private static DEFAULT_SELECTOR = "owned(ME)";
 
   constructor(http: HttpClient, userDataService: UserDataService) {
@@ -19,7 +19,7 @@ export class UserOwnedComponent extends DataSourceComponent<Collection> {
   }
 
   protected getQueryResultFormat(): string {
-    return "Collection";
+    return "CollectionWithPlays";
   }
 
   protected getQueryVariables(): { [p: string]: string } {

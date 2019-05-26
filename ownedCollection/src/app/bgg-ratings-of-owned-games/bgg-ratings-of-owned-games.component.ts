@@ -8,7 +8,7 @@ import embed from "vega-embed";
   selector: 'bgg-ratings-owned',
   templateUrl: './bgg-ratings-of-owned-games.component.html'
 })
-export class BggRatingsOfOwnedGamesComponent extends DataViewComponent<Collection> {
+export class BggRatingsOfOwnedGamesComponent<C extends Collection> extends DataViewComponent<C> {
   @ViewChild('target') target: ElementRef;
   public rows = [];
   private readonly ALDIES_COLOURS = [
@@ -30,7 +30,8 @@ export class BggRatingsOfOwnedGamesComponent extends DataViewComponent<Collectio
     };
   }
 
-  protected processData(collection: Collection) {
+  protected processData(collection: C) {
+    if (!collection || !collection.collection) return;
     const data = this.emptyData();
     const gamesIndex = makeGamesIndex(collection.games);
     collection.collection.forEach(gg => {

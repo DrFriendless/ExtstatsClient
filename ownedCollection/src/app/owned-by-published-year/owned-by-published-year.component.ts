@@ -8,7 +8,7 @@ import embed from "vega-embed";
   selector: 'owned-by-year-graph',
   templateUrl: './owned-by-published-year.component.html'
 })
-export class OwnedByPublishedYearComponent extends DataViewComponent<Collection> {
+export class OwnedByPublishedYearComponent<C extends Collection> extends DataViewComponent<C> {
   @ViewChild('target') target: ElementRef;
   public rows = [];
   private startYear = 1995;
@@ -43,7 +43,8 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Collection>
     return rating;
   }
 
-  protected processData(collection: Collection) {
+  protected processData(collection: C) {
+    if (!collection || !collection.collection) return;
     const data = this.emptyData();
     const gamesIndex = makeGamesIndex(collection.games);
     collection.collection.forEach(gg => {

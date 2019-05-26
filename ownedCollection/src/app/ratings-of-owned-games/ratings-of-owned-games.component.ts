@@ -8,7 +8,7 @@ import embed from "vega-embed";
   selector: 'ratings-owned-charts',
   templateUrl: './ratings-of-owned-games.component.html'
 })
-export class RatingsOfOwnedGamesComponent extends DataViewComponent<Collection> {
+export class RatingsOfOwnedGamesComponent<C extends Collection> extends DataViewComponent<C> {
   @ViewChild('target') target: ElementRef;
   public rows = [];
   private readonly ALDIES_COLOURS = [
@@ -30,7 +30,8 @@ export class RatingsOfOwnedGamesComponent extends DataViewComponent<Collection> 
     };
   }
 
-  protected processData(collection: Collection) {
+  protected processData(collection: C) {
+    if (!collection || !collection.collection) return;
     const data = this.emptyData();
     const gamesIndex = makeGamesIndex(collection.games);
     collection.collection.forEach(gg => {
