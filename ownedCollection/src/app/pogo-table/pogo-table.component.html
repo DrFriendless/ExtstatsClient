@@ -1,0 +1,34 @@
+<div class="pogo-table" *ngIf="!!rows">
+
+  <div class="extstats-table-block">
+    <mfTableController [table]="pogoTable" [searchColumn]="'name'" [placeholder]="'game'"></mfTableController>
+    <table class="table table-striped extstats-table" [mfData]="rows" #pogoTable="mfDataTable" [mfRowsOnPage]="30"
+           [mfSortBy]="'plays'" [mfSortOrder]="'desc'">
+      <thead>
+      <tr>
+        <th><mfDefaultSorter by="name">Name</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="plays">Plays</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="bggRank">BGG Rank</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="bggRating">BGG Rating</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="rating">Your Rating</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="firstPlay">First Play</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="lastPlay">Last Play</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="playsInLastYear">Plays in Last Year</mfDefaultSorter></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of pogoTable.data">
+        <td class="name"><a href="https://boardgamegeek.com/boardgame/{{row.bggid}}">{{row.name}}</a></td>
+        <td>{{row.plays}}</td>
+        <td>{{row.bggRank}}</td>
+        <td>{{row.bggRating}}</td>
+        <td>{{row.rating}}</td>
+        <td>{{row.firstPlay}}</td>
+        <td>{{row.lastPlay}}</td>
+        <td>{{row.playsInLastYear}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

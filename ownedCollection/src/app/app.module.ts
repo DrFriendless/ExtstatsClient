@@ -11,6 +11,7 @@ import { RatingsOfOwnedGamesComponent } from './ratings-of-owned-games/ratings-o
 import { BggRatingsOfOwnedGamesComponent } from './bgg-ratings-of-owned-games/bgg-ratings-of-owned-games.component';
 import { PlaysOfGamesOwnedComponent } from './plays-of-games-owned/plays-of-games-owned.component';
 import { PogoTableComponent } from './pogo-table/pogo-table.component';
+import { DataTableModule } from "extstats-datatable"
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PogoTableComponent } from './pogo-table/pogo-table.component';
     PogoTableComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule, FormsModule
+    BrowserModule, HttpClientModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule, FormsModule,
+    DataTableModule
   ],
   providers: [],
   bootstrap: [UserOwnedComponent]

@@ -3,8 +3,11 @@
 
   <h2 id="pogo">Plays of Games Owned</h2>
   <extstats-pogo [data]="data$" [geek]="geek"></extstats-pogo>
+  <p>&nbsp;</p>
+  <extstats-pogo-table [data]="data$"></extstats-pogo-table>
 
   <h2 id="rbpy">Games Owned by Published Year</h2>
+  <p>Coloured according to your rating.</p>
   <owned-by-year-graph [data]="data$"></owned-by-year-graph>
 
   <h2 id="rogyo">Ratings of Games You Own</h2>

@@ -1,1 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
+/* Styles for pogo-table */
+.pogo-table .table.extstats-table td,
+.pogo-table .table.extstats-table tbody,
+.pogo-table .table.extstats-table thead,
+.pogo-table .table.extstats-table.table thead th {
+  border-color: #fdc02f;
+  max-width: 450px;
+}
+.pogo-table td.name {
+  text-align: left;
+}
+/* border colour lightened 60% with 0.5 alpha */
+/* https://www.hexcolortool.com/#e52464 */
+.pogo-table .table.table-striped.extstats-table tbody tr:nth-child(even){
+  background-color: rgba(255, 255, 149, 0.5);
+}
+.pogo-table .table.table-striped.extstats-table tbody tr:nth-child(odd){
+  background-color: white;
+}
+.extstats-page-item.active {
+  background-color: rgba(255, 255, 149, 0.5);
+}
+.extstats-table-controller {
+  background-color: #fdc02f;
+  color: black;
+  border: 1px solid #fdc02f;
+}
+.extstats-table-controller a.extstats-page-link {
+  color: black;
+}
+.pogo-table .table.extstats-table thead td,
+.pogo-table .table.extstats-table tbody td {
+  border-right-width: 0;
+  border-left-width: 0;
+}
+.pogo-table th {
+  background-color: #fdc02f;
+  color: black;
+}
+.pogo-table div.extstats-doc button {
+  border: solid 1px #fdc02f;
+}
+.pogo-table div.extstats-doc li.nav-item a.nav-link.active {
+  color: #fdc02f;
+}
+.pogo-table div.extstats-doc li.nav-item a.nav-link {
+  color: #777777;
+  font-size: 14px;
+  border-radius: unset;
+}
+.pogo-table div.collapse {
+  margin-top: 1rem;
+}
+
