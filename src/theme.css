@@ -64,12 +64,9 @@ div.extstats-doc button {
     background-color: white;
     border-radius: unset;
 }
-
-h1 {
-    margin-top: 30px;
-}
-h2 {
+main h2 {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 .mat-form-field-underline {
     display: none;
