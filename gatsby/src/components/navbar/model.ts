@@ -1,10 +1,9 @@
-export interface SubMenu {
-    name: string;
-    style: string;
-    items: MenuItem[];
+export interface SubMenu extends MenuItem {
+  style: string;
+  items: MenuItem[];
 }
 
 export interface MenuItem {
-    link: string;
-    name: string;
+  link: string;
+  name: string;
 }

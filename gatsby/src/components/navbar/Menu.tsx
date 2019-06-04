@@ -3,7 +3,7 @@ import React from 'react';
 
 export function Menu(props: SubMenu) {
     return <div className="navbar-menu">
-        <a className={"navbar-button " + props.style}>{props.name}</a>
+        <a className={"navbar-button " + props.style} href={props.link}>{props.name}</a>
         <div className="navbar-dropdown">
         {
             props.items.map(item =>
