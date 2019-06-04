@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "extstats-infrastructure",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Extended Stats page infrastructure",
+  "version": "1.0.0",
+  "author": "John Farrell <friendless.farrell@gmail.com>",
   "dependencies": {
     "gatsby": "^2.4.3",
     "gatsby-image": "^2.0.41",
@@ -20,9 +20,7 @@
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1"
   },
-  "devDependencies": {
-    "prettier": "^1.17.0"
-  },
+  "devDependencies": {},
   "keywords": [
     "gatsby"
   ],
@@ -30,16 +28,15 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/DrFriendless/ExtstatsClient"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/DrFriendless/ExtstatsClient/issues"
   }
 }
