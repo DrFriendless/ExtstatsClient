@@ -1,61 +1,50 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { Collection, fromExtStatsStorage, GeekGameQuery } from "extstats-core";
-import { ExtstatsTable } from "extstats-angular";
-import {Observable} from "rxjs/internal/Observable";
-import {Subscription} from "rxjs/internal/Subscription";
-import {Subject} from "rxjs/internal/Subject";
-import {flatMap, tap, map, share} from "rxjs/internal/operators";
+import { Component, OnDestroy, OnInit } from "@angular/core"
+import { HttpClient } from "@angular/common/http";
+import { Collection } from "extstats-core";
+import { DataSourceComponent, UserDataService } from "extstats-angular"
+import { Subscription } from "rxjs"
 
 @Component({
   selector: 'user-collection',
   templateUrl: './app.component.html'
 })
-export class UserCollectionComponent implements ExtstatsTable, AfterViewInit {
+export class UserCollectionComponent extends DataSourceComponent<Collection> implements OnInit, OnDestroy {
   private static DEFAULT_SELECTOR = "rated(ME)";
-  public data$: Observable<Collection>;
-  private selectors = new Subject<string>();
-  private selector: string = UserCollectionComponent.DEFAULT_SELECTOR;
-  private geek: string;
+  public data: Collection;
+  private dataSubscription: Subscription;
 
-  constructor(private http: HttpClient) {
-    this.geek = fromExtStatsStorage(storage => storage.geek);
-    this.data$ = this.selectors.asObservable()
-      .pipe(
-        flatMap(s => this.doQuery(s)),
-        tap(data => console.log(data)),
-        share()
-      );
+  constructor(http: HttpClient, userDataService: UserDataService) {
+    super(http, userDataService, UserCollectionComponent.DEFAULT_SELECTOR);
   }
 
-  public ngAfterViewInit() {
-    this.selectors.next(this.selector);
+  public ngOnInit(): void {
+    super.ngOnInit();
+    this.data$.subscribe(collection => this.processData(collection));
   }
 
-  public getId(): string {
-    return "rated";
+  public ngOnDestroy() {
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
   }
 
-  public getSelector(): string {
-    return this.selector;
+  private processData(collection: Collection) {
+    console.log("processData");
+    console.log(collection);
+    this.data = collection;
   }
 
-  public setSelector(s: string) {
-    this.selector = s;
-    this.selectors.next(s);
+  public selectorChanged(selector: string) {
+    if (selector) super.next(selector);
   }
 
-  private doQuery(selector: string): Observable<Collection> {
-    const options = {
-      headers: new HttpHeaders().set("x-api-key", "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ")
-    };
-    const body: GeekGameQuery = {
-      query: selector,
-      geek: this.geek,
-      format: "Collection",
-      vars: {}
-    };
-    console.log(body);
-    return this.http.post("https://api.drfriendless.com/v1/query", body, options) as Observable<Collection>;
+  protected getQueryResultFormat(): string {
+    return "Collection";
+  }
+
+  protected getQueryVariables(): { [p: string]: string } {
+    return {};
+  }
+
+  protected getApiKey(): string {
+    return "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ";
   }
 }

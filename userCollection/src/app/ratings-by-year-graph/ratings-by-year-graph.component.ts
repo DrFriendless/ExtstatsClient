@@ -1,8 +1,8 @@
 import { Component, OnDestroy, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { Collection, GameData, roundRating, makeGamesIndex } from "extstats-core";
+import { Collection, roundRating, makeGamesIndex } from "extstats-core";
 import { Observable } from "rxjs/internal/Observable";
 import { Subscription } from "rxjs/internal/Subscription";
-import { VisualizationSpec, vega } from "vega-embed";
+import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
 
 @Component({

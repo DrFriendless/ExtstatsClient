@@ -1,7 +1,7 @@
 import { Component, OnDestroy, AfterViewInit, Input } from '@angular/core';
-import {Collection, GameData} from "extstats-core";
-import {Observable} from "rxjs/internal/Observable";
-import {Subscription} from "rxjs/internal/Subscription";
+import { Collection, GameData } from "extstats-core";
+import { Observable } from "rxjs/internal/Observable";
+import { Subscription } from "rxjs/internal/Subscription";
 
 @Component({
   selector: 'rating-by-ranking-graph',

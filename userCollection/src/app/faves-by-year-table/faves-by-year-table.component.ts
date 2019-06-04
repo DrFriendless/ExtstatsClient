@@ -1,7 +1,9 @@
 import { Component, OnDestroy, AfterViewInit, Input } from '@angular/core';
-import { Collection, GameData } from "extstats-core";
+import { Collection, makeGamesIndex } from "extstats-core"
 import { Observable } from "rxjs/internal/Observable";
 import { Subscription } from "rxjs/internal/Subscription";
+
+type FaveYearRow = { year: number, games: string[]; }
 
 @Component({
   selector: 'faves-by-year-table',
@@ -10,7 +12,7 @@ import { Subscription } from "rxjs/internal/Subscription";
 export class FavesByYearTableComponent implements OnDestroy, AfterViewInit {
   @Input('data') data$: Observable<Collection>;
   private subscription: Subscription;
-  public rows: { year: number, games: string[] }[] = [];
+  public rows: FaveYearRow[] = [];
 
   constructor() { }
 
@@ -23,8 +25,9 @@ export class FavesByYearTableComponent implements OnDestroy, AfterViewInit {
   }
 
   private processData(collection: Collection) {
-    const byYear = {} as { [year: number]: string[] };
-    const index = FavesByYearTableComponent.makeGamesIndex(collection.games);
+    this.rows = [];
+    const byYear: Record<number, string[]> = {};
+    const index = makeGamesIndex(collection.games);
     for (let gg of collection.collection) {
       if (gg.rating >= 8) {
         const game = index[gg.bggid];
@@ -32,28 +35,16 @@ export class FavesByYearTableComponent implements OnDestroy, AfterViewInit {
         if (!games) {
           games = [game.name];
           byYear[game.yearPublished] = games;
+          this.rows.push({ year: game.yearPublished, games });
+          this.rows.sort((y1,y2) => y1.year - y2.year);
         } else {
           games.push(game.name);
         }
       }
     }
-    const years = Object.keys(byYear).map(year => parseInt(year));
-    years.sort((a, b) => a - b);
-    const result = [];
-    for (let year of years) {
-      result.push({ year, games: byYear[year] });
-    }
-    console.log(result);
-    this.rows = result;
   }
 
   private join(ss: string[]): string {
     return ss.join(", ");
-  }
-
-  private static makeGamesIndex(games: GameData[]): { [bggid: number]: GameData } {
-    const result = {};
-    games.forEach(gd => result[gd.bggid] = gd);
-    return result;
   }
 }
