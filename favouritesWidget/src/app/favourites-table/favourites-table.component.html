@@ -17,17 +17,10 @@
 
   <div class="extstats-table-block">
     <mfTableController [table]="favouritesTable" [searchColumn]="'gameName'" [placeholder]="'game'"></mfTableController>
-    <table class="table table-striped extstats-table" [mfData]="rows" #favouritesTable="mfDataTable" [mfRowsOnPage]="30" [mfSortBy]="'fhm'" [mfSortOrder]="'desc'">
-      <thead>
-      <tr>
-        <th *ngFor="let column of columns"><mfDefaultSorter by="{{column.field}}" tooltip="{{column.tooltip}}">{{column.name}}</mfDefaultSorter></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let row of favouritesTable.data">
-        <td *ngFor="let column of columns" title="{{column.valueTooltip(row)}}" [innerHtml]="column.valueHtml(row)"></td>
-      </tr>
-      </tbody>
+    <table class="table table-striped extstats-table" [mfData]="rows" #favouritesTable="mfDataTable" [mfRowsOnPage]="30"
+           [mfSortBy]="'fhm'" [mfSortOrder]="'desc'">
+      <thead mfHead [columns]="columns"></thead>
+      <tbody mfBody [columns]="columns"></tbody>
     </table>
   </div>
 </div>
