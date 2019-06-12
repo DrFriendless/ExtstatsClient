@@ -1,3 +1,19 @@
-<p>
-  plays-by-month-ever works!
-</p>
+<div id="pbmever-table" class="monthly-table">
+  <div class="extstats-doc">
+    <extstats-button-group #buttongroup>
+      <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
+    </extstats-button-group>
+
+    <extstats-documentation id="pbmeverTableDoc" *ngIf="buttongroup.selected === 'doc'" [src]="'/json/en/doc/pbmever.json'">
+    </extstats-documentation>
+  </div>
+
+  <div class="extstats-table-block">
+    <mfTableController [table]="pbmeverTable"></mfTableController>
+    <table class="table table-striped extstats-table" [mfData]="rows" #pbmeverTable="mfDataTable" [mfRowsOnPage]="30"
+           [mfSortBy]="'fhm'" [mfSortOrder]="'desc'">
+      <thead mfHead [columns]="columns"></thead>
+      <tbody mfBody [columns]="columns"></tbody>
+    </table>
+  </div>
+</div>

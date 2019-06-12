@@ -1,0 +1,10 @@
+<div id="pby-table" class="monthly-table">
+  <div class="extstats-table-block">
+    <mfTableController [table]="pbyTable"></mfTableController>
+    <table class="table table-striped extstats-table" [mfData]="rows" #pbyTable="mfDataTable"
+           [mfRowsOnPage]="30" [mfSortBy]="'year'" [mfSortOrder]="'asc'">
+      <thead mfHead [columns]="columns"></thead>
+      <tbody mfBody [columns]="columns"></tbody>
+    </table>
+  </div>
+</div>

@@ -8,12 +8,14 @@ import { DataTableModule } from "extstats-datatable";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ExtstatsAngularModule } from "extstats-angular";
+import { PlaysByYearComponent } from './plays-by-year/plays-by-year.component';
 
 @NgModule({
   declarations: [
     MonthlyWidget,
     PlaysByMonthEverComponent,
-    PlaysByMonthYtdComponent
+    PlaysByMonthYtdComponent,
+    PlaysByYearComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, DataTableModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule
