@@ -28,5 +28,10 @@
     "index": 6,
     "head": "Do you want some money for all of this?",
     "body": "<p>Nobody *has* to pay anything. On the other hand, my server bill is increasing every month and I'd like some help with that. See the Patreon link at the top of the page for more details about what the costs are and how you can help.</p>"
+  },
+  {
+    "index": 7,
+    "head": "Do I have a personal page or something?",
+    "body": "<p>Yes indeed! It's called the Geek Page. Use the search box immediately below here to find it. Then bookmark that URL.</p>"
   }
 ]
