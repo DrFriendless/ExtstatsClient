@@ -56,3 +56,17 @@ export function ymd(play: PlaysWithDate) {
 export function buildTooltip(gameIndex: GameIndex, games: number[]) {
   return games.map(id => gameIndex[id].name).join(", ");
 }
+
+export interface YMD {
+  year: number;
+  month: number;
+  date: number;
+}
+
+export function compareDate(d1: YMD, d2: YMD): number {
+  const v1 = d1.year * 10000 + d1.month * 100 + d1.date;
+  const v2 = d2.year * 10000 + d2.month * 100 + d2.date;
+  if (v1 < v2) return -1;
+  if (v1 > v2) return 1;
+  return 0;
+}

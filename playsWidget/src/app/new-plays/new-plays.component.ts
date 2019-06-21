@@ -3,17 +3,11 @@ import { PlaysViewComponent } from "extstats-angular";
 import { makeGamesIndex, MultiGeekPlays } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
-
-interface YMD {
-  year: number;
-  month: number;
-  date: number;
-}
+import { compareDate } from "../library"
 
 @Component({
   selector: 'new-plays',
-  templateUrl: './new-plays.component.html',
-  styleUrls: ['./new-plays.component.css']
+  templateUrl: './new-plays.component.html'
 })
 export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
   @ViewChild('target') target: ElementRef;
@@ -22,14 +16,6 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
 
   protected processData(plays: MultiGeekPlays) {
     this.refreshChart(plays);
-  }
-
-  private compareDate(d1: YMD, d2: YMD): number {
-    const v1 = d1.year * 10000 + d1.month * 100 + d1.date;
-    const v2 = d2.year * 10000 + d2.month * 100 + d2.date;
-    if (v1 < v2) return -1;
-    if (v1 > v2) return 1;
-    return 0;
   }
 
   private refreshChart(data: MultiGeekPlays) {
@@ -41,17 +27,22 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
       const plays = data.plays[geek];
       if (!alreadyPlayedByGeek[geek]) alreadyPlayedByGeek[geek] = [];
       const playedByThisGeek = alreadyPlayedByGeek[geek];
-      plays.sort((p1, p2) => this.compareDate(p1, p2));
+      const playedByYear: Record<number, number[]> = {};
+      plays.sort((p1, p2) => compareDate(p1, p2));
       let first = true;
       for (const play of plays) {
         if (playedByThisGeek.indexOf(play.game) >= 0) continue;
         playedByThisGeek.push(play.game);
         if (play.year >= 1996) {
+          const playedThisYear = playedByYear[play.year] || [];
+          playedByYear[play.year] = playedThisYear;
+          playedThisYear.push(play.year);
           if (first) {
             firstPlays.push({
               count: playedByThisGeek.length,
               gameName: "Before 1996",
               playDate: new Date(1996, 0, 1).getTime(),
+              yearCount: playedThisYear.length,
               geek
             });
             first = false;
@@ -61,6 +52,7 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
             count: playedByThisGeek.length,
             gameName: game.name,
             playDate: new Date(play.year, play.month - 1, play.date).getTime(),
+            yearCount: playedThisYear.length,
             geek
           });
         }
@@ -89,20 +81,37 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
             "zero": true,
             "domain": { "data": "table", "field": "count" }
           }, {
+            "name": "yearScale",
+            "type": "linear",
+            "range": "height",
+            "zero": true,
+            "domain": { "data": "table", "field": "yearCount" }
+          }, {
             "name": "shape",
             "type": "ordinal",
             "domain": data.geeks,
-            "range": ['circle', 'square', "cross", 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left", this.star ]
+            "range": [ 'circle', 'square', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left" ]
           }, {
             "name": "colour",
             "type": "ordinal",
             "domain": data.geeks,
-            "range": ['#cdda49', '#673fb4', '#e62565', "#159588", '#fd9727', '#fc5830', '#8cc152' ]
+            "range": [ '#cdda49' ]
+          }, {
+            "name": "yearShape",
+            "type": "ordinal",
+            "domain": data.geeks,
+            "range": [ this.star ]
+          }, {
+            "name": "yearColour",
+            "type": "ordinal",
+            "domain": data.geeks,
+            "range": [ '#673fb4', '#e62565', "#159588", '#fd9727', '#fc5830', '#8cc152' ]
           }
         ],
         "axes": [
-          {"orient": "bottom", "scale": "xscale", "zindex": 1},
-          {"orient": "left", "scale": "yscale", "zindex": 1}
+          { "orient": "bottom", "scale": "xscale", "zindex": 1, title: "First Play Date" },
+          { "orient": "left", "scale": "yscale", "zindex": 1, title: "Ever" },
+          { "orient": "right", "scale": "yearScale", "zindex": 1, title: "By Year" }
         ],
         "marks": [
           {
@@ -125,14 +134,29 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
                 "fillOpacity": {"value": 0.5}
               }
             }
+          },
+          {
+            "type": "symbol",
+            "from": {"data": "table"},
+            "encode": {
+              "enter": {
+                "x": { "scale": "xscale", "field": "playDate"},
+                "y": { "scale": "yearScale", "field": "yearCount"},
+                "tooltip": {"field": "gameName", "type": "quantitative"},
+                "stroke": { "field": "geek", "scale": "yearColour" },
+                "shape": { "field": "geek", "scale": "yearShape" },
+                "strokeWidth": { "value": 1 },
+                "size": 16
+              },
+              "update": {
+                "fillOpacity": {"value": 1}
+              },
+              "hover": {
+                "fillOpacity": {"value": 0.5}
+              }
+            }
           }
-        ],
-        "legends": [{
-          "direction": "vertical",
-          "type": "symbol",
-          "stroke": "colour",
-          "shape": "shape"
-        }]
+        ]
       };
       embed(this.target.nativeElement, spec, { actions: true });
     }
@@ -144,4 +168,5 @@ interface ChartPlay {
   gameName: string;
   playDate: number;
   geek: string;
+  yearCount: number;
 }
