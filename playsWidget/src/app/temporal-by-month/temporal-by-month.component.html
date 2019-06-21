@@ -1,0 +1,22 @@
+<table class="hotness">
+  <thead *ngIf="rows[0]">
+  <td>Total</td>
+  <td>Year</td>
+  <td *ngFor="let name of monthNames">{{name}}</td>
+  </thead>
+  <tbody class="month">
+  <tr *ngFor="let row of rows">
+    <td [class]="row.totalStyle">{{row.total}}</td>
+    <td [ngClass]="{total: row.name === 'Total'}">{{row.name}}</td>
+    <td *ngFor="let i of row.indexes" [class]="row.style[i]">{{row.months[i]}}</td>
+  </tr>
+  </tbody>
+</table>
+<P>
+<table class="hotness">
+  <tr><td class="doc class1">1+ standard deviations below the mean</td></tr>
+  <tr><td class="doc class2">0.5 - 1 standard deviations below the mean</td></tr>
+  <tr><td class="doc class3">within 0.5 standard deviations of the mean</td></tr>
+  <tr><td class="doc class4">0.5 - 1 standard deviations above the mean</td></tr>
+  <tr><td class="doc class5">1+ standard deviations above the mean</td></tr>
+</table>

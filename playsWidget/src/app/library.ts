@@ -1,43 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { GameData, PlaysWithDate } from 'extstats-core';
-
-export type GameIndex = { [bggid: number]: GameData };
-
-export const MONTH_NAMES = [ 'Zerouary', 'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
-
-export interface ExpandListener {
-  toggleExpand: (number) => void;
-}
-
-export class SimplePlays {
-  public quantity: number;
-  public gameName: string;
-  public gameId: number;
-}
-
-export class PlaysTableRowModel {
-  public yearHeader = false;
-  public yearSpan = 1;
-  public year = 1996;
-  public yearPlays = 0;
-  public yearDistinct = 0;
-  public yearDates = 0;
-  public monthHeader = false;
-  public monthSpan = 1;
-  public month = 'January';
-  public monthKey = 0;
-  public monthPlays = 0;
-  public monthDistinct = 0;
-  public monthDates = 0;
-  public dateShown = false;
-  public date  = 1;
-  public datePlays  = 0;
-  public dateKey = 0;
-  public dateExpanded = false;
-  public dateDistinct = 0;
-  public plays: SimplePlays[] = [];
-}
+import { PlaysWithDate } from 'extstats-core';
 
 export function getParamValueQueryString(paramName: string): string {
   const url = window.location.href;
@@ -53,10 +15,6 @@ export function ymd(play: PlaysWithDate) {
   return play.year * 10000 + play.month * 100 + play.date;
 }
 
-export function buildTooltip(gameIndex: GameIndex, games: number[]) {
-  return games.map(id => gameIndex[id].name).join(", ");
-}
-
 export interface YMD {
   year: number;
   month: number;
@@ -70,3 +28,43 @@ export function compareDate(d1: YMD, d2: YMD): number {
   if (v1 > v2) return 1;
   return 0;
 }
+
+export function mean(vals: number[]): number {
+  return vals.reduce((a, b) => a + b) / vals.length;
+}
+
+export function variance(vals: number[], mean: number): number[] {
+  return vals.map(x => (x - mean) ** 2);
+}
+
+export class StddevRange {
+  constructor(private mean: number, private stddev: number) {
+  }
+
+  allocate(v: number): string {
+    if (v < this.mean - this.stddev / 2) {
+      if (v < this.mean - this.stddev) {
+        return "class1";
+      } else {
+        return "class2";
+      }
+    } else if (v > this.mean + this.stddev / 2) {
+      if (v > this.mean + this.stddev) {
+        return "class5";
+      } else {
+        return "class4";
+      }
+    } else {
+      return "class3";
+    }
+  }
+}
+
+export function stddev(vals: number[]): StddevRange {
+  const m = mean(vals);
+  const vs = variance(vals, m);
+  return new StddevRange(m, Math.sqrt(mean(vs)));
+}
+
+export const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Total"];
+export const monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];

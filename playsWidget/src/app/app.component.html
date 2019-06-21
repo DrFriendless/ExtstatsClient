@@ -3,5 +3,22 @@
 
   <h2 id="newplays">Rate of Play of Games New to You</h2>
   <new-plays [data]="data$"></new-plays>
+
+  <h2 id="temporalbydate">Temporal Hotness by Date</h2>
+  <P>
+    This table implements an analysis <A href="https://boardgamegeek.com/image/1247651/randy-cox">designed by Randy Cox</A>.
+    For each month since you really got into games, how many games did you play? The values are coloured according to the number of games played.
+  </P>
+  <P>Note that this table includes plays before 2005, so the total may not be the same as the other temporal hotness tables.</P>
+  <temporal-by-date [data]="data$"></temporal-by-date>
+  <p>
+
+  <h2 id="temporalbymonth">Temporal Hotness by Month</h2>
+  <temporal-by-month [data]="data$"></temporal-by-month>
+  <p>
+
+  <h2 id="temporalbyday">Temporal Hotness by Day</h2>
+  <temporal-by-day [data]="data$"></temporal-by-day>
+  <p>
 </div>
 

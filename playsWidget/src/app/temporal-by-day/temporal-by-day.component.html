@@ -1,0 +1,45 @@
+<table class="hotness">
+  <thead>
+  <td>Total</td>
+  <td>Year</td>
+  <td>Sunday</td>
+  <td>Monday</td>
+  <td>Tuesday</td>
+  <td>Wednesday</td>
+  <td>Thursday</td>
+  <td>Friday</td>
+  <td>Saturday</td>
+  </thead>
+  <tbody class="day">
+  <tr *ngFor="let year of years">
+    <td [class]="styles[year][0]">{{byYear[year][0]}}</td>
+    <td>{{year}}</td>
+    <td [class]="styles[year][1]">{{byYear[year][1]}}</td>
+    <td [class]="styles[year][2]">{{byYear[year][2]}}</td>
+    <td [class]="styles[year][3]">{{byYear[year][3]}}</td>
+    <td [class]="styles[year][4]">{{byYear[year][4]}}</td>
+    <td [class]="styles[year][5]">{{byYear[year][5]}}</td>
+    <td [class]="styles[year][6]">{{byYear[year][6]}}</td>
+    <td [class]="styles[year][7]">{{byYear[year][7]}}</td>
+  </tr>
+  <tr>
+    <td [class]="totalStyles[0]">{{totals[0]}}</td>
+    <td class="total">Total</td>
+    <td [class]="totalStyles[1]">{{totals[1]}}</td>
+    <td [class]="totalStyles[2]">{{totals[2]}}</td>
+    <td [class]="totalStyles[3]">{{totals[3]}}</td>
+    <td [class]="totalStyles[4]">{{totals[4]}}</td>
+    <td [class]="totalStyles[5]">{{totals[5]}}</td>
+    <td [class]="totalStyles[6]">{{totals[6]}}</td>
+    <td [class]="totalStyles[7]">{{totals[7]}}</td>
+  </tr>
+  </tbody>
+</table>
+<P>
+<table class="hotness">
+  <tr><td class="doc class1">1+ standard deviations below the mean</td></tr>
+  <tr><td class="doc class2">0.5 - 1 standard deviations below the mean</td></tr>
+  <tr><td class="doc class3">within 0.5 standard deviations of the mean</td></tr>
+  <tr><td class="doc class4">0.5 - 1 standard deviations above the mean</td></tr>
+  <tr><td class="doc class5">1+ standard deviations above the mean</td></tr>
+</table>
