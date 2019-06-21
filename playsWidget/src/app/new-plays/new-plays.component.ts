@@ -28,18 +28,24 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
     const playedByYear: Record<number, number[]> = {};
     plays.sort((p1, p2) => compareDate(p1, p2));
     let first = true;
+    const countByYear: Record<number, number> = {};
+    plays.forEach(p => countByYear[p.year] = 0);
+    plays.forEach(p => countByYear[p.year] += p.quantity);
+    const lotsYears = Object.keys(countByYear).filter(y => countByYear[y] >= 12);
+    let firstYear = Math.min(...lotsYears.map(y => parseInt(y)));
+    if (firstYear < 1996) firstYear = 1996;
     for (const play of plays) {
       if (playedByThisGeek.indexOf(play.game) >= 0) continue;
       playedByThisGeek.push(play.game);
-      if (play.year >= 1996) {
+      if (play.year >= firstYear) {
         const playedThisYear = playedByYear[play.year] || [];
         playedByYear[play.year] = playedThisYear;
         playedThisYear.push(play.year);
         if (first) {
           firstPlays.push({
             count: playedByThisGeek.length,
-            gameName: "Before 1996",
-            playDate: new Date(1996, 0, 1).getTime(),
+            gameName: "Before " + firstYear,
+            playDate: new Date(firstYear, 0, 1).getTime(),
             yearCount: playedThisYear.length,
             geek
           });
