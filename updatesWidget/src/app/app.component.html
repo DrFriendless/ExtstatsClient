@@ -1,0 +1,45 @@
+<p>
+  Extended Stats downloads data from boardgamegeek.
+  Older data is downloaded less frequently.
+  If you log plays on BGG, Extended Stats won't automatically notice, and if the plays were a long time ago, it won't ever look.
+  This page lets you tell Extended Stats that it needs to redownload old data.
+</p>
+<p>
+  When you choose to refresh one of these files, it will be marked as needing a refresh.
+  You will know this because the "Last Update" column will go blank.
+  The downloader will eventually reprocess it.
+  Depending on how much work the downloader has to do, that could be as soon as a couple of minutes.
+</p>
+<p>
+  The timestamps are in UTC timezone.
+</p>
+
+<h2>Miscellaneous</h2>
+<table class="update-table">
+  <thead>
+  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td></td>
+  </thead>
+  <tbody>
+  <tr *ngFor="let file of other">
+    <td><a href="{{file.url}}">{{file.description}}</a></td>
+    <td>{{file.lastUpdate}}</td>
+    <td>{{file.nextUpdate}}</td>
+    <td><button type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+  </tr>
+  </tbody>
+</table>
+
+<h2>Plays</h2>
+<table class="update-table">
+  <thead>
+  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td></td>
+  </thead>
+  <tbody>
+  <tr *ngFor="let file of plays">
+    <td><a href="{{file.url}}">{{file.description}}</a></td>
+    <td>{{file.lastUpdate}}</td>
+    <td>{{file.nextUpdate}}</td>
+    <td><button type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+  </tr>
+  </tbody>
+</table>
