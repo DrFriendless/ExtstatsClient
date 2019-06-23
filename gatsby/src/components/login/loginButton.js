@@ -34,8 +34,10 @@ const authOptions = {
   usernameStyle: 'username'
 };
 
+const clientId = 'z7FL2jZnXI9C66WcmCMC7V1STnQbFuQl';
+
 const lock = new Auth0Lock(
-  'z7FL2jZnXI9C66WcmCMC7V1STnQbFuQl',
+  clientId,
   'drfriendless.au.auth0.com',
   authOptions
 );
@@ -45,11 +47,9 @@ function login() {
 }
 
 function logout() {
-  localStorage.removeItem("username");
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("identity");
-  localStorage.removeItem("jwt");
+  document.cookie = 'extstatsid=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   username = undefined;
+  localStorage.setItem("username", username);
   showAndHide();
 }
 
@@ -57,42 +57,39 @@ function loadUserData(jwt) {
   const xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+      console.log(xhttp.responseText);
       const response = JSON.parse(xhttp.responseText);
-      console.log(response);
-      username = response.username;
-      localStorage.setItem("username", response.username);
-      showAndHide();
+      if (response.userName) {
+        username = response.userName;
+        localStorage.setItem("username", response.userName);
+        showAndHide();
+      }
     }
   };
+  xhttp.withCredentials = true;
   xhttp.open("GET", "https://api.drfriendless.com/v1/authenticate", true);
   xhttp.setRequestHeader("Authorization", "Bearer " + jwt);
   xhttp.send();
 }
 
-function setUserFromLocalStorage() {
-  const identity = localStorage.getItem("identity");
-  if (identity) {
-    console.log("Found identity in local storage");
-    const id = JSON.parse(identity);
-    console.log(id);
-    const seconds = (new Date()).getTime() / 1000;
-    if (id.exp < seconds) {
-      console.log("Login expired");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("identity");
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("username");
-      return;
+function checkForLogin() {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(xhttp.responseText);
+      const response = JSON.parse(xhttp.responseText);
+      if (response.userName) {
+        username = response.userName;
+      } else {
+        username = undefined;
+      }
+      localStorage.setItem("username", username);
+      showAndHide();
     }
-    localStorage.setItem("username", id["nickname"]);
-  } else {
-    console.log("No identity in local storage.");
-  }
-  const user = localStorage.getItem("username");
-  if (user) {
-    console.log("setting username to " + user);
-    username = user;
-  }
+  };
+  xhttp.withCredentials = true;
+  xhttp.open("GET", "https://api.drfriendless.com/v1/login", true);
+  xhttp.send();
 }
 
 function showAndHide() {
@@ -118,17 +115,18 @@ function showAndHide() {
 lock.on("authenticated", authResult => {
   console.log("authenticated");
   console.log(authResult);
-  localStorage.setItem('accessToken', authResult.accessToken);
-  localStorage.setItem('identity', JSON.stringify(authResult.idTokenPayload));
-  localStorage.setItem("jwt", authResult.idToken);
-  loadUserData(authResult.idToken);
+  const seconds = (new Date()).getTime() / 1000;
+  if (authResult.idTokenPayload.exp > seconds &&
+      authResult.idTokenPayload.iss === "https://drfriendless.au.auth0.com/" &&
+      authResult.idTokenPayload.aud === clientId) {
+      loadUserData(authResult.idToken);
+  }
 });
 
 window.addEventListener("load", () => {
   document.getElementById("loginButton").onclick = () => login();
   document.getElementById("logoutButton").onclick = () => logout();
-  setUserFromLocalStorage();
-  showAndHide();
+  checkForLogin();
 });
 </script>
 ` }} />
