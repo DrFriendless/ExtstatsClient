@@ -9,11 +9,11 @@
 
   <a href="/monthly.html?geek={{geek}}" *ngIf="!!data"><monthly-panel [geekData]="data"></monthly-panel></a>
 
-  <a href="/detailedplays.html?geek={{geek}}" *ngIf="!!data"><detailed-plays-panel [geekData]="data"></detailed-plays-panel></a>
+  <a href="/yearly.html?geek={{geek}}" *ngIf="!!data"><yearly-panel [geekData]="data"></yearly-panel></a>
 
   <a href="/multiplays.html?geeks={{geek}}" *ngIf="!!data"><multiplays-panel [geekData]="data"></multiplays-panel></a>
 
-  <a href="/yearly.html?geek={{geek}}" *ngIf="!!data"><yearly-panel [geekData]="data"></yearly-panel></a>
+  <a href="/updates.html?geek={{geek}}" *ngIf="!!data"><updates-panel [geekData]="data"></updates-panel></a>
 
   <extstats-loader *ngIf="loading"></extstats-loader>
   <div *ngIf="!data && !loading">

@@ -1,4 +1,7 @@
 <div class="geekPanel plays-panel">
   <h3>Plays</h3>
-  <p *ngIf="!!data">You have recorded {{data.warData.totalPlays}} plays of {{data.warData.distinctGames}} different games.</p>
+  <p *ngIf="!!data">
+    You have recorded {{data.warData.totalPlays}} plays of {{data.warData.distinctGames}} different games.
+    Your H-Index is {{data.warData.hindex}}.
+  </p>
 </div>

@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { GeekSummary, fromExtStatsStorage } from 'extstats-core';
+import { GeekSummary } from 'extstats-core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserDataService } from 'extstats-angular';
