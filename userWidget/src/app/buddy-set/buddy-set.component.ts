@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, Output, EventEmitter, ViewEncapsulation } from "@angular/core"
 import { BuddySet } from 'extstats-core';
 import { GeekChipsComponent } from 'extstats-angular';
 

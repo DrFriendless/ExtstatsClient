@@ -28,12 +28,11 @@
     <a name="personal"><h4>Your Personal Data</h4></a>
     <p>This is the data which Extended Stats stores about you.</p>
     <mat-form-field class="input-full-width" style="display: block;">
-    <textarea matInput class="personal-data" readonly [rows]="8" class="input-full-width">
-      {{personalData.toString()}}
+    <textarea matInput class="personal-data" readonly [rows]="12" class="input-full-width">
+      {{personalData}}
     </textarea>
     </mat-form-field>
   </div>
 </div>
 
-<button type="button" class="extstats-button" (click)="refresh()">Refresh</button>
 <button type="button" class="extstats-button" (click)="save()">Save</button>

@@ -1,9 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs/internal/Subject';
-import { flatMap, map, tap, filter } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from "@angular/core"
 import { Subscription } from 'rxjs/internal/Subscription';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SecurityService } from './security.service';
+import { HttpClient } from '@angular/common/http';
+import { SecurityService, TestSecurityService } from "./security.service"
 import { UserConfig, BuddySet } from 'extstats-core';
 
 @Component({
@@ -11,32 +9,23 @@ import { UserConfig, BuddySet } from 'extstats-core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class UserConfigComponent implements OnDestroy {
-  private usernames = new Subject<string>();
+export class UserConfigComponent implements OnDestroy, OnInit {
   private readonly usernameSubscription: Subscription;
   public username: string;
   public buddyGroups: BuddySet[] = [];
   public personalData = '';
   public geekids: string[] = [];
 
-  constructor(private http: HttpClient, private securityApi: SecurityService) {
-    this.usernameSubscription = this.usernames.asObservable()
-      .pipe(
-        tap(u => console.log("in pipe u is " + u)),
-        map(u => u ? u : undefined),
-        filter(u => !!u),
-        tap(u => this.username = u),
-        flatMap(u => this.securityApi.loadUserData()),
-        tap(pd => {
-          console.log("pd");
-          console.log(pd);
-        }),
-        filter(pd => !!(pd && pd.userData && pd.userData.config)),
-        tap(pd => this.setToUi(pd.userData.config)),
-        map(pd => pd ? JSON.stringify(pd) : '')
-      )
-      .subscribe(pds => this.personalData = pds);
-    this.refresh();
+  constructor(private http: HttpClient, private securityApi: TestSecurityService) {
+  }
+
+  public ngOnInit(): void {
+    this.securityApi.loadUserData().subscribe(pd => {
+      console.log(pd);
+      this.username = pd.userData.jwt.nickname;
+      this.personalData = pd ? JSON.stringify(pd) : '';
+      this.setToUi(pd.userData.config);
+    });
   }
 
   private setToUi(userConfig: UserConfig) {
@@ -61,11 +50,7 @@ export class UserConfigComponent implements OnDestroy {
     this.buddyGroups.push(new BuddySet('', []));
   }
 
-  public refresh() {
-    this.usernames.next(this.securityApi.getStoredUsername());
-  }
-
-  buddiesChanged(event: BuddySet) {
+  public buddiesChanged(event: BuddySet) {
     if (event.getName() === "") this.buddyGroups = this.buddyGroups.filter(bg => bg !== event);
     console.log(this.buddyGroups);
   }

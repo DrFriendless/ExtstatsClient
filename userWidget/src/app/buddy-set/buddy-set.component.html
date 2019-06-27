@@ -6,8 +6,9 @@
 </div>
 <div fxLayout="column" fxLayoutGap="12px" fxLayoutAlign="center baseline" *ngIf="editing">
   <div fxLayout="row" fxLayoutGap="12px">
-    <mat-form-field class="input-full-width">
-      <input matInput placeholder="Buddy group name" [(ngModel)]="name">
+    <mat-form-field class="input-full-width" appearance="standard">
+      <mat-label>Buddy group name</mat-label>
+      <input matInput [(ngModel)]="name">
     </mat-form-field>
     <button type="button" class="extstats-button" (click)="save()" [disabled]="!saveable()">Save</button>
     <button type="button" class="extstats-button" (click)="cancel()">Cancel</button>
