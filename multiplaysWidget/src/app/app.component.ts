@@ -50,9 +50,9 @@ export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> imple
     console.log(geek);
     console.log(this.geeks);
     if (this.geeks.length) {
-      return { geeks: this.geeks } as PlaysQuery;
+      return { geeks: this.geeks, filter: "first" } as PlaysQuery;
     } else if (geek) {
-      return { geek };
+      return { geek, filter: "first ymd" };
     } else {
       return undefined;
     }

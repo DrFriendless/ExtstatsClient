@@ -15,9 +15,9 @@ interface YMD {
   templateUrl: './new-plays.component.html'
 })
 export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
-  private KELLY_COLOURS = ['#222222', '#F3C300', '#875692', '#F38400', '#A1CAF1', '#BE0032', '#C2B280', '#848482',
+  private KELLY_COLOURS = ['#F3C300', '#875692', '#F38400', '#A1CAF1', '#BE0032', '#C2B280', '#848482',
   '#008856', '#E68FAC', '#0067A5', '#F99379', '#604E97', '#F6A600', '#B3446C', '#DCD300', '#882D17', '#8DB600',
-  '#654522', '#E25822', '#2B3D26'];
+  '#654522', '#E25822', '#222222', '#2B3D26'];
   @ViewChild('target') target: ElementRef;
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
@@ -47,6 +47,11 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
       let first = true;
       for (const play of plays) {
         if (playedByThisGeek.indexOf(play.game) >= 0) continue;
+        if (play["ymd"]) {
+          play.year = Math.floor(play["ymd"] / 10000);
+          play.month = Math.floor(play["ymd"] / 100) % 100;
+          play.date = play["ymd"] % 100;
+        }
         playedByThisGeek.push(play.game);
         if (play.year >= 1996) {
           if (first) {
@@ -100,7 +105,7 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
             "name": "colour",
             "type": "ordinal",
             "domain": data.geeks,
-            "range": ['#cdda49', '#673fb4', '#e62565', "#159588", '#fd9727', '#fc5830', '#8cc152' ]
+            "range": this.KELLY_COLOURS
           }
         ],
         "axes": [
