@@ -1,6 +1,24 @@
-<div style="text-align:center">
+<div>
   <extstats-loader *ngIf="loading"></extstats-loader>
   <h2 id="newplays">Rate of Play of Games New to You</h2>
   <new-plays [data]="data$"></new-plays>
+
+  <div class="editor-root" fxLayout="column" fxLayoutGap="12px" fxLayoutAlign="start">
+    <span>Use these controls to edit which users are shown on the graph.</span>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <geek-combo (geekChosen)="chips.addGeek($event)" [placeholder]="'Geek name'"></geek-combo>
+      <button type="button" mat-raised-button color="primary" (click)="apply()" [disabled]="false">Apply</button>
+    </div>
+    <geek-chips style="width: 100%" #chips [editable]="true" [geeks]="geeks"></geek-chips>
+  </div>
 </div>
 
+<style>
+  h2 {
+    text-align: center;
+  }
+  .editor-root {
+    width: 80%;
+    margin: 40px auto 0;
+  }
+</style>

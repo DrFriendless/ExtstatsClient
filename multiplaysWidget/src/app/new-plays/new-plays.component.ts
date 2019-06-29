@@ -15,6 +15,9 @@ interface YMD {
   templateUrl: './new-plays.component.html'
 })
 export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
+  private KELLY_COLOURS = ['#222222', '#F3C300', '#875692', '#F38400', '#A1CAF1', '#BE0032', '#C2B280', '#848482',
+  '#008856', '#E68FAC', '#0067A5', '#F99379', '#604E97', '#F6A600', '#B3446C', '#DCD300', '#882D17', '#8DB600',
+  '#654522', '#E25822', '#2B3D26'];
   @ViewChild('target') target: ElementRef;
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";

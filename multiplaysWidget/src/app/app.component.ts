@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { PlaysSourceComponent, UserDataService } from "extstats-angular";
+import { Component, OnInit, ViewChild } from "@angular/core"
+import { GeekChipsComponent, PlaysSourceComponent, UserDataService } from "extstats-angular"
 import { MultiGeekPlays, PlaysQuery } from "extstats-core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 
@@ -9,7 +9,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
   styleUrls: ['./app.component.css']
 })
 export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> implements OnInit {
-  private geeks: string[] = [];
+  @ViewChild('chips') chips: GeekChipsComponent;
+  public geeks: string[] = [];
 
   constructor(http: HttpClient, userDataService: UserDataService) {
     super(http, userDataService);
@@ -40,14 +41,10 @@ export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> imple
     return "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ";
   }
 
-// export interface PlaysQuery {
-//   geek: string;
-//   geeks?: string[];
-//   year?: number;
-//   month?: number;
-//   date?: number;
-//   filter?: string;
-// }
+  public apply(): void {
+    window.location.search = "geeks=" + this.geeks.join(",");
+  }
+
   protected buildQuery(geek: string): PlaysQuery | undefined {
     console.log("buildQuery");
     console.log(geek);
