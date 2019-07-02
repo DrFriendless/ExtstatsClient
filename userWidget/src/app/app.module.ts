@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BuddySetComponent } from './buddy-set/buddy-set.component';
 import { ExtstatsAngularModule } from "extstats-angular";
-import { FlexLayoutModule } from "@angular/flex-layout"
+import { FlexLayoutModule } from "@angular/flex-layout";
 import {
   MatAutocompleteModule,
   MatBadgeModule,

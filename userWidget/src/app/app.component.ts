@@ -16,13 +16,13 @@ export class UserConfigComponent implements OnDestroy, OnInit {
   public personalData = '';
   public geekids: string[] = [];
 
-  constructor(private http: HttpClient, private securityApi: TestSecurityService) {
+  constructor(private http: HttpClient, private securityApi: SecurityService) {
   }
 
   public ngOnInit(): void {
     this.securityApi.loadUserData().subscribe(pd => {
       console.log(pd);
-      this.username = pd.userData.jwt.nickname;
+      this.username = pd ? pd.userData.userName : undefined;
       this.personalData = pd ? JSON.stringify(pd) : '';
       this.setToUi(pd.userData.config);
     });

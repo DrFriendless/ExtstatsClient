@@ -4,6 +4,9 @@ import { PersonalData, UserConfig, BuddySet } from 'extstats-core';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs/internal/observable/of';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class SecurityService implements SecurityApi {
 
   constructor(private http: HttpClient) { }
@@ -27,9 +30,6 @@ export interface SecurityApi {
   saveUserConfig(userConfig: UserConfig): Observable<any>;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TestSecurityService implements SecurityApi {
   private GEEK = 'Friendless';
   private USERNAME = 'friendless';
