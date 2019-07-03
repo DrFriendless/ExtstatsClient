@@ -37,8 +37,8 @@ export class TestSecurityService implements SecurityApi {
 
   public loadUserData(): Observable<PersonalData | undefined> {
     return of({
-      error: 'TokenExpiredError',
-      userData: { config: this.userConfig, jwt: { nickname: this.USERNAME } },
+      error: undefined,
+      userData: { userName: this.USERNAME, config: this.userConfig },
       allData: undefined
     } as PersonalData);
   }

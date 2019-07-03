@@ -23,7 +23,7 @@ export class UserConfigComponent implements OnDestroy, OnInit {
     this.securityApi.loadUserData().subscribe(pd => {
       console.log(pd);
       this.username = pd ? pd.userData.userName : undefined;
-      this.personalData = pd ? JSON.stringify(pd) : '';
+      this.personalData = pd ? JSON.stringify(pd.allData) : '';
       this.setToUi(pd.userData.config);
     });
   }
