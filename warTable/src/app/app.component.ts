@@ -13,6 +13,7 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
   public rows: WarTableRow[] = [];
   private subscription: Subscription;
   public docCollapsed = true;
+  public loading = false;
 
   constructor(private http: HttpClient) {}
 
@@ -21,9 +22,14 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
       headers: new HttpHeaders().set("x-api-key", "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ")
     };
     this.loadData$ = this.http.get("https://api.drfriendless.com/v1/wartable", options);
+    this.loading = true;
     this.subscription = this.loadData$.subscribe(result => {
       this.rows = result;
-      console.log(this.rows);
+      this.rows.forEach(r => {
+        // round to a number of digits which is nice to look at
+        r.hrindex = Math.floor(r.hrindex * 100) / 100;
+      });
+      this.loading = false;
     });
   }
 
