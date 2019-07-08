@@ -8,11 +8,13 @@
         <th><mfDefaultSorter by="ranking">Ranking</mfDefaultSorter></th>
         <th><mfDefaultSorter by="game_name">Name</mfDefaultSorter></th>
         <th><mfDefaultSorter by="total_ratings">Score</mfDefaultSorter></th>
-        <th><mfDefaultSorter by="num_ratings">Num. Ratings</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="num_ratings">Ratings<br>Count</mfDefaultSorter></th>
         <th><mfDefaultSorter by="bgg_ranking">BGG Ranking</mfDefaultSorter></th>
         <th><mfDefaultSorter by="bgg_rating">BGG Rating</mfDefaultSorter></th>
-        <th><mfDefaultSorter by="normalised_ranking">Normalised Ranking</mfDefaultSorter></th>
-        <th><mfDefaultSorter by="total_plays">Total Plays</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="normalised_ranking">Normalised<br>Ranking</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="total_plays">Total<br>Plays</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="hindex">H-index</mfDefaultSorter></th>
+        <th><mfDefaultSorter by="gindex">G-index</mfDefaultSorter></th>
       </tr>
       </thead>
       <tbody>
@@ -25,6 +27,8 @@
         <td>{{row.bgg_rating}}</td>
         <td>{{row.normalised_ranking}}</td>
         <td>{{row.total_plays}}</td>
+        <td>{{row.hindex}}</td>
+        <td>{{row.gindex}}</td>
       </tr>
       </tbody>
     </table>
