@@ -7,12 +7,12 @@
   {
     "index": 2,
     "head": "How do I get to use the site?",
-    "body": "<p>First of all, take a look at <a href=\"/wartable.html\">the War Table</a> where all users are listed to see if you're there. If so, just follow the link from your BGG user name. If not, send geekmail to BGG user Friendless and ask to be added to the site. Some time later you'll receive a reply saying you're in.</p>"
+    "body": "<p>First of all, type your BGG user name into the box at the bottom of this page to see if you're already here. If so, just follow the link. If not, send geekmail to BGG user Friendless and ask to be added to the site. Some time later you'll receive a reply saying you're in.</p>"
   },
   {
     "index": 3,
     "head": "Do I have to sign up for an account here?",
-    "body": "<P>No, you don't have to. An account here is an entirely separate thing to having your BGG username in the list. An account here will allow you to save configurations that you like and probably other stuff in the future.</P>"
+    "body": "<P>No, you don't have to. An account here is an entirely separate thing to having your BGG username in the list. An account here will allow you to save configurations that you like and probably other stuff in the future. See <a href=\"http://blog.drfriendless.com/2019/07/07/login-is-useful/\">this blog post</a> on the topic.</p>"
   },
   {
     "index": 4,

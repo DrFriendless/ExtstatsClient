@@ -1,0 +1,31 @@
+[
+  {
+    "title": "What are these rankings?",
+    "text": ["This is the Extended Stats game rankings. One of the objectives of Extended Stats is to experiment with being different to BGG, and this page does indeed use a different ranking system. You can sort by BGG Ranking if that offends you.",
+    "If you have a good idea for another ranking, let me know and I can try to add it to this table."]
+  },
+  {
+    "title": "Score",
+    "text": ["A game's score is simply all of the ratings Extended Stats users have given it, added up. People complain 'but that favours common games!' Well, yes, those games got commn for a reason."]
+  },
+  {
+    "title": "Ratings Count",
+    "text": ["How many Extended Stats users have rated the game."]
+  },
+  {
+    "title": "Normalised Ranking",
+    "text": ["This column is not working yet. After I reimplement it I'll remember what it means."]
+  },
+  {
+    "title": "Total Plays",
+    "text": ["Total plays of this game recorded by Extended Stats users."]
+  },
+  {
+    "title": "H-index",
+    "text": ["The largest number <b><i>h</i></b> such that <b><i>h</i></b> players have played the game <b><i>h</i></b> times each."]
+  },
+  {
+    "title": "G-index",
+    "text": ["The largest number <b><i>g</i></b> such that the <b><i>g</i></b> players who have played the game the most times have played the game on average <b><i>g</i></b> times each. This is similar to the h-index but favours games that some people play alot."]
+  }
+]

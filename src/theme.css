@@ -68,10 +68,6 @@ main h2 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.mat-form-field-underline {
-    display: none;
-}
-
 .extstats-table-block {
     display: inline-block;
 }

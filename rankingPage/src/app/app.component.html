@@ -1,5 +1,14 @@
 <div class="ranking-table" *ngIf="!!rows">
 
+  <div class="extstats-doc">
+    <extstats-button-group #buttongroup>
+      <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
+    </extstats-button-group>
+
+    <extstats-documentation id="rankingTableDoc" *ngIf="buttongroup.selected === 'doc'" [src]="'/json/en/doc/ranking.json'">
+    </extstats-documentation>
+  </div>
+
   <div class="extstats-table-block">
     <mfTableController [table]="rankingTable" [searchColumn]="'game_name'" [placeholder]="'game'"></mfTableController>
     <table class="table table-striped extstats-table" [mfData]="rows" #rankingTable="mfDataTable" [mfRowsOnPage]="30" [mfSortBy]="'name'" [mfSortOrder]="'asc'">

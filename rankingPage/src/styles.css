@@ -48,3 +48,17 @@
   margin-top: 1rem;
 }
 
+.ranking-table div.extstats-doc button {
+  border: solid 1px #e62565;
+}
+.ranking-table div.extstats-doc li.nav-item a.nav-link.active {
+  color: #e62565;
+}
+.ranking-table div.extstats-doc li.nav-item a.nav-link {
+  color: #777777;
+  font-size: 14px;
+  border-radius: unset;
+}
+.ranking-table div.collapse {
+  margin-top: 1rem;
+}
