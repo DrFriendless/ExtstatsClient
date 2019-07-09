@@ -4,7 +4,7 @@
 }
 .extstats-login button,
 .extstats-logout button {
-    border: 2px transparent solid;
+    border: 0;
     margin: 2px;
     height: 32px;
     width: 100px;
@@ -12,8 +12,34 @@
     text-align: center;
     border-radius: 0;
     line-height: 18px;
+    box-shadow: 2px 2px 1px #ccc;
+    background: #673fb4;
 }
 .extstats-login button:hover,
 .extstats-logout button:hover {
-    border: 2px black solid;
+    background: #673fb4;
+}
+.geekLink a {
+    background: #fee94e;
+    padding: 6px 12px;
+    color: black;
+    box-shadow: 2px 2px 1px #ccc;
+    margin: 4px;
+}
+.geekLink a:hover,
+#usernamelink:hover,
+.extstats-login button:hover,
+.extstats-logout button:hover {
+    box-shadow: 4px 4px 2px #ccc;
+}
+#usernamelink {
+    padding: 6px 12px;
+    color: black;
+    box-shadow: 2px 2px 1px #ccc;
+    margin: 2px;
+    background: #fdc02f;
+}
+.userLink {
+    display: block;
+    margin: 4px;
 }

@@ -12,9 +12,10 @@
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  box-shadow: 2px 2px 1px #ccc;
 }
 .extstats-navbar .navbar-button:hover {
-  border: 2px black solid;
+  box-shadow: 4px 4px 2px #ccc;
 }
 .extstats-navbar .nav-wartable {
   background-color: #673fb4;

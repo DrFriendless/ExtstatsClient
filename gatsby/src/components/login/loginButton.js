@@ -10,7 +10,9 @@ class LoginButton extends Component {
           <button className="btn btn-primary btn-margin" id="logoutButton">
             Log Out
           </button>
-          <span><a href="/user.html" id="usernamelink"></a></span>
+          <div className="userLink"><a href="/user.html" id="usernamelink"></a></div>
+          <div id="geekLinkBlock">
+          </div>
         </div>
         <div className="extstats-login">
           <button className="btn btn-primary btn-margin" id="loginButton">
@@ -57,13 +59,13 @@ function loadUserData(jwt) {
   const xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      console.log(xhttp.responseText);
       const response = JSON.parse(xhttp.responseText);
-      if (response.userName) {
-        username = response.userName;
-        localStorage.setItem("username", response.userName);
-        showAndHide();
-      }
+      console.log(response);
+      setUserName(response);
+      setGeekLinks(response);
+    } else {
+      setUserName(undefined);
+      setGeekLinks(undefined);
     }
   };
   xhttp.withCredentials = true;
@@ -72,19 +74,40 @@ function loadUserData(jwt) {
   xhttp.send();
 }
 
+function setUserName(response) {
+  if (response.userName) {
+    username = response.userName;
+  } else {
+    username = undefined;
+  }
+  localStorage.setItem("username", username);
+  showAndHide();
+}
+
+function setGeekLinks(response) {
+  var geekLinkBlock = document.getElementById("geekLinkBlock");
+  if (geekLinkBlock) geekLinkBlock.innerHTML = "";
+  if (response.config.usernames && geekLinkBlock) {
+    response.config.usernames.forEach(function(u) {
+      var div = document.createElement("div");
+      div.setAttribute('class', 'geekLink');
+      div.innerHTML = '<a href="/geek.html?geek=' + u + '">' + u + '</a>';
+      geekLinkBlock.appendChild(div);
+    });
+  }
+}
+
 function checkForLogin() {
   const xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      console.log(xhttp.responseText);
       const response = JSON.parse(xhttp.responseText);
-      if (response.userName) {
-        username = response.userName;
-      } else {
-        username = undefined;
-      }
-      localStorage.setItem("username", username);
-      showAndHide();
+      console.log(response);
+      setUserName(response);
+      setGeekLinks(response);
+    } else {
+      setUserName(undefined);
+      setGeekLinks(undefined);
     }
   };
   xhttp.withCredentials = true;
@@ -93,8 +116,6 @@ function checkForLogin() {
 }
 
 function showAndHide() {
-  console.log("showAndHide");
-  console.log(!!username);
   const loginButton = document.getElementById("loginButton");
   const logoutBlock = document.getElementById("logoutBlock");
   const logoutButton = document.getElementById("logoutButton");
