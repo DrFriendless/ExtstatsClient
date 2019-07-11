@@ -1,14 +1,34 @@
 import { Component, OnInit, ViewChild } from "@angular/core"
-import { GeekChipsComponent, PlaysSourceComponent, UserDataService } from "extstats-angular"
-import { MultiGeekPlays, PlaysQuery } from "extstats-core";
+import { GeekChipsComponent, UserDataService } from "extstats-angular"
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { GraphQuerySourceComponent } from "./graph-query-source/graph-query-source.component";
+import { GameData } from "extstats-core"
+
+export interface HasYMD {
+  ymd: number;
+}
+export interface PlayData extends HasYMD {
+  geek: string;
+  game: number;
+  year?: number;
+  month?: number;
+  date?: number;
+}
+export interface PlaysData {
+  games: GameData[];
+  geeks: string[];
+  plays: PlayData[];
+}
+export interface Result {
+  plays: PlaysData;
+}
 
 @Component({
   selector: 'multiplays-widget',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> implements OnInit {
+export class MultiPlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
   @ViewChild('chips') chips: GeekChipsComponent;
   public geeks: string[] = [];
 
@@ -18,23 +38,11 @@ export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> imple
 
   public ngOnInit() {
     super.ngOnInit();
-    const gs = this.getParamValueQueryString("geeks");
+    const gs = MultiPlaysWidget.getParamValueQueryString("geeks");
     if (gs) {
       this.geeks = gs.split(",").map(s => s.trim()).filter(s => !!s);
     }
     this.refresh();
-  }
-
-  public getId(): string {
-    return "plays";
-  }
-
-  protected getQueryResultFormat(): string {
-    return "MultiGeekPlays";
-  }
-
-  protected getQueryVariables(): { [p: string]: string } {
-    return {};
   }
 
   protected getApiKey(): string {
@@ -45,20 +53,19 @@ export class MultiPlaysWidget extends PlaysSourceComponent<MultiGeekPlays> imple
     window.location.search = "geeks=" + this.geeks.join(",");
   }
 
-  protected buildQuery(geek: string): PlaysQuery | undefined {
-    console.log("buildQuery");
-    console.log(geek);
-    console.log(this.geeks);
+  protected buildQuery(geek: string): string {
     if (this.geeks.length) {
-      return { geeks: this.geeks, filter: "first" } as PlaysQuery;
+      const geeks = this.geeks.map(g => `"${g}"`).join(", ");
+      return `{plays(geeks: [${geeks}], first: true) { geeks games { bggid name } plays { game ymd geek } } }`;
     } else if (geek) {
-      return { geek, filter: "first ymd" };
+      const geeks = `"${geek}"`;
+      return `{plays(geeks: [${geeks}], first: true) { geeks games { bggid name } plays { game ymd geek } } }`;
     } else {
-      return undefined;
+      return "";
     }
   }
 
-  private getParamValueQueryString(paramName: string): string {
+  private static getParamValueQueryString(paramName: string): string {
     const url = window.location.href;
     let paramValue;
     if (url.includes('?')) {

@@ -1,57 +1,48 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular";
-import { makeGamesIndex, MultiGeekPlays } from "extstats-core";
+import { makeGamesIndex } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
-
-interface YMD {
-  year: number;
-  month: number;
-  date: number;
-}
+import { HasYMD, PlaysData, Result } from "../app.component"
 
 @Component({
   selector: 'new-plays',
   templateUrl: './new-plays.component.html'
 })
-export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class NewPlaysComponent extends PlaysViewComponent<Result> {
   private KELLY_COLOURS = ['#F3C300', '#875692', '#F38400', '#A1CAF1', '#BE0032', '#C2B280', '#848482',
-  '#008856', '#E68FAC', '#0067A5', '#F99379', '#604E97', '#F6A600', '#B3446C', '#DCD300', '#882D17', '#8DB600',
-  '#654522', '#E25822', '#222222', '#2B3D26'];
+    '#008856', '#E68FAC', '#0067A5', '#F99379', '#604E97', '#F6A600', '#B3446C', '#DCD300', '#882D17', '#8DB600',
+    '#654522', '#E25822', '#222222', '#2B3D26'];
   @ViewChild('target') target: ElementRef;
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
 
-  protected processData(plays: MultiGeekPlays) {
-    this.refreshChart(plays);
+  protected processData(plays: Result) {
+    this.refreshChart(plays.plays);
   }
 
-  private compareDate(d1: YMD, d2: YMD): number {
-    const v1 = d1.year * 10000 + d1.month * 100 + d1.date;
-    const v2 = d2.year * 10000 + d2.month * 100 + d2.date;
-    if (v1 < v2) return -1;
-    if (v1 > v2) return 1;
+  private static compareDate(d1: HasYMD, d2: HasYMD): number {
+    if (d1 < d2) return -1;
+    if (d1 > d2) return 1;
     return 0;
   }
 
-  private refreshChart(data: MultiGeekPlays) {
+  private refreshChart(data: PlaysData) {
     if (!data || !data.games) return;
     const firstPlays: ChartPlay[] = [];
     const alreadyPlayedByGeek: { [geek: string]: number[] } = {};
     const gamesIndex = makeGamesIndex(data.games);
     for (const geek of data.geeks) {
-      const plays = data.plays[geek];
+      const plays = data.plays.filter(p => p.geek === geek);
       if (!alreadyPlayedByGeek[geek]) alreadyPlayedByGeek[geek] = [];
       const playedByThisGeek = alreadyPlayedByGeek[geek];
-      plays.sort((p1, p2) => this.compareDate(p1, p2));
+      plays.sort((p1, p2) => NewPlaysComponent.compareDate(p1, p2));
       let first = true;
       for (const play of plays) {
         if (playedByThisGeek.indexOf(play.game) >= 0) continue;
-        if (play["ymd"]) {
-          play.year = Math.floor(play["ymd"] / 10000);
-          play.month = Math.floor(play["ymd"] / 100) % 100;
-          play.date = play["ymd"] % 100;
-        }
+        play.year = Math.floor(play.ymd / 10000);
+        play.month = Math.floor(play.ymd / 100) % 100;
+        play.date = play.ymd % 100;
         playedByThisGeek.push(play.game);
         if (play.year >= 1996) {
           if (first) {
