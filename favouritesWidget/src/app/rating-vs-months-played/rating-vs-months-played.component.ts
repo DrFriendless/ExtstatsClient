@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { DataViewComponent } from "extstats-angular";
-import { CollectionWithPlays } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
+import { Data, Result } from "../app.component"
 
 type RatingVsMonthsData = { rating: number, months: number, tooltip: string, subdomain: string };
 
@@ -10,37 +10,30 @@ type RatingVsMonthsData = { rating: number, months: number, tooltip: string, sub
   selector: 'extstats-rating-vs-months-played',
   templateUrl: './rating-vs-months-played.component.html'
 })
-export class RatingVsMonthsPlayedComponent extends DataViewComponent<CollectionWithPlays> {
+export class RatingVsMonthsPlayedComponent extends DataViewComponent<Result> {
   @ViewChild('target') target: ElementRef;
 
-  protected processData(data: CollectionWithPlays): any {
+  protected processData(data: Result): any {
     if (data) {
-      const chartData = this.extractRatingVsMonths(data);
-      const spec = this.ratingsVsMonths(chartData);
+      const chartData = RatingVsMonthsPlayedComponent.extractRatingVsMonths(data.geekgames);
+      const spec = RatingVsMonthsPlayedComponent.ratingsVsMonths(chartData);
       embed(this.target.nativeElement, spec, { actions: true });
     }
   }
 
-  private extractRatingVsMonths(data: CollectionWithPlays): RatingVsMonthsData[] {
+  private static extractRatingVsMonths(data: Data): RatingVsMonthsData[] {
     const values = [];
-    const monthsByGame = {};
-    for (const gp of data.plays) {
-      monthsByGame[gp.game] = gp.distinctMonths;
-    }
     const gameById = {};
-    for (const game of data.games) {
-      gameById[game.bggid] = game;
-    }
-    for (const gg of data.collection) {
+    for (const game of data.games) gameById[game.bggid] = game;
+    for (const gg of data.geekGames) {
       if (gg.rating > 0) {
-        const months = monthsByGame[gg.bggid] || 0;
-        values.push({ rating: gg.rating, months, tooltip: gameById[gg.bggid].name, subdomain: gameById[gg.bggid].subdomain });
+        values.push({ rating: gg.rating, months: gg.months, tooltip: gameById[gg.bggid].name, subdomain: gameById[gg.bggid].subdomain });
       }
     }
     return values;
   }
 
-  private ratingsVsMonths(values: RatingVsMonthsData[]): VisualizationSpec {
+  private static ratingsVsMonths(values: RatingVsMonthsData[]): VisualizationSpec {
     const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
     return {
       "$schema": "https://vega.github.io/schema/vega/v4.json",

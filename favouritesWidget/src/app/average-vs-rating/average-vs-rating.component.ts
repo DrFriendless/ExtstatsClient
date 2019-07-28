@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DataViewComponent } from "extstats-angular";
-import { CollectionWithPlays } from "extstats-core";
 import embed, { VisualizationSpec } from "vega-embed";
+import { Data, GameResult, Result } from "../app.component"
 
 type AverageVsRatingData = { rating: number, average: number, tooltip: string, subdomain: string };
 
@@ -9,25 +9,22 @@ type AverageVsRatingData = { rating: number, average: number, tooltip: string, s
   selector: 'extstats-average-vs-rating',
   templateUrl: './average-vs-rating.component.html'
 })
-export class AverageVsRatingComponent extends DataViewComponent<CollectionWithPlays> {
+export class AverageVsRatingComponent extends DataViewComponent<Result> {
   @ViewChild('target') target: ElementRef;
 
-  protected processData(data: CollectionWithPlays): any {
+  protected processData(data: Result): any {
     if (data) {
-      const chartData = this.extractAvgVsRating(data);
-      const spec = this.avrSpec(chartData);
+      const chartData = AverageVsRatingComponent.extractAvgVsRating(data.geekgames);
+      const spec = AverageVsRatingComponent.avrSpec(chartData);
       embed(this.target.nativeElement, spec, { actions: true });
     }
   }
 
-  private extractAvgVsRating(data: CollectionWithPlays): AverageVsRatingData[] {
+  private static extractAvgVsRating(data: Data): AverageVsRatingData[] {
+    const gameById: Record<string, GameResult> = {};
+    for (const gd of data.games) gameById[gd.bggid] = gd;
     const values = [];
-    const gameById = {};
-    console.log(data);
-    for (const gd of data.games) {
-      gameById[gd.bggid] = gd;
-    }
-    for (const gg of data.collection) {
+    for (const gg of data.geekGames) {
       if (gg.rating > 0 && gameById[gg.bggid].bggRating) {
         values.push({
           rating: gg.rating,
@@ -40,10 +37,8 @@ export class AverageVsRatingComponent extends DataViewComponent<CollectionWithPl
     return values;
   }
 
-  private avrSpec(values: AverageVsRatingData[]): VisualizationSpec {
+  private static avrSpec(values: AverageVsRatingData[]): VisualizationSpec {
     const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
-    const house = "M-0.5,0L0,-0.5 0.5,0 0.3,0 0.3,0.5 0.05,0.5 0.05,0.2 -0.05,0.2 -0.05,0.5 -0.3,0.5 -0.3,0 -0.5,0Z";
-    const heart = "M0.3408,0.0984c0.0507,0,0.0919,0.0413,0.0919,0.0923c0,0.0262,-0.0109,0.0498,-0.0283,0.0666L0.256,0.4071L0.105,0.2546c-0.0158,-0.0166,-0.0256,-0.0391,-0.0256,-0.0639c0-0.051,0.0411,-0.0923,0.0919,-0.0923c0.0382,0,0.0709,0.0234,0.0848,0.0568C0.2698,0.1219,0.3026,0.0984,0.3408,0.0984 M0.3408,0.083z";
     const spec = {
       "$schema": "https://vega.github.io/schema/vega/v4.json",
       "hconcat": [],

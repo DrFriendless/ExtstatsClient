@@ -1,15 +1,16 @@
 import { Component, OnInit } from "@angular/core"
-import { CollectionWithPlays, GameData, GamePlays, makeGamesIndex } from "extstats-core"
+import { CollectionWithPlays, GameData } from "extstats-core"
 import { DataViewComponent } from "extstats-angular"
 import { ChartSet, ChartDefinition } from "extstats-vega"
 import { VisualizationSpec } from "vega-embed"
 import { Column } from "extstats-datatable/lib/src/DataTable"
+import { Data, GeekGameResult, makeGamesIndex, Result } from "../app.component"
 
 @Component({
   selector: "favourites-table",
   templateUrl: "./favourites-table.component.html",
 })
-export class FavouritesTableComponent extends DataViewComponent<CollectionWithPlays> implements OnInit {
+export class FavouritesTableComponent extends DataViewComponent<Result> implements OnInit {
   public columns = [
     {field: "gameName", name: "Game"},
     {field: "rating", name: "Rating", tooltip: "Your rating for this game."},
@@ -28,7 +29,7 @@ export class FavouritesTableComponent extends DataViewComponent<CollectionWithPl
   ].map(c => new Column(c))
   public rows: Row[] = []
   public chartSet = new ChartSet()
-  public data: CollectionWithPlays
+  public data: Data
 
   public ngOnInit() {
     this.chartSet.add(new ChartDefinition("FHM vs Year Published",
@@ -101,50 +102,34 @@ export class FavouritesTableComponent extends DataViewComponent<CollectionWithPl
   }
 
 
-  protected processData(data: CollectionWithPlays) {
+  protected processData(data: Result) {
     if (!data) return
-    this.data = data
+    this.data = data.geekgames
     const HUBER_BASELINE = 4.5
-    const collection = data.collection
-    const playsIndex = FavouritesTableComponent.makePlaysIndex(data.plays)
-    const gamesIndex = makeGamesIndex(data.games)
-    const lastYearIndex = FavouritesTableComponent.makePlaysIndex(data.lastYearPlays)
+    const collection: GeekGameResult[] = this.data.geekGames
+    const gamesIndex = makeGamesIndex(this.data.games)
     this.rows = []
     collection.forEach(gg => {
       if (!gg.rating) gg.rating = undefined
-      const gp = playsIndex[gg.bggid] || {
-        plays: 0,
-        expansion: false,
-        game: gg.bggid,
-        distinctMonths: 0,
-        distinctYears: 0,
-      } as GamePlays
-      const ly = lastYearIndex[gg.bggid] || {
-        plays: 0,
-        expansion: false,
-        game: gg.bggid,
-        distinctMonths: 0,
-        distinctYears: 0,
-      } as GamePlays
       const game = gamesIndex[gg.bggid] || {name: "Unknown", bggRanking: 1000000, bggRating: 1.0} as GameData
-      const hoursPlayed = gp.plays * game.playTime / 60
-      const friendlessHappiness = (!gg.rating) ? undefined : Math.floor((gg.rating * 5 + gp.plays + gp.distinctMonths * 4 + hoursPlayed) * 10) / 10
+      const hoursPlayed = gg.plays * game.playTime / 60
+      const friendlessHappiness = (!gg.rating) ? undefined : Math.floor((gg.rating * 5 + gg.plays + gg.months * 4 + hoursPlayed) * 10) / 10
       const huberHappiness = (!gg.rating) ? undefined : Math.floor((gg.rating - HUBER_BASELINE) * hoursPlayed)
       let huberHeat = undefined
-      if (gp.plays > 0 && gg.rating) {
-        const s = 1 + ly.plays / gp.plays
-        const lyHours = ly.plays * game.playTime / 60
+      if (gg.plays > 0 && gg.rating) {
+        const s = 1 + gg.lyPlays / gg.plays
+        const lyHours = gg.lyPlays * game.playTime / 60
         const lyHappiness = (gg.rating - HUBER_BASELINE) * lyHours
-        huberHeat = s * s * Math.sqrt(ly.plays) * lyHappiness
+        huberHeat = s * s * Math.sqrt(gg.lyPlays) * lyHappiness
         huberHeat = Math.floor(huberHeat * 10) / 10
       }
       let ruhm = 0
-      if (gp.distinctMonths > 0 && gg.rating && gp.firstPlay && gp.lastPlay) {
-        const firstDate = FavouritesTableComponent.intToDate(gp.firstPlay)
-        const lastDate = FavouritesTableComponent.intToDate(gp.lastPlay)
+      if (gg.months > 0 && gg.rating && gg.firstPlay && gg.lastPlay) {
+        const firstDate = FavouritesTableComponent.intToDate(gg.firstPlay)
+        const lastDate = FavouritesTableComponent.intToDate(gg.lastPlay)
         const flash = FavouritesTableComponent.daysBetween(lastDate, firstDate)
         const lag = FavouritesTableComponent.daysBetween(new Date(), lastDate)
-        const flmr = flash / lag * gp.distinctMonths * gg.rating
+        const flmr = flash / lag * gg.months * gg.rating
         const log = (flmr < 1) ? 0 : Math.log(flmr)
         ruhm = Math.round(log * 100) / 100
       }
@@ -156,13 +141,13 @@ export class FavouritesTableComponent extends DataViewComponent<CollectionWithPl
         gameName: game.name,
         game: gg.bggid,
         rating: gg.rating,
-        plays: gp.plays,
+        plays: gg.plays,
         bggRanking: game.bggRanking,
         bggRating: game.bggRating,
-        firstPlayed: FavouritesTableComponent.toDateString(gp.firstPlay),
-        lastPlayed: FavouritesTableComponent.toDateString(gp.lastPlay),
-        monthsPlayed: gp.distinctMonths,
-        yearsPlayed: gp.distinctYears,
+        firstPlayed: FavouritesTableComponent.toDateString(gg.firstPlay),
+        lastPlayed: FavouritesTableComponent.toDateString(gg.lastPlay),
+        monthsPlayed: gg.months,
+        yearsPlayed: gg.years,
         yearPublished: game.yearPublished,
         fhm: friendlessHappiness,
         hhm: huberHappiness,
@@ -203,14 +188,6 @@ export class FavouritesTableComponent extends DataViewComponent<CollectionWithPl
     const mm = (m < 10) ? "0" + m.toString() : m.toString()
     const dd = (d < 10) ? "0" + d.toString() : d.toString()
     return y.toString() + "-" + mm + "-" + dd
-  }
-
-  private static makePlaysIndex(plays: GamePlays[]): object {
-    const result = {}
-    plays.forEach(gp => {
-      result[gp.game] = gp
-    })
-    return result
   }
 
   private static fhmVsYearPublished(data: CollectionWithPlays): object {
