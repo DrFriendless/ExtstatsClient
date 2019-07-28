@@ -7,6 +7,9 @@
     </button>
   </extstats-button-group>
 
+  <h2 id="faves">Your Favourite Games</h2>
+  <favourites-table [data]="data$"></favourites-table>
+
   <div id="favouritesSettings" *ngIf="buttongroup.selected === 'settings'">
     <extstats-config [initial]="INITIAL_SELECTOR" [alternatives]="[]" (select)="selectorChanged($event)"></extstats-config>
   </div>
@@ -20,6 +23,6 @@
   <h2 id="rvp">Rating vs Plays</h2>
   <extstats-rating-vs-plays [data]="data$"></extstats-rating-vs-plays>
 
-  <h2 id="faves">Your Favourite Games</h2>
-  <favourites-table [data]="data$"></favourites-table>
+  <h2 id="ysp">You Should Play</h2>
+  <you-should-play [data]="data$"></you-should-play>
 </div>

@@ -13,6 +13,7 @@ export function makeGamesIndex<T extends {bggid: number}>(games: T[]): Record<st
 export interface GeekGameResult {
   bggid: number;
   shouldPlayScore: number;
+  daysSincePlayed: number;
   rating: number;
   plays: number;
   lyPlays: number;
@@ -80,7 +81,7 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
   protected buildQuery(geek: string): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
       " games { bggid name playTime bggRanking bggRating yearPublished subdomain } " +
-      " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay } " +
+      " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay daysSincePlayed } " +
       "}}";
   }
 }

@@ -1,8 +1,6 @@
-import { Component, OnInit } from "@angular/core"
-import { CollectionWithPlays, GameData } from "extstats-core"
+import { Component } from "@angular/core"
+import { GameData } from "extstats-core"
 import { DataViewComponent } from "extstats-angular"
-import { ChartSet, ChartDefinition } from "extstats-vega"
-import { VisualizationSpec } from "vega-embed"
 import { Column } from "extstats-datatable/lib/src/DataTable"
 import { Data, GeekGameResult, makeGamesIndex, Result } from "../app.component"
 
@@ -10,7 +8,7 @@ import { Data, GeekGameResult, makeGamesIndex, Result } from "../app.component"
   selector: "favourites-table",
   templateUrl: "./favourites-table.component.html",
 })
-export class FavouritesTableComponent extends DataViewComponent<Result> implements OnInit {
+export class FavouritesTableComponent extends DataViewComponent<Result> {
   public columns = [
     {field: "gameName", name: "Game"},
     {field: "rating", name: "Rating", tooltip: "Your rating for this game."},
@@ -28,79 +26,7 @@ export class FavouritesTableComponent extends DataViewComponent<Result> implemen
     {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published."},
   ].map(c => new Column(c))
   public rows: Row[] = []
-  public chartSet = new ChartSet()
   public data: Data
-
-  public ngOnInit() {
-    this.chartSet.add(new ChartDefinition("FHM vs Year Published",
-      FavouritesTableComponent.fhmVsYearPublished, FavouritesTableComponent.fhmVsYpSpec))
-  }
-
-  private static fhmVsYpSpec(values: object): VisualizationSpec {
-    const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z"
-    return {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
-      "hconcat": [],
-      "title": "FHM vs Year Published",
-      "autosize": {
-        "type": "fit",
-        "resize": true,
-      },
-      "width": 600,
-      "height": 600,
-      "data": [ { values, name: "table" } ],
-      "scales": [ {
-        "name": "x",
-        "type": "linear",
-        "range": "width",
-        "zero": false,
-        "domain": {"data": "table", "field": "year"},
-      }, {
-        "name": "y",
-        "type": "linear",
-        "range": "height",
-        "nice": true, "zero": true,
-        "domain": {"data": "table", "field": "fhm"},
-      }, {
-        "name": "sub",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ["#000000", "#f0d000", "#A4C639", "#20d0d0", "#f02020", "#4381b2", "#fab6b6", "#888888", "#BDB76B" ],
-      }, {
-        "name": "shape",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ["circle", "square", "cross", "diamond", "triangle-up", "triangle-down", "triangle-right", "triangle-left", star ],
-      },
-      ],
-      "axes": [
-        {"orient": "bottom", "scale": "x", "zindex": 1, "title": "Year Published" },
-        {"orient": "left", "scale": "y", "zindex": 1, "title": "Friendless Happiness Metric" },
-      ],
-      "marks": [{
-        "type": "symbol",
-        "from": {"data": "table"},
-        "encode": {
-          "enter": {
-            "x": { "scale": "x", "field": "year"},
-            "y": { "scale": "y", "field": "fhm"},
-            "tooltip": {"field": "tooltip", "type": "quantitative"},
-            "stroke": { "field": "subdomain", "scale": "sub" },
-            "shape": { "field": "subdomain", "scale": "shape" },
-            "strokeWidth": {"value": 2},
-          },
-        },
-      }],
-      "legends": [{
-        "direction": "vertical",
-        "stroke": "sub",
-        "shape": "shape",
-      }],
-    }
-  }
-
 
   protected processData(data: Result) {
     if (!data) return
@@ -169,14 +95,10 @@ export class FavouritesTableComponent extends DataViewComponent<Result> implemen
 
   // https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
   private static daysBetween(date1: Date, date2: Date) {
-    // The number of milliseconds in one day
     const ONE_DAY = 1000 * 60 * 60 * 24
-    // Convert both dates to milliseconds
     const date1Ms = date1.getTime()
     const date2Ms = date2.getTime()
-    // Calculate the difference in milliseconds
     const difference_ms = Math.abs(date1Ms - date2Ms)
-    // Convert back to days and return
     return Math.round(difference_ms / ONE_DAY)
   }
 
@@ -188,21 +110,6 @@ export class FavouritesTableComponent extends DataViewComponent<Result> implemen
     const mm = (m < 10) ? "0" + m.toString() : m.toString()
     const dd = (d < 10) ? "0" + d.toString() : d.toString()
     return y.toString() + "-" + mm + "-" + dd
-  }
-
-  private static fhmVsYearPublished(data: CollectionWithPlays): object {
-    const values = []
-    const gameById = {}
-    for (const gd of data.games) {
-      gameById[gd.bggid] = gd
-    }
-    for (const gg of data.collection) {
-      if (gg["fhm"] > 0 && gameById[gg.bggid].yearPublished >= 1990) {
-        values.push({year: gameById[gg.bggid].yearPublished, fhm: gg["fhm"],
-          tooltip: gameById[gg.bggid].name, subdomain: gameById[gg.bggid].subdomain })
-      }
-    }
-    return values
   }
 }
 

@@ -12,6 +12,7 @@ import { FavouritesTableComponent } from './favourites-table/favourites-table.co
 import { AverageVsRatingComponent } from './average-vs-rating/average-vs-rating.component';
 import { RatingVsPlaysComponent } from './rating-vs-plays/rating-vs-plays.component';
 import { RatingVsMonthsPlayedComponent } from './rating-vs-months-played/rating-vs-months-played.component';
+import { YouShouldPlayComponent } from './you-should-play/you-should-play.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { RatingVsMonthsPlayedComponent } from './rating-vs-months-played/rating-
     FavouritesTableComponent,
     AverageVsRatingComponent,
     RatingVsPlaysComponent,
-    RatingVsMonthsPlayedComponent
+    RatingVsMonthsPlayedComponent,
+    YouShouldPlayComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, DataTableModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule,
