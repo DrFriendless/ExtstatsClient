@@ -25,7 +25,7 @@ export class TemporalByDateComponent extends PlaysViewComponent<MultiGeekPlays> 
     const gameIndex = makeGamesIndex(data.games);
     for (const play of plays) {
       play['name'] = gameIndex[play.game].name;
-      if (play.date === 2 && play.month === 1) console.log(play);
+      if (play.month === 0) continue;
       const month = this.rows[play.month - 1];
       month.days[play.date - 1] += play.quantity;
       totalRow.days[play.date - 1] += play.quantity;
