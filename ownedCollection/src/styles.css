@@ -51,4 +51,7 @@
 .pogo-table div.collapse {
   margin-top: 1rem;
 }
+.pogo-table {
+  line-height: 1.5em;
+}
 
