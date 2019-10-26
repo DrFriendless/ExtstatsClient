@@ -3,7 +3,7 @@ import { DataViewComponent } from "extstats-angular";
 import { makeIndex } from "extstats-core"
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
-import { Result } from "../app.component";
+import { Data } from "../app.component";
 
 type GivenData = {
   plays: Bucket;
@@ -49,7 +49,7 @@ const BUCKETS_TO_USE = Array
   selector: 'extstats-pogo',
   templateUrl: './plays-of-games-owned.component.html'
 })
-export class PlaysOfGamesOwnedComponent extends DataViewComponent<Result> {
+export class PlaysOfGamesOwnedComponent extends DataViewComponent<Data> {
   @Input() geek: string;
   @ViewChild('target', {static: true}) target: ElementRef;
   private readonly COLOURS = [
@@ -74,14 +74,14 @@ export class PlaysOfGamesOwnedComponent extends DataViewComponent<Result> {
     return { plays: bucket, expansion, names: [], key: bucket.lo.toString() + "-" + expansion };
   }
 
-  protected processData(collection: Result) {
-    if (!collection || !collection.geekgames) return;
+  protected processData(collection: Data) {
+    if (!collection || !collection.geekGames) return;
     const givenDataByKey: Record<string, GivenData> = {};
-    const gamesIndex = makeIndex(collection.geekgames.games);
+    const gamesIndex = makeIndex(collection.games);
     const countByLo: Record<number, number> = {};
     let tens = 0;
     let anyExpansions = false;
-    collection.geekgames.geekGames.forEach(gg => {
+    collection.geekGames.forEach(gg => {
       const bucket = calcPlaysBucket(gg.plays);
       if (bucket.lo >= 10) tens++;
       if (!countByLo[bucket.lo]) {

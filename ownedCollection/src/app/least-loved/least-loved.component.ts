@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { makeIndex } from "extstats-core";
 import { DataViewComponent } from "extstats-angular";
 import { Column } from "extstats-datatable/lib/src/DataTable";
-import { Result } from "../app.component";
+import {Data, formatDate, ymdToDate} from "../app.component";
 
 interface LeastLovedRow {
     game: number;
@@ -17,10 +17,9 @@ interface LeastLovedRow {
 
 @Component({
   selector: 'least-loved',
-  templateUrl: './least-loved.component.html',
-  styleUrls: ['./least-loved.component.css']
+  templateUrl: './least-loved.component.html'
 })
-export class LeastLovedComponent extends DataViewComponent<Result> {
+export class LeastLovedComponent extends DataViewComponent<Data> {
   public columns: Column<LeastLovedRow>[] = [
     new Column({ field: "gameName", name: "Game",
       valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.game}">${row.gameName}</a>`
@@ -36,12 +35,12 @@ export class LeastLovedComponent extends DataViewComponent<Result> {
 
   public rows: LeastLovedRow[] = [];
 
-  protected processData(data: Result): any {
-    if (!data || !data.geekgames) return;
+  protected processData(data: Data): any {
+    if (!data || !data.geekGames) return;
     const now = new Date();
-    const gamesIndex = makeIndex(data.geekgames.games);
+    const gamesIndex = makeIndex(data.games);
     const rows: LeastLovedRow[] = [];
-    data.geekgames.geekGames.forEach(gg => {
+    data.geekGames.forEach(gg => {
       if (gg.rating > 0 && gg.lastPlay) {
         const game = gamesIndex[gg.bggid];
         const lp = ymdToDate(gg.lastPlay);
@@ -65,19 +64,4 @@ export class LeastLovedComponent extends DataViewComponent<Result> {
     });
     this.rows = (rows.length > 30) ? rows.slice(0, 30) : rows
   }
-}
-
-function ymdToDate(ymd: number): Date {
-  const y = Math.floor(ymd / 10000);
-  const d = ymd % 100;
-  const m = Math.floor(ymd / 100) % 100;
-  return new Date(y, m - 1, d);
-}
-
-function formatDate(date: number | undefined): string {
-  if (!date) return "";
-  const y = Math.floor(date / 10000);
-  const m = Math.floor(date / 100) % 100;
-  const d = date % 100;
-  return `${y}-${m}-${d}`;
 }

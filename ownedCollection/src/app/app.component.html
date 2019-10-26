@@ -2,25 +2,28 @@
   <extstats-loader *ngIf="loading"></extstats-loader>
 
   <h2 id="pogo">Plays of Games Owned</h2>
-  <extstats-pogo [data]="data$" [geek]="geek"></extstats-pogo>
+  <extstats-pogo [data]="pageData$" [geek]="geek"></extstats-pogo>
   <p>&nbsp;</p>
-  <extstats-pogo-table [data]="data$"></extstats-pogo-table>
+  <extstats-pogo-table [data]="pageData$"></extstats-pogo-table>
 
   <h2 id="rbpy">Games Owned by Published Year</h2>
   <p>Coloured according to your rating.</p>
-  <owned-by-year-graph [data]="data$"></owned-by-year-graph>
+  <owned-by-year-graph [data]="pageData$"></owned-by-year-graph>
 
   <h2 id="pogobpy">Plays of Games Owned by Published Year</h2>
-  <pogo-by-published-year [data]="data$"></pogo-by-published-year>
+  <pogo-by-published-year [data]="pageData$"></pogo-by-published-year>
 
   <h2 id="rogyo">Ratings of Games You Own</h2>
-  <ratings-owned-charts [data]="data$"></ratings-owned-charts>
+  <ratings-owned-charts [data]="pageData$"></ratings-owned-charts>
 
   <h2 id="bggrogyo">BGG Ratings of Games You Own</h2>
-  <bgg-ratings-owned [data]="data$"></bgg-ratings-owned>
+  <bgg-ratings-owned [data]="pageData$"></bgg-ratings-owned>
 
   <h2 id="leastloved">Why Do You Even Own These Games?</h2>
-  <least-loved [data]="data$"></least-loved>
+  <least-loved [data]="pageData$"></least-loved>
+
+  <h2 id="ratingByLifetime">Lifetime of Games by Rating</h2>
+  <rating-by-lifetime [data]="pageData$"></rating-by-lifetime>
 </div>
 
 

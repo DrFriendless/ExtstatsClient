@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { makeIndex } from "extstats-core"
 import { DataViewComponent } from "extstats-angular";
-import {Result} from "../app.component";
+import { Data, formatDate } from "../app.component";
 
 type PogoTableRow = {
   bggid: number;
@@ -21,14 +21,14 @@ const LAMBDA = Math.log(0.1) / -10.0;
   selector: 'extstats-pogo-table',
   templateUrl: './pogo-table.component.html'
 })
-export class PogoTableComponent extends DataViewComponent<Result> {
+export class PogoTableComponent extends DataViewComponent<Data> {
   public rows: PogoTableRow[] = [];
 
-  protected processData(data: Result): any {
-    if (!data || !data.geekgames) return;
-    const gamesIndex = makeIndex(data.geekgames.games);
+  protected processData(data: Data): any {
+    if (!data || !data.geekGames) return;
+    const gamesIndex = makeIndex(data.games);
     const rows: PogoTableRow[] = [];
-    data.geekgames.geekGames.forEach(gg => {
+    data.geekGames.forEach(gg => {
       const game = gamesIndex[gg.bggid];
       const bggRating = Math.floor(game.bggRating * 100) / 100;
       const plays = gg.plays;
@@ -51,12 +51,3 @@ export class PogoTableComponent extends DataViewComponent<Result> {
 function cdfunction(n: number): number {
   return 1.0 - Math.exp(-LAMBDA * n);
 }
-
-function formatDate(date: number | undefined): string {
-  if (!date) return "";
-  const y = Math.floor(date / 10000);
-  const m = Math.floor(date / 100) % 100;
-  const d = date % 100;
-  return `${y}-${m}-${d}`;
-}
-

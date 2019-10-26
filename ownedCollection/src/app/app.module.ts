@@ -12,7 +12,8 @@ import { PlaysOfGamesOwnedComponent } from './plays-of-games-owned/plays-of-game
 import { PogoTableComponent } from './pogo-table/pogo-table.component';
 import { DataTableModule } from "extstats-datatable";
 import { PlaysOfGamesOwnedByPublishedYearComponent } from './plays-of-games-owned-by-published-year/plays-of-games-owned-by-published-year.component';
-import { LeastLovedComponent } from './least-loved/least-loved.component'
+import { LeastLovedComponent } from './least-loved/least-loved.component';
+import { RatingByLifetimeComponent } from './rating-by-lifetime/rating-by-lifetime.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { LeastLovedComponent } from './least-loved/least-loved.component'
     PlaysOfGamesOwnedComponent,
     PogoTableComponent,
     PlaysOfGamesOwnedByPublishedYearComponent,
-    LeastLovedComponent
+    LeastLovedComponent,
+    RatingByLifetimeComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule,

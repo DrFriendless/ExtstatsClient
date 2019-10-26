@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataViewComponent } from "extstats-angular";
 import { makeIndex } from "extstats-core";
 import embed, { VisualizationSpec } from "vega-embed";
-import { Result } from "../app.component";
+import { Data } from "../app.component";
 
 const RED = "#ff0000";
 const ORANGE = "#ff8800";
@@ -25,7 +25,7 @@ type SingleGameData = {
   selector: 'pogo-by-published-year',
   templateUrl: './plays-of-games-owned-by-published-year.component.html'
 })
-export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent<Result> {
+export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent<Data> {
   @ViewChild('target', {static: true}) target: ElementRef;
   public rows = [];
   private startYear = 1995;
@@ -42,11 +42,11 @@ export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent
     return result;
   }
 
-  protected processData(collection: Result) {
-    if (!collection || !collection.geekgames) return;
+  protected processData(collection: Data) {
+    if (!collection || !collection.geekGames) return;
     const data = this.emptyData();
-    const gamesIndex = makeIndex(collection.geekgames.games);
-    collection.geekgames.geekGames.forEach(gg => {
+    const gamesIndex = makeIndex(collection.games);
+    collection.geekGames.forEach(gg => {
       const g = gamesIndex[gg.bggid];
       if (g) {
         if (g.yearPublished >= this.startYear) {

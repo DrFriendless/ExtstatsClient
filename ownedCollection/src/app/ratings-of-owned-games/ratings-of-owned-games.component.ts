@@ -3,13 +3,13 @@ import { DataViewComponent } from "extstats-angular";
 import { makeIndex, roundRating } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
-import {Result} from "../app.component";
+import { Data } from "../app.component";
 
 @Component({
   selector: 'ratings-owned-charts',
   templateUrl: './ratings-of-owned-games.component.html'
 })
-export class RatingsOfOwnedGamesComponent extends DataViewComponent<Result> {
+export class RatingsOfOwnedGamesComponent extends DataViewComponent<Data> {
   @ViewChild('target', {static: true}) target: ElementRef;
   public rows = [];
   private readonly ALDIES_COLOURS = [
@@ -31,11 +31,11 @@ export class RatingsOfOwnedGamesComponent extends DataViewComponent<Result> {
     };
   }
 
-  protected processData(collection: Result) {
-    if (!collection || !collection.geekgames) return;
+  protected processData(collection: Data) {
+    if (!collection || !collection.geekGames) return;
     const data = this.emptyData();
-    const gamesIndex = makeIndex(collection.geekgames.games);
-    collection.geekgames.geekGames.forEach(gg => {
+    const gamesIndex = makeIndex(collection.games);
+    collection.geekGames.forEach(gg => {
       const g = gamesIndex[gg.bggid];
       if (g && gg.rating > 0) {
         const rating = roundRating(gg.rating);

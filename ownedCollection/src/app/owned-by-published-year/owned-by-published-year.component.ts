@@ -3,13 +3,13 @@ import { DataViewComponent } from "extstats-angular";
 import { makeIndex } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
-import { Result } from "../app.component";
+import { Data } from "../app.component";
 
 @Component({
   selector: 'owned-by-year-graph',
   templateUrl: './owned-by-published-year.component.html'
 })
-export class OwnedByPublishedYearComponent extends DataViewComponent<Result> {
+export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
   @ViewChild('target', {static: true}) target: ElementRef;
   public rows = [];
   private startYear = 1995;
@@ -44,11 +44,11 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Result> {
     return rating;
   }
 
-  protected processData(collection: Result) {
-    if (!collection || !collection.geekgames) return;
+  protected processData(collection: Data) {
+    if (!collection || !collection.geekGames) return;
     const data = this.emptyData();
-    const gamesIndex = makeIndex(collection.geekgames.games);
-    collection.geekgames.geekGames.forEach(gg => {
+    const gamesIndex = makeIndex(collection.games);
+    collection.geekGames.forEach(gg => {
       const g = gamesIndex[gg.bggid];
       if (g) {
         if (g.yearPublished >= this.startYear) {
