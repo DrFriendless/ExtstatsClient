@@ -10,11 +10,17 @@
   <p>Coloured according to your rating.</p>
   <owned-by-year-graph [data]="data$"></owned-by-year-graph>
 
+  <h2 id="pogobpy">Plays of Games Owned by Published Year</h2>
+  <pogo-by-published-year [data]="data$"></pogo-by-published-year>
+
   <h2 id="rogyo">Ratings of Games You Own</h2>
   <ratings-owned-charts [data]="data$"></ratings-owned-charts>
 
   <h2 id="bggrogyo">BGG Ratings of Games You Own</h2>
   <bgg-ratings-owned [data]="data$"></bgg-ratings-owned>
+
+  <h2 id="leastloved">Why Do You Even Own These Games?</h2>
+  <least-loved [data]="data$"></least-loved>
 </div>
 
 

@@ -1,15 +1,16 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { DataViewComponent } from "extstats-angular";
-import { Collection, makeGamesIndex, roundRating } from "extstats-core";
+import { makeIndex, roundRating } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
+import {Result} from "../app.component";
 
 @Component({
   selector: 'ratings-owned-charts',
   templateUrl: './ratings-of-owned-games.component.html'
 })
-export class RatingsOfOwnedGamesComponent<C extends Collection> extends DataViewComponent<C> {
-  @ViewChild('target') target: ElementRef;
+export class RatingsOfOwnedGamesComponent extends DataViewComponent<Result> {
+  @ViewChild('target', {static: true}) target: ElementRef;
   public rows = [];
   private readonly ALDIES_COLOURS = [
     '#ff0000',
@@ -30,11 +31,11 @@ export class RatingsOfOwnedGamesComponent<C extends Collection> extends DataView
     };
   }
 
-  protected processData(collection: C) {
-    if (!collection || !collection.collection) return;
+  protected processData(collection: Result) {
+    if (!collection || !collection.geekgames) return;
     const data = this.emptyData();
-    const gamesIndex = makeGamesIndex(collection.games);
-    collection.collection.forEach(gg => {
+    const gamesIndex = makeIndex(collection.geekgames.games);
+    collection.geekgames.geekGames.forEach(gg => {
       const g = gamesIndex[gg.bggid];
       if (g && gg.rating > 0) {
         const rating = roundRating(gg.rating);
@@ -54,7 +55,7 @@ export class RatingsOfOwnedGamesComponent<C extends Collection> extends DataView
       chartData.push({rating, count, tooltip: "" + rating + ". " + names.join(", ") });
     }
     const spec: VisualizationSpec = {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],
       "padding": 5,
       "title": "Your Ratings of Games You Own",
@@ -86,7 +87,7 @@ export class RatingsOfOwnedGamesComponent<C extends Collection> extends DataView
               "fill": {"scale": "colour", "field": "rating"},
               "x": {"signal": "width / 2"},
               "y": {"signal": "height / 2"},
-              "tooltip": {"field": "tooltip", "type": "quantitative"}
+              "tooltip": {"field": "tooltip"}
             },
             "update": {
               "startAngle": {"field": "startAngle"},

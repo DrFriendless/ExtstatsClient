@@ -1,0 +1,10 @@
+<div id="least-loved-table" class="least-loved-table">
+  <div class="extstats-table-block">
+    <mfTableController [table]="leastLovedTable"></mfTableController>
+    <table class="table table-striped extstats-table" [mfData]="rows" #leastLovedTable="mfDataTable" [mfRowsOnPage]="30"
+           [mfSortBy]="'fhm'" [mfSortOrder]="'desc'">
+      <thead mfHead [columns]="columns"></thead>
+      <tbody mfBody [columns]="columns"></tbody>
+    </table>
+  </div>
+</div>

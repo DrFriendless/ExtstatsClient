@@ -1,15 +1,16 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { DataViewComponent } from "extstats-angular";
-import { Collection, makeGamesIndex } from "extstats-core";
+import { makeIndex } from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
+import { Result } from "../app.component";
 
 @Component({
   selector: 'owned-by-year-graph',
   templateUrl: './owned-by-published-year.component.html'
 })
-export class OwnedByPublishedYearComponent<C extends Collection> extends DataViewComponent<C> {
-  @ViewChild('target') target: ElementRef;
+export class OwnedByPublishedYearComponent extends DataViewComponent<Result> {
+  @ViewChild('target', {static: true}) target: ElementRef;
   public rows = [];
   private startYear = 1995;
   private readonly ALDIES_COLOURS = [
@@ -43,11 +44,11 @@ export class OwnedByPublishedYearComponent<C extends Collection> extends DataVie
     return rating;
   }
 
-  protected processData(collection: C) {
-    if (!collection || !collection.collection) return;
+  protected processData(collection: Result) {
+    if (!collection || !collection.geekgames) return;
     const data = this.emptyData();
-    const gamesIndex = makeGamesIndex(collection.games);
-    collection.collection.forEach(gg => {
+    const gamesIndex = makeIndex(collection.geekgames.games);
+    collection.geekgames.geekGames.forEach(gg => {
       const g = gamesIndex[gg.bggid];
       if (g) {
         if (g.yearPublished >= this.startYear) {
@@ -70,7 +71,7 @@ export class OwnedByPublishedYearComponent<C extends Collection> extends DataVie
       }
     }
     const spec: VisualizationSpec = {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],
       "padding": 5,
       "title": "Ratings By Published Year of Games Owned",
@@ -126,7 +127,7 @@ export class OwnedByPublishedYearComponent<C extends Collection> extends DataVie
               "fill": {"scale": "color", "field": "c"},
               "stroke": { "value": "black" },
               "strokeWidth": { "value": 1 },
-              "tooltip": {"field": "t", "type": "quantitative"}
+              "tooltip": {"field": "t"}
             },
             "update": {
               "fillOpacity": {"value": 1}

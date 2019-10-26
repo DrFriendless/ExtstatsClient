@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef, Input } from "@angular/core"
 import { DataViewComponent } from "extstats-angular";
-import { CollectionWithPlays, GamePlays, makeGamesIndex, makePlaysIndex } from "extstats-core"
+import { makeIndex } from "extstats-core"
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
+import { Result } from "../app.component";
 
 type GivenData = {
   plays: Bucket;
@@ -48,9 +49,9 @@ const BUCKETS_TO_USE = Array
   selector: 'extstats-pogo',
   templateUrl: './plays-of-games-owned.component.html'
 })
-export class PlaysOfGamesOwnedComponent<C extends CollectionWithPlays> extends DataViewComponent<C> {
+export class PlaysOfGamesOwnedComponent extends DataViewComponent<Result> {
   @Input() geek: string;
-  @ViewChild('target') target: ElementRef;
+  @ViewChild('target', {static: true}) target: ElementRef;
   private readonly COLOURS = [
     '#D2691E',
     '#FFA500',
@@ -73,16 +74,15 @@ export class PlaysOfGamesOwnedComponent<C extends CollectionWithPlays> extends D
     return { plays: bucket, expansion, names: [], key: bucket.lo.toString() + "-" + expansion };
   }
 
-  protected processData(collection: C) {
-    if (!collection || !collection.collection) return;
+  protected processData(collection: Result) {
+    if (!collection || !collection.geekgames) return;
     const givenDataByKey: Record<string, GivenData> = {};
-    const gamesIndex = makeGamesIndex(collection.games);
-    const playsIndex = makePlaysIndex(collection.plays);
+    const gamesIndex = makeIndex(collection.geekgames.games);
     const countByLo: Record<number, number> = {};
     let tens = 0;
     let anyExpansions = false;
-    collection.collection.forEach(gg => {
-      const bucket = this.calcPlaysBucket(playsIndex[gg.bggid]);
+    collection.geekgames.geekGames.forEach(gg => {
+      const bucket = calcPlaysBucket(gg.plays);
       if (bucket.lo >= 10) tens++;
       if (!countByLo[bucket.lo]) {
         countByLo[bucket.lo] = 1;
@@ -132,16 +132,9 @@ export class PlaysOfGamesOwnedComponent<C extends CollectionWithPlays> extends D
     this.refreshChart(result, markData);
   }
 
-  private calcPlaysBucket(gamePlays: GamePlays | undefined): Bucket {
-    const plays = (gamePlays && gamePlays.plays) || 0;
-    if (plays < SINGLE_BUCKETS) return BUCKETS_TO_USE[plays];
-    return BUCKETS_TO_USE.slice(SINGLE_BUCKETS).filter(b => plays >= b.lo && plays <= b.hi)[0];
-  }
-
   private refreshChart(data: GraphData[], markData: MarkData) {
-
     const spec: VisualizationSpec = {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],
       "padding": 5,
       "title": "Plays of Games Owned",
@@ -210,8 +203,8 @@ export class PlaysOfGamesOwnedComponent<C extends CollectionWithPlays> extends D
               "fill": {"scale": "color", "field": "colourCode"},
               "stroke": { "value": "black" },
               "strokeWidth": { "value": 1 },
-              "tooltip": {"field": "tooltip", "type": "quantitative"},
-              "href": {"field": "url", "type": "nominal"}
+              "tooltip": {"field": "tooltip"},
+              "href": {"field": "url"}
             },
             "update": {
               "fillOpacity": {"value": 1}
@@ -238,4 +231,9 @@ export class PlaysOfGamesOwnedComponent<C extends CollectionWithPlays> extends D
     };
     embed(this.target.nativeElement, spec, { actions: true });
   }
+}
+
+function calcPlaysBucket(plays: number): Bucket {
+  if (plays < SINGLE_BUCKETS) return BUCKETS_TO_USE[plays];
+  return BUCKETS_TO_USE.slice(SINGLE_BUCKETS).filter(b => plays >= b.lo && plays <= b.hi)[0];
 }
