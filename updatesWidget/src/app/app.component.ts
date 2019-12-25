@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
     this.data$ = this.subject
       .asObservable()
       .pipe(
-        switchMap(junk => this.doQuery(geek))
+        switchMap(() => this.doQuery(geek))
       ) as Observable<ToProcessElement[]>;
     this.data$.subscribe(vs => this.processData(vs));
     this.subject.next(undefined);
@@ -34,21 +34,14 @@ export class AppComponent implements OnInit {
     this.other = [];
     this.plays = [];
     for (const tpe of data) {
-      const s = JSON.stringify(tpe);
-      tpe['string'] = s;
+      tpe['string'] = JSON.stringify(tpe);
       if (tpe.processMethod === 'processPlays') {
         this.plays.push(tpe);
       } else {
         this.other.push(tpe);
       }
     }
-    this.plays.sort(this.byDateDescending);
-  }
-
-  private byDateDescending(t1: ToProcessElement, t2: ToProcessElement): number {
-    let c = t1.year - t2.year;
-    if (c === 0) c = t1.month - t2.month;
-    return -c;
+    this.plays.sort(byDateDescending);
   }
 
   private patch(tpe: ToProcessElement): void {
@@ -70,13 +63,9 @@ export class AppComponent implements OnInit {
     this.doRefresh(url).subscribe(tpe => this.patch(tpe));
   }
 
-  protected getApiKey(): string {
-    return "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ";
-  }
-
   private doRefresh(url: string): Observable<ToProcessElement> {
     const options = {
-      headers: new HttpHeaders().set("x-api-key", this.getApiKey())
+      headers: new HttpHeaders().set("x-api-key", getApiKey())
     };
     const body = { url };
     return this.http.post("https://api.drfriendless.com/v1/update", body, options) as Observable<ToProcessElement>;
@@ -84,8 +73,18 @@ export class AppComponent implements OnInit {
 
   private doQuery(geek: string): Observable<ToProcessElement[]> {
     const options = {
-      headers: new HttpHeaders().set("x-api-key", this.getApiKey())
+      headers: new HttpHeaders().set("x-api-key", getApiKey())
     };
     return this.http.get("https://api.drfriendless.com/v1/updates/?geek=" + encodeURIComponent(geek), options) as Observable<ToProcessElement[]>;
   }
+}
+
+function byDateDescending(t1: ToProcessElement, t2: ToProcessElement): number {
+  let c = t1.year - t2.year;
+  if (c === 0) c = t1.month - t2.month;
+  return -c;
+}
+
+function getApiKey(): string {
+  return "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ";
 }

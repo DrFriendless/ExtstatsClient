@@ -32,7 +32,7 @@
 <h2>Plays</h2>
 <table class="update-table">
   <thead>
-  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td></td>
+  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td># Plays</td><td></td>
   </thead>
   <tbody>
   <tr *ngFor="let file of plays">
@@ -40,6 +40,7 @@
     <td>{{file.lastUpdate}}</td>
     <td>{{file.nextUpdate}}</td>
     <td><button type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+    <td>{{file.recorded || 0}}</td>
   </tr>
   </tbody>
 </table>
