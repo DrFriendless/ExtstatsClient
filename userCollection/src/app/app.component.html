@@ -2,16 +2,19 @@
   <extstats-loader *ngIf="loading"></extstats-loader>
 
   <h2 id="rbpy">Ratings by Published Year</h2>
-  <ratings-by-year-graph [data]="data$"></ratings-by-year-graph>
+  <ratings-by-year-graph [data]="pageData$"></ratings-by-year-graph>
 
   <h2 id="fgbpy">Favourite Games by Published Year</h2>
-  <faves-by-year-table [data]="data$"></faves-by-year-table>
+  <faves-by-year-table [data]="pageData$"></faves-by-year-table>
+
+  <h2 id="rvweight">Rating vs Weight</h2>
+  <rating-vs-weight [data]="pageData$"></rating-vs-weight>
 
   <h2 id="rbyr">Rating by BGG Ranking</h2>
   <p>All rated games on BGG are allocated a square, from #1 in the top left.
     Games you have rated have their box coloured in with your rating for them.
   </p>
-  <rating-by-ranking-graph [data]="data$"></rating-by-ranking-graph>
+  <rating-by-ranking-graph [data]="pageData$"></rating-by-ranking-graph>
 </div>
 
 

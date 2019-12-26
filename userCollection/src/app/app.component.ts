@@ -1,47 +1,49 @@
-import { Component, OnDestroy, OnInit } from "@angular/core"
+import { Component } from "@angular/core"
 import { HttpClient } from "@angular/common/http";
-import { Collection } from "extstats-core";
-import { DataSourceComponent, UserDataService } from "extstats-angular"
-import { Subscription } from "rxjs"
+import { GraphQuerySourceComponent, UserDataService} from "extstats-angular";
+import {map} from "rxjs/operators";
+import {Observable} from "rxjs";
+
+export interface GeekGameResult {
+  bggid: number;
+  rating: number;
+}
+export interface GameResult {
+  bggid: number;
+  name: string;
+  bggRanking: number;
+  yearPublished: number;
+  weight: number;
+  subdomain: string;
+}
+export interface Data {
+  geekGames: GeekGameResult[];
+  games: GameResult[];
+}
+interface Result {
+  geekgames: Data;
+}
 
 @Component({
   selector: 'user-collection',
   templateUrl: './app.component.html'
 })
-export class UserCollectionComponent extends DataSourceComponent<Collection> implements OnInit, OnDestroy {
+export class UserCollectionComponent extends GraphQuerySourceComponent<Result> {
   private static DEFAULT_SELECTOR = "rated(ME)";
-  public data: Collection;
-  private dataSubscription: Subscription;
+  private selector = UserCollectionComponent.DEFAULT_SELECTOR;
+  public geek: string;
+  public pageData$: Observable<Data> = this.data$.pipe(map(d => d.geekgames));
 
   constructor(http: HttpClient, userDataService: UserDataService) {
-    super(http, userDataService, UserCollectionComponent.DEFAULT_SELECTOR);
+    super(http, userDataService);
   }
 
-  public ngOnInit(): void {
-    super.ngOnInit();
-    this.data$.subscribe(collection => this.processData(collection));
-  }
-
-  public ngOnDestroy() {
-    if (this.dataSubscription) this.dataSubscription.unsubscribe();
-  }
-
-  private processData(collection: Collection) {
-    console.log("processData");
-    console.log(collection);
-    this.data = collection;
-  }
-
-  public selectorChanged(selector: string) {
-    if (selector) super.next(selector);
-  }
-
-  protected getQueryResultFormat(): string {
-    return "Collection";
-  }
-
-  protected getQueryVariables(): { [p: string]: string } {
-    return {};
+  protected buildQuery(geek: string): string {
+    this.geek = geek;
+    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+      " games { bggid name bggRanking yearPublished weight subdomain } " +
+      " geekGames { bggid rating } " +
+      "}}";
   }
 
   protected getApiKey(): string {

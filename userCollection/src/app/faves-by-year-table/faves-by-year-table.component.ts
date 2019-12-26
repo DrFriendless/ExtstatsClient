@@ -1,7 +1,7 @@
-import { Component, OnDestroy, AfterViewInit, Input } from '@angular/core';
-import { Collection, makeGamesIndex } from "extstats-core"
-import { Observable } from "rxjs/internal/Observable";
-import { Subscription } from "rxjs/internal/Subscription";
+import { Component } from '@angular/core';
+import { makeIndex} from "extstats-core"
+import {DataViewComponent} from "extstats-angular";
+import {Data} from "../app.component";
 
 type FaveYearRow = { year: number, games: string[]; }
 
@@ -9,26 +9,14 @@ type FaveYearRow = { year: number, games: string[]; }
   selector: 'faves-by-year-table',
   templateUrl: './faves-by-year-table.component.html'
 })
-export class FavesByYearTableComponent implements OnDestroy, AfterViewInit {
-  @Input('data') data$: Observable<Collection>;
-  private subscription: Subscription;
+export class FavesByYearTableComponent extends DataViewComponent<Data> {
   public rows: FaveYearRow[] = [];
 
-  constructor() { }
-
-  public ngOnDestroy() {
-    if (this.subscription) this.subscription.unsubscribe();
-  }
-
-  public ngAfterViewInit() {
-    this.subscription = this.data$.subscribe(collection => this.processData(collection));
-  }
-
-  private processData(collection: Collection) {
+  protected processData(data: Data): any {
     this.rows = [];
     const byYear: Record<number, string[]> = {};
-    const index = makeGamesIndex(collection.games);
-    for (let gg of collection.collection) {
+    const index = makeIndex(data.games);
+    for (let gg of data.geekGames) {
       if (gg.rating >= 8) {
         const game = index[gg.bggid];
         let games = byYear[game.yearPublished];

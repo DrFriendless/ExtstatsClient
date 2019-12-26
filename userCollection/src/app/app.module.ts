@@ -10,13 +10,15 @@ import { UserCollectionComponent} from './app.component';
 import { FavesByYearTableComponent } from './faves-by-year-table/faves-by-year-table.component';
 import { RatingsByYearGraphComponent } from './ratings-by-year-graph/ratings-by-year-graph.component';
 import { RatingByRankingGraphComponent } from './rating-by-ranking-graph/rating-by-ranking-graph.component';
+import { RatingVsWeightComponent } from './rating-vs-weight/rating-vs-weight.component';
 
 @NgModule({
   declarations: [
     UserCollectionComponent,
     FavesByYearTableComponent,
     RatingsByYearGraphComponent,
-    RatingByRankingGraphComponent
+    RatingByRankingGraphComponent,
+    RatingVsWeightComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, DataTableModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule, FormsModule
