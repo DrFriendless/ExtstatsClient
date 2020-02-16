@@ -10,7 +10,7 @@ import { compareDate } from "../library"
   templateUrl: './new-plays.component.html'
 })
 export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
-  @ViewChild('target') target: ElementRef;
+  @ViewChild('target', {static: true}) target: ElementRef;
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
 
@@ -125,11 +125,11 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
             "enter": {
               "x": { "scale": "xscale", "field": "playDate"},
               "y": { "scale": "yscale", "field": "count"},
-              "tooltip": {"field": "gameName", "type": "quantitative"},
+              "tooltip": {"field": "gameName" },
               "stroke": { "field": "geek", "scale": "colour" },
               "shape": { "field": "geek", "scale": "shape" },
               "strokeWidth": { "value": 1 },
-              "size": 16
+              "size": { "value": 16 }
             },
             "update": {
               "fillOpacity": {"value": 1}
@@ -146,11 +146,11 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
             "enter": {
               "x": { "scale": "xscale", "field": "playDate"},
               "y": { "scale": "yearScale", "field": "yearCount"},
-              "tooltip": {"field": "gameName", "type": "quantitative"},
+              "tooltip": {"field": "gameName"},
               "stroke": { "field": "geek", "scale": "yearColour" },
               "shape": { "field": "geek", "scale": "yearShape" },
               "strokeWidth": { "value": 1 },
-              "size": 16
+              "size": { "value": 16 }
             },
             "update": {
               "fillOpacity": {"value": 1}

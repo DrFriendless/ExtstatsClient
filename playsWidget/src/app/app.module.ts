@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { PlaysWidget } from './app.component';
 import { NewPlaysComponent } from './new-plays/new-plays.component';
 import { HttpClientModule } from "@angular/common/http";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ExtstatsAngularModule } from "extstats-angular";
 import { FormsModule } from '@angular/forms';
@@ -21,7 +20,7 @@ import { TemporalByDayComponent } from './temporal-by-day/temporal-by-day.compon
     TemporalByDayComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, TooltipModule.forRoot(), NgbModule.forRoot(), ExtstatsAngularModule, FormsModule, DataTableModule
+    BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule, DataTableModule
   ],
   providers: [],
   bootstrap: [PlaysWidget]
