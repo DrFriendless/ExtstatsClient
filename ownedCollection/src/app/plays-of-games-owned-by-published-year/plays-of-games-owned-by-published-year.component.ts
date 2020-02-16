@@ -18,7 +18,7 @@ type SingleGameData = {
   plays: number;
   tooltip: string;
   y: number;
-  x: number;
+  x: Date;
 };
 
 @Component({
@@ -53,7 +53,7 @@ export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent
           const plays = gg.plays;
           const d: SingleGameData = {
             name: g.name, plays, tooltip: `${g.name} (${plays} plays)`, colour: calcColour(plays),
-            y: 0, x: g.yearPublished
+            y: 0, x: new Date(g.yearPublished, 7)
           };
           data[g.yearPublished].push(d);
         }
@@ -84,7 +84,7 @@ export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent
       "hconcat": [],
       "padding": 5,
       "title": "Plays of Games Owned by Published Year",
-      "width": 600,
+      "width": 800,
       "height": 600,
       "data": [{
         "name": "table",
@@ -95,7 +95,7 @@ export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent
           "name": "x",
           "type": "band",
           "range": "width",
-          "domain": {"data": "table", "field": "x"}
+          "domain": {"data": "table", "field": "x"},
         },
         {
           "name": "y",
@@ -113,7 +113,7 @@ export class PlaysOfGamesOwnedByPublishedYearComponent extends DataViewComponent
         }
       ],
       "axes": [
-        {"orient": "bottom", "scale": "x", "zindex": 1},
+        {"orient": "bottom", "scale": "x", "zindex": 1, "formatType": "time", "format": "%y" },
         {"orient": "left", "scale": "y", "zindex": 1}
       ],
       "marks": [

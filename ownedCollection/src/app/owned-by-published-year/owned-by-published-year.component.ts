@@ -5,6 +5,13 @@ import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
 import { Data } from "../app.component";
 
+type SingleYearData = {
+  year: Date;
+  y: number;
+  colour: number;
+  tooltip: string;
+}
+
 @Component({
   selector: 'owned-by-year-graph',
   templateUrl: './owned-by-published-year.component.html'
@@ -62,12 +69,12 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
   }
 
   private refreshChart(data: { [year: number]: { counts: number[], names: string[][] } }) {
-    const chartData = [];
+    const chartData: SingleYearData[] = [];
     for (const year in data) {
       for (let i = 1; i <= 10; i++) {
         const count = data[year].counts[i - 1];
         const names = data[year].names[i - 1];
-        chartData.push({x: year, y: count, c: i, t: names.join(", ") });
+        chartData.push({year: new Date(parseInt(year), 7), y: count, colour: i, tooltip: names.join(", ") });
       }
     }
     const spec: VisualizationSpec = {
@@ -75,7 +82,7 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
       "hconcat": [],
       "padding": 5,
       "title": "Ratings By Published Year of Games Owned",
-      "width": 600,
+      "width": 800,
       "height": 600,
       "data": [{
         "name": "table",
@@ -83,8 +90,8 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
         "transform": [
           {
             "type": "stack",
-            "groupby": ["x"],
-            "sort": {"field": "c"},
+            "groupby": ["year"],
+            "sort": {"field": "colour"},
             "field": "y"
           }
         ]
@@ -94,7 +101,7 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
           "name": "x",
           "type": "band",
           "range": "width",
-          "domain": {"data": "table", "field": "x"}
+          "domain": {"data": "table", "field": "year"}
         },
         {
           "name": "y",
@@ -107,12 +114,12 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
           "name": "color",
           "type": "ordinal",
           "range": this.ALDIES_COLOURS,
-          "domain": {"data": "table", "field": "c"}
+          "domain": {"data": "table", "field": "colour"}
         }
       ],
       "axes": [
-        {"orient": "bottom", "scale": "x", "zindex": 1},
-        {"orient": "left", "scale": "y", "zindex": 1}
+        { "orient": "bottom", "scale": "x", "zindex": 1, "formatType": "time", "format": "%y" },
+        { "orient": "left", "scale": "y", "zindex": 1 }
       ],
       "marks": [
         {
@@ -120,14 +127,14 @@ export class OwnedByPublishedYearComponent extends DataViewComponent<Data> {
           "from": {"data": "table"},
           "encode": {
             "enter": {
-              "x": {"scale": "x", "field": "x"},
+              "x": {"scale": "x", "field": "year"},
               "width": {"scale": "x", "band": 1, "offset": -1},
               "y": {"scale": "y", "field": "y0"},
               "y2": {"scale": "y", "field": "y1"},
-              "fill": {"scale": "color", "field": "c"},
+              "fill": {"scale": "color", "field": "colour"},
               "stroke": { "value": "black" },
               "strokeWidth": { "value": 1 },
-              "tooltip": {"field": "t"}
+              "tooltip": {"field": "tooltip"}
             },
             "update": {
               "fillOpacity": {"value": 1}

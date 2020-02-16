@@ -29,7 +29,7 @@
     "core-js": "^2.5.4",
     "extstats-angular": "^3.7.2",
     "extstats-core": "^1.5.0",
-    "extstats-datatable": "file:extstats-datatable-1.0.1.tgz",
+    "extstats-datatable": "^1.0.1",
     "ngx-bootstrap": "^3.2.0",
     "rollup": "^0.65.2",
     "rxjs": "~6.3.3",
