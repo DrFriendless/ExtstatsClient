@@ -41,12 +41,10 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
 
   ngOnInit() {
     super.ngOnInit();
-    const ys = [new Date().getFullYear()];
     this.getYears().subscribe(data => {
-      for (const y of data.data.plays.plays) {
-        if (ys.indexOf(y.year) < 0) ys.push(y.year);
-      }
-      this.years = ys.sort((a,b) => a - b);
+      console.log(data);
+      this.years = (data.data.years.length === 0) ? [new Date().getFullYear()] : data.data.years;
+      this.year = this.years[this.years.length-1];
     });
   }
 
@@ -54,7 +52,7 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
     const options = {
       headers: new HttpHeaders().set('x-api-key', this.getApiKey())
     };
-    const query = '?query=' + encodeURIComponent(`{plays(geeks: ["${this.geek}"]) { plays { year } } }`);
+    const query = '?query=' + encodeURIComponent(`{years(geek: "${this.geek}")}`);
     return this.httpClient.get('https://api.drfriendless.com/v1/retrieve' + query, options) as Observable<any>;
   }
 
