@@ -1,3 +1,15 @@
-.selected {
-  background: #00cc00;
+.year-button.selected {
+  background: #d34533;
+}
+.year-button {
+  background: #e68a00;
+  color: #fff;
+  border: none;
+  box-shadow: 2px 2px 1px #ccc;
+  margin: 4px;
+  width: 48px;
+  height: 24px;
+}
+.year-button:hover {
+  box-shadow: 4px 4px 2px #ccc;
 }

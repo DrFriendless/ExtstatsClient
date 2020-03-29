@@ -22,7 +22,7 @@ export interface Result {
 }
 
 @Component({
-  selector: 'app-root',
+  selector: 'yearly-widget',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

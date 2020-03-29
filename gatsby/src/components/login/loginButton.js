@@ -58,7 +58,7 @@ function logout() {
 function loadUserData(jwt) {
   const xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState === 4 && this.status === 200) {
       const response = JSON.parse(xhttp.responseText);
       console.log(response);
       setUserName(response);
@@ -75,7 +75,7 @@ function loadUserData(jwt) {
 }
 
 function setUserName(response) {
-  if (response.userName) {
+  if (response && response.userName) {
     username = response.userName;
   } else {
     username = undefined;
@@ -85,11 +85,11 @@ function setUserName(response) {
 }
 
 function setGeekLinks(response) {
-  var geekLinkBlock = document.getElementById("geekLinkBlock");
+  const geekLinkBlock = document.getElementById("geekLinkBlock");
   if (geekLinkBlock) geekLinkBlock.innerHTML = "";
-  if (response.config.usernames && geekLinkBlock) {
+  if (response && response.config && response.config.usernames && geekLinkBlock) {
     response.config.usernames.forEach(function(u) {
-      var div = document.createElement("div");
+      const div = document.createElement("div");
       div.setAttribute('class', 'geekLink');
       div.innerHTML = '<a href="/geek.html?geek=' + u + '">' + u + '</a>';
       geekLinkBlock.appendChild(div);
@@ -100,12 +100,12 @@ function setGeekLinks(response) {
 function checkForLogin() {
   const xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState === 4 && this.status === 200) {
       const response = JSON.parse(xhttp.responseText);
       console.log(response);
       setUserName(response);
       setGeekLinks(response);
-    } else {
+    } else if (this.readyState === 4) {
       setUserName(undefined);
       setGeekLinks(undefined);
     }
