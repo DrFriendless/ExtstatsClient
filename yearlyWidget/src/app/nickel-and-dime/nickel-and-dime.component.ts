@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {PlaysViewComponent} from "extstats-angular";
 import {Result} from "../app.component";
 import {makeIndex} from "extstats-core";
@@ -36,7 +36,7 @@ export class NickelAndDimeComponent extends PlaysViewComponent<Result> {
       if (gamesIndex[p.game].isExpansion) continue;
       counter.add(p.game, p.quantity);
     }
-    const desc = counter.desc();
+    const desc = counter.descfunc(n => gamesIndex[n].name);
     for (const key of desc) {
       const plays = counter.get(key);
       if (plays < 4) break;
