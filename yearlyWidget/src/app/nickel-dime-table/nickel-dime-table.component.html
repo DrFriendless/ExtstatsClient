@@ -1,0 +1,10 @@
+<h3 class="nickel-dime-title" *ngIf="data.length > 0">{{title}}</h3>
+<table class="table table-striped extstats-table nickel-dime-table" *ngIf="data.length > 0">
+  <thead><td>Plays</td><td>Game</td></thead>
+  <tbody>
+  <tr *ngFor="let g of data">
+    <td class="plays">{{g.plays}}</td>
+    <td class="name"><a href="{{g.url}}">{{g.name}}</a></td>
+  </tr>
+  </tbody>
+</table>

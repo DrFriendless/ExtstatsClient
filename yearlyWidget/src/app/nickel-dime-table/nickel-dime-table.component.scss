@@ -1,0 +1,21 @@
+.nickel-dime-table {
+  width: 600px;
+  margin-left: 100px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .plays {
+    width: 8vh;
+  }
+  .name {
+    width: 64vh;
+    text-align: left;
+  }
+}
+.nickel-dime-title {
+  text-align: left;
+  margin-left: 100px;
+}
+
+.nickel-dime-table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(230, 139, 0, 0.25);
+}

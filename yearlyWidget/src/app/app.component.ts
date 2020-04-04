@@ -42,9 +42,10 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
   ngOnInit() {
     super.ngOnInit();
     this.getYears().subscribe(data => {
-      console.log(data);
-      this.years = (data.data.years.length === 0) ? [new Date().getFullYear()] : data.data.years;
-      this.year = this.years[this.years.length-1];
+      if (data && data.data && data.data.years) {
+        this.years = (data.data.years.length === 0) ? [new Date().getFullYear()] : data.data.years;
+        this.year = this.years[this.years.length-1];
+      }
     });
   }
 

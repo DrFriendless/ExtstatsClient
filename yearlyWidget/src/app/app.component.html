@@ -1,6 +1,10 @@
 <div style="text-align:center">
   <year-chooser [years]="years" [selected]="year" (year)="setYear($event)"></year-chooser>
   <extstats-loader *ngIf="loading"></extstats-loader>
+
+  <h2 id="nickel-and-dime">Nickels and Dimes</h2>
+  <nickel-and-dime [data]="data$"></nickel-and-dime>
+
   <h2 id="mike-hulsebus">Mike Hulsebus-Style Pie Chart</h2>
   <mike-hulsebus [data]="data$"></mike-hulsebus>
 </div>
