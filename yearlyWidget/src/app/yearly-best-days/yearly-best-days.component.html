@@ -1,0 +1,13 @@
+<table class="table table-striped extstats-table yearly-best-days">
+  <thead><td>Date</td><td>Score</td><td>Plays</td></thead>
+  <tbody>
+  <tr *ngFor="let row of rows">
+    <td class="date">{{row.ymd.toDateString()}}</td>
+    <td class="score">{{row.score.toFixed(0)}}</td>
+    <td class="plays"><span *ngFor="let desc of row.playDescs; let i = index">
+      <span *ngIf="i">, </span>
+      {{desc.quantity}} plays of <a href="https://boardgamegeek.com/boardgame/{{desc.bggid}}">{{desc.game}}</a>
+    </span></td>
+  </tr>
+  </tbody>
+</table>

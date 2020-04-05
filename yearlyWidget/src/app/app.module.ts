@@ -8,6 +8,7 @@ import {ExtstatsAngularModule} from "extstats-angular";
 import { YearChooserComponent } from './year-chooser/year-chooser.component';
 import { NickelAndDimeComponent } from './nickel-and-dime/nickel-and-dime.component';
 import { NickelDimeTableComponent } from './nickel-dime-table/nickel-dime-table.component';
+import { YearlyBestDaysComponent } from './yearly-best-days/yearly-best-days.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { NickelDimeTableComponent } from './nickel-dime-table/nickel-dime-table.
     MikeHulsebusComponent,
     YearChooserComponent,
     NickelAndDimeComponent,
-    NickelDimeTableComponent
+    NickelDimeTableComponent,
+    YearlyBestDaysComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, ExtstatsAngularModule

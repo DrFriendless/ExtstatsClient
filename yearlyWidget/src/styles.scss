@@ -1,1 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+.extstats-table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(230, 139, 0, 0.25);
+}
+.extstats-table-title {
+  text-align: left;
+}

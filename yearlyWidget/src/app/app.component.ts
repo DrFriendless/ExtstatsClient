@@ -11,11 +11,17 @@ export interface Game {
 export interface Plays {
   game: number;
   quantity: number;
+  ymd: number;
+}
+export interface GeekGame {
+  rating: number;
+  bggid: number;
 }
 export interface Data {
   games: Game[];
   geeks: string[];
   plays: Plays[];
+  geekgames: GeekGame[];
 }
 export interface Result {
   plays: Data;
@@ -65,7 +71,7 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
     if (geek) {
       const s = this.year * 10000;
       const e = this.year * 10000 + 1231;
-      return `{plays(geeks: ["${geek}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid name isExpansion } plays { game quantity } } }`;
+      return `{plays(geeks: ["${geek}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid name isExpansion } plays { game quantity ymd } geekgames { bggid rating } } }`;
     } else {
       return "";
     }

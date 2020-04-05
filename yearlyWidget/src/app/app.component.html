@@ -2,6 +2,9 @@
   <year-chooser [years]="years" [selected]="year" (year)="setYear($event)"></year-chooser>
   <extstats-loader *ngIf="loading"></extstats-loader>
 
+  <h2 id="yearly-best-days">Best Days of Gaming</h2>
+  <yearly-best-days [data]="data$"></yearly-best-days>
+
   <h2 id="nickel-and-dime">Nickels and Dimes</h2>
   <nickel-and-dime [data]="data$"></nickel-and-dime>
 

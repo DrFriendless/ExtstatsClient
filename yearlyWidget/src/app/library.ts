@@ -29,5 +29,12 @@ export class Counter {
     });
     return keys;
   }
+}
 
+export function ymdToDate(ymd: number | string): Date {
+  if (typeof ymd === "string") ymd = parseInt(ymd);
+  const y = Math.floor(ymd / 10000);
+  const d = ymd % 100;
+  const m = Math.floor(ymd / 100) % 100;
+  return new Date(y, m - 1, d);
 }
