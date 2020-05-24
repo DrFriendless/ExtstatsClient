@@ -1,23 +1,23 @@
 import { Component } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular"
-import { MultiGeekPlays } from "extstats-core"
 import { stddev } from "../library"
+import {Result} from "../app.component";
 
 @Component({
   selector: 'temporal-by-day',
   templateUrl: './temporal-by-day.component.html'
 })
-export class TemporalByDayComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class TemporalByDayComponent extends PlaysViewComponent<Result> {
   public years: number[] = [];
   public byYear: Record<number, number[]> = {};
   public totals = [0, 0, 0, 0, 0, 0, 0, 0];
   public styles: Record<number, string[]> = {};
   public totalStyles = [ undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined ];
 
-  protected processData(data: MultiGeekPlays) {
-    if (!data || !data.games || !data.geeks || !data.geeks.length) return;
-    const geek = data.geeks[0];
-    const plays = data.plays[geek];
+  protected processData(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    const data = d.plays;
+    const plays = data.plays;
     for (const play of plays) {
       if (play.year < 2005) continue;
       if (this.years.indexOf(play.year) < 0) {
@@ -27,7 +27,7 @@ export class TemporalByDayComponent extends PlaysViewComponent<MultiGeekPlays> {
       }
       const y = this.byYear[play.year];
       y[0] += play.quantity;
-      const date = new Date(play.year, play.month - 1, play.date);
+      const date = new Date(play.year, play.month - 1, play.day);
       y[date.getDay() + 1] += play.quantity;
       this.totals[0] += play.quantity;
       this.totals[date.getDay() + 1] += play.quantity;

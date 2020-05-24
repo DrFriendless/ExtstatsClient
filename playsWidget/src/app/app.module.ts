@@ -6,7 +6,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ExtstatsAngularModule } from "extstats-angular";
 import { FormsModule } from '@angular/forms';
-import { DataTableModule } from "extstats-datatable";
 import { TemporalByDateComponent } from './temporal-by-date/temporal-by-date.component';
 import { TemporalByMonthComponent } from './temporal-by-month/temporal-by-month.component';
 import { TemporalByDayComponent } from './temporal-by-day/temporal-by-day.component';
@@ -22,7 +21,7 @@ import { MostPlayedByYearComponent } from './most-played-by-year/most-played-by-
     MostPlayedByYearComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule, DataTableModule
+    BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule
   ],
   providers: [],
   bootstrap: [PlaysWidget]

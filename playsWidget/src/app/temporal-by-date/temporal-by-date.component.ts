@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular"
-import { makeGamesIndex, MultiGeekPlays } from "extstats-core"
+import { makeIndex} from "extstats-core"
 import { monthLengths, months, stddev } from "../library"
+import {Result} from "../app.component";
 
 @Component({
   selector: 'temporal-by-date',
   templateUrl: './temporal-by-date.component.html'
 })
-export class TemporalByDateComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class TemporalByDateComponent extends PlaysViewComponent<Result> {
   public rows: Row[] = [];
 
   constructor() {
@@ -17,18 +18,18 @@ export class TemporalByDateComponent extends PlaysViewComponent<MultiGeekPlays> 
     }
   }
 
-  protected processData(data: MultiGeekPlays) {
-    if (!data || !data.games || !data.geeks || !data.geeks.length) return;
+  protected processData(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    const data = d.plays;
     const totalRow = this.rows[12];
-    const geek = data.geeks[0];
-    const plays = data.plays[geek];
-    const gameIndex = makeGamesIndex(data.games);
+    const plays = data.plays;
+    const gameIndex = makeIndex(data.games);
     for (const play of plays) {
       play['name'] = gameIndex[play.game].name;
       if (play.month === 0) continue;
       const month = this.rows[play.month - 1];
-      month.days[play.date - 1] += play.quantity;
-      totalRow.days[play.date - 1] += play.quantity;
+      month.days[play.day - 1] += play.quantity;
+      totalRow.days[play.day - 1] += play.quantity;
       month.total += play.quantity;
       totalRow.total += play.quantity;
     }

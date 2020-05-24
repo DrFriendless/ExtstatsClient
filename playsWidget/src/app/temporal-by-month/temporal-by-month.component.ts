@@ -1,23 +1,22 @@
 import { Component } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular"
-import { makeGamesIndex, MultiGeekPlays } from "extstats-core"
 import { months, stddev } from "../library"
+import {Result} from "../app.component";
 
 @Component({
   selector: 'temporal-by-month',
   templateUrl: './temporal-by-month.component.html'
 })
-export class TemporalByMonthComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class TemporalByMonthComponent extends PlaysViewComponent<Result> {
   public rows: Row[] = [];
   public monthNames = months.slice(0, months.length - 1);
   private byYear: Record<number, Row> = {};
 
-  protected processData(data: MultiGeekPlays) {
-    if (!data || !data.games || !data.geeks || !data.geeks.length) return;
+  protected processData(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    const data = d.plays;
     const totalRow = new Row("Total");
-    const geek = data.geeks[0];
-    const plays = data.plays[geek];
-    const gameIndex = makeGamesIndex(data.games);
+    const plays = data.plays;
     for (const play of plays) {
       if (play.year < 2005) continue;
       const yearRow = this.byYear[play.year] || new Row(play.year.toString());

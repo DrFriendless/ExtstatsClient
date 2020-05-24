@@ -1,30 +1,32 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular";
-import { makeGamesIndex, MultiGeekPlays } from "extstats-core";
+import { makeIndex} from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
 import { compareDate } from "../library"
+import {Result} from "../app.component";
 
 @Component({
   selector: 'new-plays',
   templateUrl: './new-plays.component.html'
 })
-export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class NewPlaysComponent extends PlaysViewComponent<Result> {
   @ViewChild('target', {static: true}) target: ElementRef;
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
 
-  protected processData(plays: MultiGeekPlays) {
+  protected processData(plays: Result) {
     this.refreshChart(plays);
   }
 
-  private refreshChart(data: MultiGeekPlays) {
-    if (!data || !data.games || !data.geeks || !data.geeks.length) return;
+  private refreshChart(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    const data = d.plays;
     const firstPlays: ChartPlay[] = [];
     const playedByThisGeek: number[] = [];
-    const gamesIndex = makeGamesIndex(data.games);
+    const gamesIndex = makeIndex(data.games);
     const geek = data.geeks[0];
-    const plays = data.plays[geek];
+    const plays = data.plays;
     const playedByYear: Record<number, number[]> = {};
     plays.sort((p1, p2) => compareDate(p1, p2));
     let first = true;
@@ -55,14 +57,14 @@ export class NewPlaysComponent extends PlaysViewComponent<MultiGeekPlays> {
         firstPlays.push({
           count: playedByThisGeek.length,
           gameName: game.name,
-          playDate: new Date(play.year, play.month - 1, play.date).getTime(),
+          playDate: new Date(play.year, play.month - 1, play.day).getTime(),
           yearCount: playedThisYear.length,
           geek
         });
       }
     }
     const spec: VisualizationSpec = {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],
       "padding": 5,
       "title": "First Plays",

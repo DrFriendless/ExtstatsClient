@@ -1,9 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {PlaysViewComponent} from "extstats-angular";
-import {makeGamesIndex, MultiGeekPlays} from "extstats-core";
-import {compareDate} from "../library";
+import { makeIndex} from "extstats-core";
 import embed, {VisualizationSpec} from "vega-embed";
-import container from "vega-embed/build/src/container";
+import {Result} from "../app.component";
 
 type PlaysOfGames = {
   year: number;
@@ -40,25 +39,22 @@ function findTop(plays: Record<string, number>, howMany: number): string[] {
   selector: 'most-played-by-year',
   templateUrl: './most-played-by-year.component.html'
 })
-export class MostPlayedByYearComponent extends PlaysViewComponent<MultiGeekPlays> {
+export class MostPlayedByYearComponent extends PlaysViewComponent<Result> {
   @ViewChild('target', {static: true}) target: ElementRef;
 
-  protected processData(data: MultiGeekPlays) {
-    if (!data || !data.games || !data.geeks || !data.geeks.length) return;
-    const gamesIndex = makeGamesIndex(data.games);
-    const geek = data.geeks[0];
-    const plays = data.plays[geek];
+  protected processData(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
+    const data = d.plays;
+    const gamesIndex = makeIndex(data.games);
+    const plays = data.plays;
     const byYear: ByYear = { years: {}, distinguishedGames: [] };
     const allPlays: Record<string, number> = {};
     plays.forEach(p => {
       if (!byYear.years[p.year]) byYear.years[p.year] =
         { year: p.year, plays: {}, top10: [], top10Count: [], otherPlayCount: 0 } as PlaysOfGames;
       const pog: PlaysOfGames = byYear.years[p.year];
-      let playsSoFar = pog.plays[p.game] || 0;
-      playsSoFar += p.quantity;
-      pog.plays[p.game] = playsSoFar;
-      if (!allPlays[p.game]) allPlays[p.game] = 0;
-      allPlays[p.game] = allPlays[p.game] + p.quantity;
+      pog.plays[p.game] = (pog.plays[p.game] || 0) + p.quantity;
+      allPlays[p.game] = (allPlays[p.game] || 0) + p.quantity;
     });
     const top: string[] = findTop(allPlays, 20);
     const values: DataPoint[] = [];
