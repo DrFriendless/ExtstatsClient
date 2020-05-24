@@ -19,7 +19,7 @@ export class TemporalByDateComponent extends PlaysViewComponent<Result> {
   }
 
   protected processData(d: Result) {
-    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
     const totalRow = this.rows[12];
     const plays = data.plays;

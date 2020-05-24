@@ -15,7 +15,7 @@ export class TemporalByDayComponent extends PlaysViewComponent<Result> {
   public totalStyles = [ undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined ];
 
   protected processData(d: Result) {
-    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
     const plays = data.plays;
     for (const play of plays) {

@@ -1,7 +1,7 @@
-import { Component } from "@angular/core"
-import { DataViewComponent } from "extstats-angular"
-import { Column } from "extstats-datatable/lib/src/DataTable"
-import { Data, makeGamesIndex, Result } from "../app.component"
+import { Component } from "@angular/core";
+import { DataViewComponent } from "extstats-angular";
+import { Data, makeGamesIndex, Result } from "../app.component";
+import {Column} from "extstats-datatable/lib/src/DataTable";
 
 @Component({
   selector: 'you-should-play',
@@ -17,18 +17,18 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
     new Column({ field: "plays", name: "Plays", tooltip: "The number of times you have played this game." }),
     new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game." }),
     new Column({ field: "daysSincePlayed", name: "Days Since Last Play", tooltip: "Days since you last played this game." })
-  ]
-  public rows: Row[] = []
-  public data: Data
+  ];
+  public rows: Row[] = [];
+  public data: Data;
 
   protected processData(data: Result) {
-    if (!data || !data.geekgames) return
-    this.data = data.geekgames
-    const gamesIndex = makeGamesIndex(this.data.games)
-    const rows: Row[] = []
+    if (!data || !data.geekgames) return;
+    this.data = data.geekgames;
+    const gamesIndex = makeGamesIndex(this.data.games);
+    const rows: Row[] = [];
     this.data.geekGames.forEach(gg => {
       if (gg.rating > 0) {
-        const game = gamesIndex[gg.bggid]
+        const game = gamesIndex[gg.bggid];
         const row: Row = {
           gameName: game.name,
           game: gg.bggid,
@@ -37,24 +37,24 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
           lastPlayed: YouShouldPlayComponent.toDateString(gg.lastPlay),
           shouldPlayScore: gg.shouldPlayScore,
           daysSincePlayed: gg.daysSincePlayed
-        }
-        rows.push(row)
+        };
+        rows.push(row);
       }
-    })
+    });
     rows.sort((a, b) => {
       return b.shouldPlayScore - a.shouldPlayScore
-    })
+    });
     this.rows = (rows.length > 20) ? rows.slice(0, 20) : rows
   }
 
   private static toDateString(date: number): string {
-    if (!date) return ""
-    const y = Math.floor(date / 10000)
-    const m = Math.floor(date / 100) % 100
-    const d = date % 100
-    const mm = (m < 10) ? "0" + m.toString() : m.toString()
-    const dd = (d < 10) ? "0" + d.toString() : d.toString()
-    return y.toString() + "-" + mm + "-" + dd
+    if (!date) return "";
+    const y = Math.floor(date / 10000);
+    const m = Math.floor(date / 100) % 100;
+    const d = date % 100;
+    const mm = (m < 10) ? "0" + m.toString() : m.toString();
+    const dd = (d < 10) ? "0" + d.toString() : d.toString();
+    return y.toString() + "-" + mm + "-" + dd;
   }
 }
 

@@ -13,7 +13,7 @@ export class TemporalByMonthComponent extends PlaysViewComponent<Result> {
   private byYear: Record<number, Row> = {};
 
   protected processData(d: Result) {
-    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+    if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
     const totalRow = new Row("Total");
     const plays = data.plays;

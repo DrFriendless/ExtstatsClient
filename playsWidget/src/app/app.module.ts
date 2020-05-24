@@ -10,6 +10,7 @@ import { TemporalByDateComponent } from './temporal-by-date/temporal-by-date.com
 import { TemporalByMonthComponent } from './temporal-by-month/temporal-by-month.component';
 import { TemporalByDayComponent } from './temporal-by-day/temporal-by-day.component';
 import { MostPlayedByYearComponent } from './most-played-by-year/most-played-by-year.component';
+import { FlorenceNightingaleComponent } from './florence-nightingale/florence-nightingale.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MostPlayedByYearComponent } from './most-played-by-year/most-played-by-
     TemporalByDateComponent,
     TemporalByMonthComponent,
     TemporalByDayComponent,
-    MostPlayedByYearComponent
+    MostPlayedByYearComponent,
+    FlorenceNightingaleComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule

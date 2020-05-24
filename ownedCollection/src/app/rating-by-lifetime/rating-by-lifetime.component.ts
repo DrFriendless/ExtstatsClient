@@ -104,7 +104,7 @@ export class RatingByLifetimeComponent extends DataViewComponent<Data> {
               "x": {"scale": "x", value: 0 },
               "x2": {"scale": "x", "field": "lifetime"},
               "y": {"scale": "y", "field": "y"},
-              "y2": {"scale": "y", offset: 1},
+              "y2": {"scale": "y", offset: -1},
               "fill": {"scale": "color", "field": "rating"},
               "tooltip": {"field": "tooltip"}
             },

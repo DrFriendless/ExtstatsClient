@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {Component, ViewChild, ElementRef, Input} from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular";
 import { makeIndex} from "extstats-core";
 import { VisualizationSpec } from "vega-embed";
@@ -15,17 +15,12 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
 
   private star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
 
-  protected processData(plays: Result) {
-    this.refreshChart(plays);
-  }
-
-  private refreshChart(d: Result) {
-    if (!d || !d.plays || !d.plays.games || !d.plays.geeks) return;
+  protected processData(d: Result) {
+    if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
     const firstPlays: ChartPlay[] = [];
     const playedByThisGeek: number[] = [];
     const gamesIndex = makeIndex(data.games);
-    const geek = data.geeks[0];
     const plays = data.plays;
     const playedByYear: Record<number, number[]> = {};
     plays.sort((p1, p2) => compareDate(p1, p2));
@@ -48,8 +43,7 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
             count: playedByThisGeek.length,
             gameName: "Before " + firstYear,
             playDate: new Date(firstYear, 0, 1).getTime(),
-            yearCount: playedThisYear.length,
-            geek
+            yearCount: playedThisYear.length
           });
           first = false;
         }
@@ -58,8 +52,7 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
           count: playedByThisGeek.length,
           gameName: game.name,
           playDate: new Date(play.year, play.month - 1, play.day).getTime(),
-          yearCount: playedThisYear.length,
-          geek
+          yearCount: playedThisYear.length
         });
       }
     }
@@ -92,26 +85,6 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
           "range": "height",
           "zero": true,
           "domain": { "data": "table", "field": "yearCount" }
-        }, {
-          "name": "shape",
-          "type": "ordinal",
-          "domain": data.geeks,
-          "range": [ 'circle', 'square', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left" ]
-        }, {
-          "name": "colour",
-          "type": "ordinal",
-          "domain": data.geeks,
-          "range": [ '#cdda49' ]
-        }, {
-          "name": "yearShape",
-          "type": "ordinal",
-          "domain": data.geeks,
-          "range": [ this.star ]
-        }, {
-          "name": "yearColour",
-          "type": "ordinal",
-          "domain": data.geeks,
-          "range": [ '#673fb4', '#e62565', "#159588", '#fd9727', '#fc5830', '#8cc152' ]
         }
       ],
       "axes": [
@@ -128,8 +101,8 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
               "x": { "scale": "xscale", "field": "playDate"},
               "y": { "scale": "yscale", "field": "count"},
               "tooltip": {"field": "gameName" },
-              "stroke": { "field": "geek", "scale": "colour" },
-              "shape": { "field": "geek", "scale": "shape" },
+              "stroke": { "value": '#cdda49' },
+              "shape": { "value": "circle" },
               "strokeWidth": { "value": 1 },
               "size": { "value": 16 }
             },
@@ -149,8 +122,8 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
               "x": { "scale": "xscale", "field": "playDate"},
               "y": { "scale": "yearScale", "field": "yearCount"},
               "tooltip": {"field": "gameName"},
-              "stroke": { "field": "geek", "scale": "yearColour" },
-              "shape": { "field": "geek", "scale": "yearShape" },
+              "stroke": { "value": '#673fb4' },
+              "shape": { "value": this.star },
               "strokeWidth": { "value": 1 },
               "size": { "value": 16 }
             },
@@ -172,6 +145,5 @@ interface ChartPlay {
   count: number;
   gameName: string;
   playDate: number;
-  geek: string;
   yearCount: number;
 }
