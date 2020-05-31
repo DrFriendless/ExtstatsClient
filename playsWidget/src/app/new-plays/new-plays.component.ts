@@ -1,4 +1,4 @@
-import {Component, ViewChild, ElementRef, Input} from '@angular/core';
+import {Component, ViewChild, ElementRef} from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular";
 import { makeIndex} from "extstats-core";
 import { VisualizationSpec } from "vega-embed";

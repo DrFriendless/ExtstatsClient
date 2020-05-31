@@ -1,0 +1,19 @@
+<div id="bestdays-table">
+  <div class="extstats-doc">
+    <extstats-button-group #buttongroup>
+      <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
+    </extstats-button-group>
+
+    <extstats-documentation id="bestdaysTableDoc" *ngIf="buttongroup.selected === 'doc'" [src]="'/json/en/doc/bestdays.json'">
+    </extstats-documentation>
+  </div>
+
+  <div class="extstats-table-block bestdays">
+    <mfTableController [table]="bestdaysTable"></mfTableController>
+    <table class="table table-striped extstats-table" [mfData]="rows" #bestdaysTable="mfDataTable" [mfRowsOnPage]="50"
+           [mfSortBy]="'score'" [mfSortOrder]="'desc'">
+      <thead mfHead [columns]="columns"></thead>
+      <tbody mfBody [columns]="columns"></tbody>
+    </table>
+  </div>
+</div>

@@ -12,9 +12,14 @@ export interface PlayData extends YMD {
   game: number;
   quantity: number;
 }
+export interface GeekGameData {
+  bggid: number;
+  rating: number;
+}
 export interface PlaysData {
   games: GameData[];
   plays: PlayData[];
+  geekgames: GeekGameData[];
 }
 export interface Result {
   plays: PlaysData;
@@ -41,6 +46,6 @@ export class PlaysWidget extends GraphQuerySourceComponent<Result> implements On
 
   protected buildQuery(geek: string): string {
     const geeks = `"${geek}"`;
-    return `{plays(geeks: [${geeks}]) { games { bggid name subdomain } plays { game year month day quantity } } }`;
+    return `{plays(geeks: [${geeks}]) { games { bggid name subdomain } plays { game year month day quantity } geekgames { bggid rating } } }`;
   }
 }

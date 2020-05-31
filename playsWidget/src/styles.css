@@ -37,3 +37,60 @@ table.hotness {
 table.hotness thead, table.hotness td.total {
   font-weight: bold;
 }
+/* Styles for best days table */
+.bestdays table tbody tr td {
+  min-width: 100px
+}
+
+.extstats-page-item.active {
+  background-color: rgba(255, 232, 255, 0.5);
+}
+.extstats-table-controller {
+  background-color: #00cc99;
+  color: white;
+  border: 1px solid #00cc99;
+}
+.extstats-table-controller a.extstats-page-link {
+  color: white;
+}
+.bestdays .table.extstats-table thead td,
+.bestdays .table.extstats-table tbody td {
+  border-right-width: 0;
+  border-left-width: 0;
+}
+.bestdays th {
+  background-color: #00cc99;
+  color: white;
+}
+
+.bestdays table.extstats-table td,
+.bestdays table.extstats-table tbody,
+.bestdays table.extstats-table thead,
+.bestdays table.extstats-table.table thead th {
+  border-color: #00cc99;
+}
+/* border colour lightened 60% with 0.5 alpha */
+.bestdays table.table-striped.extstats-table tbody tr:nth-child(even){
+  background-color: rgba(133, 255, 224, 0.5);
+}
+.bestdays table.table-striped.extstats-table tbody tr:nth-child(odd){
+  background-color: white;
+}
+
+.bestdays div.extstats-doc button {
+  border: solid 1px #00cc99;
+}
+.bestdays div.extstats-doc li.nav-item a.nav-link.active {
+  color: #00cc99;
+}
+.bestdays div.extstats-doc li.nav-item a.nav-link {
+  color: #777777;
+  font-size: 14px;
+  border-radius: unset;
+}
+.bestdays div.collapse {
+  margin-top: 1rem;
+}
+div.monthly-table {
+  margin-bottom: 40px;
+}

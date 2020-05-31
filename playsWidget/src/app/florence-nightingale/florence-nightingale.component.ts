@@ -49,11 +49,8 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
     let start = 0;
     const perSubdomain = 6.283 / Object.values(playsBySubdomain).length;
     const padding = perSubdomain / 20;
-    console.log(perSubdomain);
-    console.log(padding);
     for (const key in playsBySubdomain) {
       const count = playsBySubdomain[key];
-      console.log(key, count);
       chartData.push({
         name: key,  radius: Math.sqrt(count),
         startAngle: start + padding, endAngle: start + perSubdomain - padding,
@@ -87,7 +84,6 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
 
 
   private displayChart(chartData: ChartData[]): void {
-    console.log(chartData);
     const spec: VisualizationSpec = {
       "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],

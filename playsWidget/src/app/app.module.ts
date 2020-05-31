@@ -11,6 +11,9 @@ import { TemporalByMonthComponent } from './temporal-by-month/temporal-by-month.
 import { TemporalByDayComponent } from './temporal-by-day/temporal-by-day.component';
 import { MostPlayedByYearComponent } from './most-played-by-year/most-played-by-year.component';
 import { FlorenceNightingaleComponent } from './florence-nightingale/florence-nightingale.component';
+import { BestDaysComponent } from './best-days/best-days.component';
+import {ExtstatsDatatableModule} from "extstats-datatable";
+import {CommonModule} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -20,10 +23,12 @@ import { FlorenceNightingaleComponent } from './florence-nightingale/florence-ni
     TemporalByMonthComponent,
     TemporalByDayComponent,
     MostPlayedByYearComponent,
-    FlorenceNightingaleComponent
+    FlorenceNightingaleComponent,
+    BestDaysComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule
+    BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule,
+    ExtstatsDatatableModule, CommonModule
   ],
   providers: [],
   bootstrap: [PlaysWidget]
