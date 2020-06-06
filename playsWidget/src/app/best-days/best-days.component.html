@@ -9,7 +9,7 @@
   </div>
 
   <div class="extstats-table-block bestdays">
-    <mfTableController [table]="bestdaysTable"></mfTableController>
+    <mfTableController [table]="bestdaysTable" [searchColumn]="'playstr'" [placeholder]="'Plays'" [anywhere]="true"></mfTableController>
     <table class="table table-striped extstats-table" [mfData]="rows" #bestdaysTable="mfDataTable" [mfRowsOnPage]="50"
            [mfSortBy]="'score'" [mfSortOrder]="'desc'">
       <thead mfHead [columns]="columns"></thead>

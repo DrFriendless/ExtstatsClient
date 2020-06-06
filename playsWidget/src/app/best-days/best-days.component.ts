@@ -5,9 +5,21 @@ import {makeIndex} from "extstats-core";
 import {Column} from "extstats-datatable";
 
 interface Row {
+  rank: number;
   date: string;
   score: number;
-  plays: PlayData[];
+  playstr: string;
+}
+
+function renderPlays(plays: PlayData[], gi: { [bggid: string]: GameData }): string {
+  const strs = plays.map((pd: PlayData) => {
+    if (pd.quantity === 1) {
+      return "a play of " + gi[pd.game].name;
+    } else {
+      return `${pd.quantity} plays of ${gi[pd.game].name}`;
+    }
+  });
+  return strs.join(", ");
 }
 
 @Component({
@@ -17,21 +29,10 @@ interface Row {
 export class BestDaysComponent extends PlaysViewComponent<Result> {
   rows: Row[] = [];
   columns: Column<Row>[] = [
+    new Column({ field: "rank", name: "Rank", tooltip: "Position in ranking." }),
     new Column({ field: "date", name: "Date", tooltip: "The date of these plays." }),
     new Column({ field: "score", name: "Score", tooltip: "The score for this date." }),
-    new Column({
-      field: "plays", name: "Plays", tooltip: "Games played with quantities.",
-      valueHtml: row => {
-        const strs = row.plays.map((pd: PlayData) => {
-          if (pd.quantity === 1) {
-            return "a play of " + this.gi[pd.game].name;
-          } else {
-            return `${pd.quantity} plays of ${this.gi[pd.game].name}`;
-          }
-        });
-        return strs.join(", ");
-      }
-    }),
+    new Column({ field: "playstr", name: "Plays", tooltip: "Games played with quantities." }),
   ];
   mediumRating = 5.0;
   bias = 1.75;
@@ -63,10 +64,11 @@ export class BestDaysComponent extends PlaysViewComponent<Result> {
       scored.push({ymd, score, plays: byYmd[ymd] });
     }
     scored.sort((a, b) => b.score - a.score);
-    this.rows = scored.map(row => {
+    this.rows = scored.map((row, index) => {
       const ymd = parseInt(row.ymd);
       const date = `${Math.floor(ymd/10000)}-${Math.floor(ymd/100) % 100}-${ymd%100}`;
-      return { score: Math.floor(row.score*10)/10, plays: row.plays, date };
+      return { rank: index+1 , score: Math.floor(row.score*10)/10, date,
+        playstr: renderPlays(row.plays, this.gi) };
     });
   }
 
