@@ -1,0 +1,7 @@
+[{
+  "title": "Score",
+  "text": ["It is assumed that a neutral game is one that you have rated 5. For each different game played on the day, calculate the difference from neutral. Raise it to the power 1.75 (so very high and very low ratings count much more). Multiply by the number of plays, to a maximum of 1.5 (so 2 plays is the same as 10). Add up all the scores, with games rated below neutral counting as negative."]
+},{
+  "title": "Plays",
+  "text": ["The search bar can be used to locate the first date whose plays description contains what you typed."]
+}]
