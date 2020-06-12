@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {PlaysViewComponent} from "extstats-angular";
 import {GameData, GeekGameData, PlayData, PlaysData, Result} from "../app.component";
 import {makeIndex} from "extstats-core";
 import {Column} from "extstats-datatable";
+import {Options} from "ng5-slider";
+import {debounceTime} from "rxjs/operators";
 
 interface Row {
   rank: number;
@@ -26,7 +28,7 @@ function renderPlays(plays: PlayData[], gi: { [bggid: string]: GameData }): stri
   selector: 'best-days',
   templateUrl: './best-days.component.html'
 })
-export class BestDaysComponent extends PlaysViewComponent<Result> {
+export class BestDaysComponent extends PlaysViewComponent<Result> implements OnInit {
   rows: Row[] = [];
   columns: Column<Row>[] = [
     new Column({ field: "rank", name: "Rank", tooltip: "Position in ranking." }),
@@ -37,17 +39,29 @@ export class BestDaysComponent extends PlaysViewComponent<Result> {
   mediumRating = 5.0;
   bias = 1.75;
   maxPlays = 1.5;
+  playsSteps = [{ value: 1 }, { value: 1.5 }, { value: 2 }, { value: 2.5 }, { value: 3 }, { value: 4 }, { value: 5 },
+    { value: 10 }, { value: 100 } ];
+  mediumRatingOptions: Options = { floor: 1, ceil: 10, step: 0.5, showTicks: true, showTicksValues: true };
+  biasOptions: Options = { floor: 0.5, ceil: 5.0, step: 0.25, showTicks: true, showTicksValues: true };
+  maxPlaysOptions: Options = { floor: 1, ceil: 100, stepsArray: this.playsSteps, showTicks: true, showTicksValues: true };
+  fiddle = new EventEmitter<any>();
 
   private data: PlaysData;
   private gi: { [bggid: string]: GameData } = {};
   private ggi: { [bggid: string]: GeekGameData } = {};
+
+  ngOnInit(): void {
+    this.fiddle.subscribe(junk => {
+      this.recalc();
+    });
+  }
 
   protected processData(d: Result): any {
     if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     this.data = d.plays;
     this.gi = makeIndex(this.data.games);
     this.ggi = makeIndex(this.data.geekgames);
-    this.recalc();
+    this.fiddle.next();
   }
 
   private recalc() {

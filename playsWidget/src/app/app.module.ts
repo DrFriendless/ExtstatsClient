@@ -14,6 +14,7 @@ import { FlorenceNightingaleComponent } from './florence-nightingale/florence-ni
 import { BestDaysComponent } from './best-days/best-days.component';
 import {ExtstatsDatatableModule} from "extstats-datatable";
 import {CommonModule} from "@angular/common";
+import {Ng5SliderModule} from "ng5-slider";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import {CommonModule} from "@angular/common";
   ],
   imports: [
     BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule,
-    ExtstatsDatatableModule, CommonModule
+    ExtstatsDatatableModule, CommonModule, Ng5SliderModule
   ],
   providers: [],
   bootstrap: [PlaysWidget]

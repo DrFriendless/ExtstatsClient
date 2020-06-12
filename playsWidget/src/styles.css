@@ -94,3 +94,21 @@ table.hotness thead, table.hotness td.total {
 div.monthly-table {
   margin-bottom: 40px;
 }
+.slider-box {
+  flex: 1;
+  margin: 12px 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+.slider-box .ng5-slider .ng5-slider-pointer {
+  background-color: #00cc99;
+  width: 20px;
+  height: 20px;
+  top: -9px;
+  transition: all linear .1s;
+  margin-left: 5px;
+}
+.slider-box .ng5-slider .ng5-slider-pointer:after {
+  top: 6px;
+  left: 6px;
+}
