@@ -1,8 +1,9 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
 import {PlaysViewComponent} from "extstats-angular";
 import { makeIndex} from "extstats-core";
 import embed, {VisualizationSpec} from "vega-embed";
 import {Result} from "../app.component";
+import {Options} from "ng5-slider";
 
 type PlaysOfGames = {
   year: number;
@@ -41,28 +42,45 @@ function findTop(plays: Record<string, number>, howMany: number): string[] {
 })
 export class MostPlayedByYearComponent extends PlaysViewComponent<Result> {
   @ViewChild('target', {static: true}) target: ElementRef;
+  howMany = 20;
+  readonly howManyOptions: Options = { floor: 3, ceil: 40, step: 1, showTicks: true, showTicksValues: true };
+  readonly fiddle = new EventEmitter<any>();
+
+  private allPlays: Record<string, number> = {};
+  private byYear: ByYear;
+  private gamesIndex: Record<string, { name: string }>;
+
+  ngOnInit(): void {
+    this.fiddle.subscribe(junk => {
+      this.recalc();
+    });
+  }
 
   protected processData(d: Result) {
     if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
-    const gamesIndex = makeIndex(data.games);
     const plays = data.plays;
-    const byYear: ByYear = { years: {}, distinguishedGames: [] };
-    const allPlays: Record<string, number> = {};
+    this.gamesIndex = makeIndex(data.games);
+    this.byYear = { years: {}, distinguishedGames: [] };
+    this.allPlays = {}
     plays.forEach(p => {
-      if (!byYear.years[p.year]) byYear.years[p.year] =
+      if (!this.byYear.years[p.year]) this.byYear.years[p.year] =
         { year: p.year, plays: {}, top10: [], top10Count: [], otherPlayCount: 0 } as PlaysOfGames;
-      const pog: PlaysOfGames = byYear.years[p.year];
+      const pog: PlaysOfGames = this.byYear.years[p.year];
       pog.plays[p.game] = (pog.plays[p.game] || 0) + p.quantity;
-      allPlays[p.game] = (allPlays[p.game] || 0) + p.quantity;
+      this.allPlays[p.game] = (this.allPlays[p.game] || 0) + p.quantity;
     });
-    const top: string[] = findTop(allPlays, 20);
+    this.fiddle.next();
+  }
+
+  private recalc() {
+    const top: string[] = findTop(this.allPlays, this.howMany);
     const values: DataPoint[] = [];
-    Object.values(byYear.years).forEach((year: PlaysOfGames) => {
+    Object.values(this.byYear.years).forEach((year: PlaysOfGames) => {
       top.forEach(bggid => {
         const v = year.plays[bggid];
         if (v) {
-          const g = gamesIndex[bggid];
+          const g = this.gamesIndex[bggid];
           values.push({ y: year.plays[bggid], count: year.plays[bggid], game: bggid,
             name: g.name + " (" + year.plays[bggid] + ")", year: new Date(year.year, 7) });
         }
@@ -76,7 +94,7 @@ export class MostPlayedByYearComponent extends PlaysViewComponent<Result> {
       "$schema": "https://vega.github.io/schema/vega/v5.7.3.json",
       "hconcat": [],
       "padding": 5,
-      "title": "Plays of 20 Most Played Games by Year",
+      "title": `Plays of ${this.howMany} Most Played Games by Year`,
       "width": 900,
       "height": 600,
       "data": [{

@@ -1,8 +1,9 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
 import {PlaysViewComponent} from "extstats-angular";
 import {Result} from "../app.component";
 import {makeIndex} from "extstats-core";
 import embed, {VisualizationSpec} from "vega-embed";
+import {Options} from "ng5-slider";
 
 const FLORENCE_COLOURS = { 'Abstract Games': '#20b020', 'cgs': '#d060d0', 'Unknown': '#aaaaaa',
   'Children\'s Games' : '#f0d000', 'Family Games': '#20d0d0', 'Party Games': '#f02020',
@@ -24,33 +25,50 @@ interface ChartData {
 })
 export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
   @ViewChild('target', {static: true}) target: ElementRef;
+  howMany = 30;
+  readonly howManyOptions: Options = { floor: 3, ceil: 50, step: 1, showTicks: true, showTicksValues: true };
+  readonly fiddle = new EventEmitter<any>();
+
+  private playsByGame: Record<string, number>;
+  private playsBySubdomain: Record<string, number>;
+  private gi: Record<number, { subdomain: string, name: string }>;
+
+  ngOnInit(): void {
+    this.fiddle.subscribe(junk => {
+      this.recalc();
+    });
+  }
 
   protected processData(d: Result) {
     if (!d || !d.plays || !d.plays.games || !d.plays.plays) return;
     const data = d.plays;
-    const gi = makeIndex(data.games);
-    const playsBySubdomain: Record<string, number> = {};
-    const playsByGame: Record<string, number> = {};
+    this.gi = makeIndex(data.games);
+    this.playsBySubdomain = {};
+    this.playsByGame = {};
     for (const play of data.plays) {
-      const game = gi[play.game];
+      const game = this.gi[play.game];
       if (!game || !game.subdomain) continue;
-      playsBySubdomain[game.subdomain] = (playsBySubdomain[game.subdomain] || 0) + play.quantity;
-      playsByGame[play.game] = (playsByGame[play.game] || 0) + play.quantity;
+      this.playsBySubdomain[game.subdomain] = (this.playsBySubdomain[game.subdomain] || 0) + play.quantity;
+      this.playsByGame[play.game] = (this.playsByGame[play.game] || 0) + play.quantity;
     }
-    if (playsBySubdomain.size === 0) return;
+    if (this.playsBySubdomain.size === 0) return;
+    this.fiddle.next();
+  }
+
+  private recalc() {
     const mostPlayedGames: { bggid: number, count: number, subdomain: string }[] = [];
-    for (const bggid in playsByGame) {
-      mostPlayedGames.push({ bggid: parseInt(bggid), count: playsByGame[bggid], subdomain: gi[bggid].subdomain });
+    for (const bggid in this.playsByGame) {
+      mostPlayedGames.push({ bggid: parseInt(bggid), count: this.playsByGame[bggid], subdomain: this.gi[bggid].subdomain });
     }
     mostPlayedGames.sort((a, b) => b.count - a.count);
-    mostPlayedGames.splice(30);
+    mostPlayedGames.splice(this.howMany);
     mostPlayedGames.reverse();
     const chartData: ChartData[] = [];
     let start = 0;
-    const perSubdomain = 6.283 / Object.values(playsBySubdomain).length;
+    const perSubdomain = 6.283 / Object.values(this.playsBySubdomain).length;
     const padding = perSubdomain / 20;
-    for (const key in playsBySubdomain) {
-      const count = playsBySubdomain[key];
+    for (const key in this.playsBySubdomain) {
+      const count = this.playsBySubdomain[key];
       chartData.push({
         name: key,  radius: Math.sqrt(count),
         startAngle: start + padding, endAngle: start + perSubdomain - padding,
@@ -59,7 +77,7 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
       let total = 0;
       const sub: ChartData[] = [];
       for (const g of mostPlayedGames.filter(g => g.subdomain === key)) {
-        const name = gi[g.bggid].name;
+        const name = this.gi[g.bggid].name;
         const item = { name: "", radius: Math.sqrt(total + g.count),
           startAngle: start + padding, endAngle: start + perSubdomain - padding,
           colour: "#000000", "tooltip": `${name} (${g.count})`, zindex: 0
@@ -80,8 +98,6 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
     }
     this.displayChart(chartData);
   }
-
-
 
   private displayChart(chartData: ChartData[]): void {
     const spec: VisualizationSpec = {

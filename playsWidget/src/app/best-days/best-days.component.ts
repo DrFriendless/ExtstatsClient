@@ -39,12 +39,12 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
   mediumRating = 5.0;
   bias = 1.75;
   maxPlays = 1.5;
-  playsSteps = [{ value: 1 }, { value: 1.5 }, { value: 2 }, { value: 2.5 }, { value: 3 }, { value: 4 }, { value: 5 },
+  readonly playsSteps = [{ value: 1 }, { value: 1.5 }, { value: 2 }, { value: 2.5 }, { value: 3 }, { value: 4 }, { value: 5 },
     { value: 10 }, { value: 100 } ];
-  mediumRatingOptions: Options = { floor: 1, ceil: 10, step: 0.5, showTicks: true, showTicksValues: true };
-  biasOptions: Options = { floor: 0.5, ceil: 5.0, step: 0.25, showTicks: true, showTicksValues: true };
-  maxPlaysOptions: Options = { floor: 1, ceil: 100, stepsArray: this.playsSteps, showTicks: true, showTicksValues: true };
-  fiddle = new EventEmitter<any>();
+  readonly mediumRatingOptions: Options = { floor: 1, ceil: 10, step: 0.5, showTicks: true, showTicksValues: true };
+  readonly biasOptions: Options = { floor: 0.5, ceil: 5.0, step: 0.25, showTicks: true, showTicksValues: true };
+  readonly maxPlaysOptions: Options = { floor: 1, ceil: 100, stepsArray: this.playsSteps, showTicks: true, showTicksValues: true };
+  readonly fiddle = new EventEmitter<any>();
 
   private data: PlaysData;
   private gi: { [bggid: string]: GameData } = {};

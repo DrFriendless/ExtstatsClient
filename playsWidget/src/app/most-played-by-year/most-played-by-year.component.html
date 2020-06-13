@@ -1,5 +1,20 @@
+<div class="extstats-doc">
+  <extstats-button-group #buttongroup>
+    <button type="button" class="btn" [extstatsButtonGroup]="buttongroup" selector="config">Fiddle</button>
+  </extstats-button-group>
+</div>
+
+<div *ngIf="buttongroup.selected === 'config'" style="display: flex; flex-direction: row; width: 100%">
+  <div class="slider-box">
+    <h3>How Many Games to Show {{howMany}}</h3>
+    <ng5-slider [(value)]="howMany" [options]="howManyOptions" (userChange)="fiddle.next()"></ng5-slider>
+    <p>This slider controls how many of your top played games to show on this chart. By default, this is 20.
+    </p>
+  </div>
+</div>
+
 <div class="extstats-graph most-played-by-year">
   <div #target style="flex-grow: 1; display: block"></div>
 </div>
 
-<p>For your 20 most played games, how many times did you play each in each year?</p>
+<p>For your {{howMany}} most played games, how many times did you play each in each year?</p>
