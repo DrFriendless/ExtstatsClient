@@ -1,7 +1,7 @@
 import { Component } from "@angular/core"
 import { DataViewComponent } from "extstats-angular"
-import { Column } from "extstats-datatable/lib/src/DataTable"
-import { makeKeySingle } from "../library"
+import { Column } from "extstats-datatable";
+import { makeKeySingle } from "../library";
 import {
   calcHIndex,
   GameID,
@@ -19,7 +19,7 @@ import {
 })
 export class PlaysByMonthYtdComponent extends DataViewComponent<PlayAndGamesIndex> {
   public columns: Column<Row>[] = [
-    new Column({ field: "month", name: "Month", tooltip: "The month this row is for." }),
+    new Column({ field: "month", name: "Month", tooltip: "The month this row is for.", classname: "month-column" }),
     new Column({ field: "plays", name: "Plays", tooltip: "How many games you played in this month." }),
     new Column({ field: "distinct", name: "Distinct Games", tooltip: "Different games played this month.",
       valueTooltip: (r: Row) => r.gamesPlayedNames.join(", ") }),

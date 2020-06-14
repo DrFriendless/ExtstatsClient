@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { DataViewComponent } from "extstats-angular";
-import { ym } from "../library"
-import { Column } from "extstats-datatable/lib/src/DataTable";
-import { buildTooltip, PlayAndGamesIndex } from "../play-index"
+import { ym } from "../library";
+import { Column } from "extstats-datatable";
+import { buildTooltip, PlayAndGamesIndex } from "../play-index";
 
 @Component({
   selector: "plays-by-year",

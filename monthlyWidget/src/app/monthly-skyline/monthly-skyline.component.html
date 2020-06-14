@@ -1,0 +1,17 @@
+<table class="skyline-legend">
+  <tr><td class="skyline-legend-plays"></td><td>Total Plays</td></tr>
+  <tr><td class="skyline-legend-distinct"></td><td>Different Games</td></tr>
+  <tr><td class="skyline-legend-new"></td><td>New Games</td></tr>
+</table>
+
+<div class="skyline">
+  <div class="skyline-column" *ngFor="let month of months" title="{{month.tooltip}}">
+    <div class="skyline-stack" [style.height.px]="height">
+      <div [style.height.px]="height * month.new / max" class="skyline-new" title="{{month.newtip}}"></div>
+      <div [style.height.px]="height * month.distinct / max" class="skyline-distinct" title="{{month.distincttip}}"></div>
+      <div [style.height.px]="height * month.plays / max" class="skyline-plays" title="{{month.distincttip}}"></div>
+    </div>
+    <span>{{month.month}}</span><br>
+    <span>{{month.year}}</span>
+  </div>
+</div>

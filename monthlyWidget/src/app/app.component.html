@@ -1,6 +1,9 @@
 <div style="text-align:center">
   <extstats-loader *ngIf="loading"></extstats-loader>
 
+  <h2 id="skyline">Monthly Skyline</h2>
+  <monthly-skyline [data]="playAndGame$"></monthly-skyline>
+
   <h2 id="pbmytd">Plays By Month (Year to Date)</h2>
   <plays-by-month-ytd [data]="playAndGame$"></plays-by-month-ytd>
 

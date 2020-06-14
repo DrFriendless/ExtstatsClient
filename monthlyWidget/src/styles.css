@@ -57,4 +57,56 @@
 .monthly-table div.collapse {
   margin-top: 1rem;
 }
-
+.month-column {
+  min-width: 90px;
+}
+.skyline-new {
+  width: 100%;
+  background-color: #e62565;
+  z-index: 3;
+  position: absolute;
+  bottom: 0;
+}
+.skyline-plays {
+  width: 100%;
+  background-color: #8cc152;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+}
+.skyline-distinct {
+  width: 100%;
+  background-color: #159588;
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+}
+.skyline-stack {
+  display: inline-block;
+  width: 40px;
+  position: relative;
+  flex: 0 0 auto;
+}
+.skyline {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+.skyline-column span {
+  font-size: 12px;
+}
+.skyline-legend-new {
+  width: 20px;
+  background-color: #e62565;
+}
+.skyline-legend-distinct {
+  width: 20px;
+  background-color: #159588;
+}
+.skyline-legend-plays {
+  width: 20px;
+  background-color: #8cc152;
+}
+.skyline-legend td {
+  text-align: left;
+}
