@@ -4,6 +4,7 @@ import {Result} from "../app.component";
 import {makeIndex} from "extstats-core";
 import embed, {VisualizationSpec} from "vega-embed";
 import {Options} from "ng5-slider";
+import {LoginService} from "../login.service";
 
 const FLORENCE_COLOURS = { 'Abstract Games': '#20b020', 'cgs': '#d060d0', 'Unknown': '#aaaaaa',
   'Children\'s Games' : '#f0d000', 'Family Games': '#20d0d0', 'Party Games': '#f02020',
@@ -32,6 +33,11 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> {
   private playsByGame: Record<string, number>;
   private playsBySubdomain: Record<string, number>;
   private gi: Record<number, { subdomain: string, name: string }>;
+
+  constructor(loginService: LoginService) {
+    super();
+    loginService.registerFeature("florence");
+  }
 
   ngOnInit(): void {
     this.fiddle.subscribe(junk => {

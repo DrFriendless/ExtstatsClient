@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GraphQuerySourceComponent, UserDataService } from "extstats-angular";
 import { HttpClient } from "@angular/common/http";
 import {YMD} from "./library";
+import {LoginService} from "./login.service";
 
 export interface GameData {
   bggid: number;
@@ -31,12 +32,16 @@ export interface Result {
   styleUrls: ['./app.component.css']
 })
 export class PlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
-  constructor(http: HttpClient, userDataService: UserDataService) {
+  constructor(http: HttpClient, userDataService: UserDataService, private loginService: LoginService) {
     super(http, userDataService);
   }
 
   public ngOnInit() {
     super.ngOnInit();
+    console.log("features", this.loginService.features);
+    this.loginService.isLoggedIn.subscribe(yes => {
+      console.log("logged in = ", yes);
+    })
     this.refresh();
   }
 
