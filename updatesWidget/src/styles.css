@@ -7,3 +7,33 @@
 .update-table tbody button {
   margin: 4px;
 }
+.update-button {
+  margin: 6px;
+  height: 28px;
+  width: 90px;
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 2px 2px 1px #ccc;
+  background-color: #666666;
+  color: white;
+  border: none;
+}
+.update-button.wide {
+  width: unset;
+}
+.update-button:hover {
+  box-shadow: 4px 4px 2px #ccc;
+}
+.url-column {
+  width: 300px;
+}
+.date-column {
+  width: 200px;
+}
+.plays-columns {
+  width: 64px;
+  text-align: right;
+}

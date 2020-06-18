@@ -14,17 +14,23 @@
   The timestamps are in UTC timezone.
 </p>
 
+<button class="update-button wide" type="button" (click)="onRefreshAll()">Refresh This List</button>
+<p></p>
+
 <h2>Miscellaneous</h2>
 <table class="update-table">
   <thead>
-  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td></td>
+  <td>File</td>
+  <td class="date-column">Last Update</td>
+  <td class="date-column">Next Update</td>
+  <td></td>
   </thead>
   <tbody>
   <tr *ngFor="let file of other">
-    <td><a href="{{file.url}}">{{file.description}}</a></td>
-    <td>{{file.lastUpdate}}</td>
-    <td>{{file.nextUpdate}}</td>
-    <td><button type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+    <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+    <td class="date-column">{{file.lastUpdate}}</td>
+    <td class="date-column">{{file.nextUpdate}}</td>
+    <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
   </tr>
   </tbody>
 </table>
@@ -32,15 +38,27 @@
 <h2>Plays</h2>
 <table class="update-table">
   <thead>
-  <td>File</td><td class="date">Last Update</td><td class="date">Next Update</td><td></td><td># Plays</td>
+  <td>File</td>
+  <td class="date-column">Last Update</td>
+  <td class="date-column">Next Update</td>
+  <td></td>
+  <td class="plays-columns"># Plays</td>
   </thead>
   <tbody>
   <tr *ngFor="let file of plays">
-    <td><a href="{{file.url}}">{{file.description}}</a></td>
-    <td>{{file.lastUpdate}}</td>
-    <td>{{file.nextUpdate}}</td>
-    <td><button type="button" (click)="onRefresh(file.url)">Refresh</button></td>
-    <td>{{file.recorded || 0}}</td>
+    <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+    <td class="date-column">{{file.lastUpdate}}</td>
+    <td class="date-column">{{file.nextUpdate}}</td>
+    <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+    <td class="plays-columns">{{file['recorded'] || 0}}</td>
   </tr>
   </tbody>
 </table>
+
+<h3>Update Old Stuff</h3>
+<p>
+  This button will update all files which haven't been updated in a week.
+  Use this when you've made lots of changes and can't remember what months they were in.
+  Of course after you use it, it won't work again for a week.
+</p>
+<button class="update-button wide" type="button" (click)="onRefreshOld()">Refresh Old Files</button>

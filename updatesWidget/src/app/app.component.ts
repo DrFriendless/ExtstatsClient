@@ -4,6 +4,7 @@ import { Observable, Subject } from "rxjs"
 import { ToProcessElement } from "extstats-core"
 import { UserDataService } from "extstats-angular"
 import { switchMap } from "rxjs/operators"
+const dateFormat = require("dateformat");
 
 @Component({
   selector: 'extstats-updates',
@@ -11,20 +12,20 @@ import { switchMap } from "rxjs/operators"
 })
 export class AppComponent implements OnInit {
   private data$: Observable<ToProcessElement[]>;
-  public other: ToProcessElement[] = [];
-  public plays: ToProcessElement[] = [];
   private subject = new Subject<any>();
+  other: ToProcessElement[] = [];
+  plays: ToProcessElement[] = [];
+  geek: string = undefined;
 
   constructor(private http: HttpClient, private userService: UserDataService) {
   }
 
-  public ngOnInit(): void {
-    const geek = this.userService.getAGeek();
-    console.log(geek);
+  ngOnInit(): void {
+    this.geek = this.userService.getAGeek();
     this.data$ = this.subject
       .asObservable()
       .pipe(
-        switchMap(() => this.doQuery(geek))
+        switchMap(() => this.doQuery(this.geek))
       ) as Observable<ToProcessElement[]>;
     this.data$.subscribe(vs => this.processData(vs));
     this.subject.next(undefined);
@@ -34,7 +35,8 @@ export class AppComponent implements OnInit {
     this.other = [];
     this.plays = [];
     for (const tpe of data) {
-      tpe['string'] = JSON.stringify(tpe);
+      tpe.lastUpdate = transform(tpe.lastUpdate);
+      tpe.nextUpdate = transform(tpe.nextUpdate);
       if (tpe.processMethod === 'processPlays') {
         this.plays.push(tpe);
       } else {
@@ -45,22 +47,55 @@ export class AppComponent implements OnInit {
   }
 
   private patch(tpe: ToProcessElement): void {
-    for (const i in this.other) {
-      if (this.other[i].url === tpe.url) {
-        this.other[i] = tpe;
+    for (const o of this.other) {
+      if (o.url === tpe.url) {
+        o.lastUpdate = transform(tpe.lastUpdate);
+        o.nextUpdate = transform(tpe.nextUpdate);
         return;
       }
     }
-    for (const i in this.plays) {
-      if (this.plays[i].url === tpe.url) {
-        this.plays[i] = tpe;
+    for (const o of this.plays) {
+      if (o.url === tpe.url) {
+        o.lastUpdate = transform(tpe.lastUpdate);
+        o.nextUpdate = transform(tpe.nextUpdate);
         return;
       }
     }
   }
 
-  public onRefresh(url: string): void {
+  private noLastUpdate(url: string): void {
+    for (const o of this.other) {
+      if (o.url === url) {
+        o.lastUpdate = "";
+        return;
+      }
+    }
+    for (const o of this.plays) {
+      if (o.url === url) {
+        o.lastUpdate = "";
+        return;
+      }
+    }
+  }
+
+
+  onRefreshAll(): void {
+    this.subject.next(undefined);
+  }
+
+  onRefresh(url: string): void {
     this.doRefresh(url).subscribe(tpe => this.patch(tpe));
+  }
+
+  onRefreshOld(): void {
+    this.doRefreshOld(this.geek).subscribe(urls => urls.forEach(url => this.noLastUpdate(url)));
+  }
+
+  private doRefreshOld(geek: string): Observable<string[]> {
+    const options = {
+      headers: new HttpHeaders().set("x-api-key", getApiKey())
+    };
+    return this.http.post("https://api.drfriendless.com/v1/updateOld/?geek=" + encodeURIComponent(geek), {}, options) as Observable<string[]>;
   }
 
   private doRefresh(url: string): Observable<ToProcessElement> {
@@ -87,4 +122,9 @@ function byDateDescending(t1: ToProcessElement, t2: ToProcessElement): number {
 
 function getApiKey(): string {
   return "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ";
+}
+
+function transform(s: string) {
+  if (!s) return "";
+  return dateFormat(new Date(s), "h:MM:sstt d mmm yy");
 }
