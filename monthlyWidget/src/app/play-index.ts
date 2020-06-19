@@ -65,7 +65,7 @@ export function indexPlays(data: MonthlyData): PlayAndGamesIndex {
   const ownedGames = new Set<number>();
   const gamesIndex = {}
   data.geekGames.forEach(gg => {
-    if (gg.owned) ownedGames.add(gg.bggid);
+    if (gg.owned) ownedGames.add(gg.game.bggid);
     gamesIndex[gg.game.bggid] = gg.game;
   } );
   years.sort();
