@@ -4,7 +4,6 @@ import {GameData, GeekGameData, PlayData, PlaysData, Result} from "../app.compon
 import {makeIndex} from "extstats-core";
 import {Column} from "extstats-datatable";
 import {Options} from "ng5-slider";
-import {debounceTime} from "rxjs/operators";
 
 interface Row {
   rank: number;

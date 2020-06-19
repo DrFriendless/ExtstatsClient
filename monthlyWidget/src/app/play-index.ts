@@ -1,5 +1,6 @@
-import { CollectionWithMonthlyPlays, GameData, makeGamesIndex, MonthlyPlayCount, MonthlyPlays } from "extstats-core"
+import { GameData } from "extstats-core"
 import { setToArray, ym } from "./library"
+import {CountData, MonthlyData, PlayData } from "./app.component";
 
 export type GameID = number;
 export type PlayCount = number;
@@ -23,61 +24,60 @@ export type PlayAndGamesIndex = {
   yearlyPlaysPerMonth: YearTo<MonthTo<GamePlays>>
 };
 
-export function indexPlays(data: CollectionWithMonthlyPlays): PlayAndGamesIndex {
-  if (data) {
-    const plays = data.plays;
-    if (!plays || plays.length === 0) return;
-    plays.sort((a, b) => ym(a) - ym(b));
-    const everPlayIndex = new PlayIndex();
-    const yearPlayIndices: YearTo<PlayIndex> = {};
-    const years: number[] = [];
-    const months: number[] = [];
-    const everPlaysPerMonth = {};
-    const yearlyPlaysPerMonth = {};
-    let lastMonth = -1;
-    let lastYear = -1;
-    for (const mp of plays) {
-      if (years.indexOf(mp.year) < 0) years.push(mp.year);
-      const m = mp.year * 100 + mp.month;
-      if (m != lastMonth && lastMonth >= 0) {
-        everPlaysPerMonth[lastMonth] = everPlayIndex.snapshotEverPlaysPerGame();
-        if (m != lastMonth) {
-          if (!yearlyPlaysPerMonth[lastYear]) yearlyPlaysPerMonth[lastYear] = {};
-          yearlyPlaysPerMonth[lastYear][lastMonth] = everPlayIndex.snapshotYearPlaysPerGame(lastYear);
-        }
-      }
-      lastMonth = m;
-      lastYear = mp.year;
-      if (months.indexOf(m) < 0) months.push(m);
-      if (!yearPlayIndices[mp.year]) {
-        yearPlayIndices[mp.year] = new PlayIndex();
-      }
-      const yearPlayIndex = yearPlayIndices[mp.year];
-      yearPlayIndex.addPlays(mp);
-      everPlayIndex.addPlays(mp);
-    }
-    if (!yearlyPlaysPerMonth[lastYear]) yearlyPlaysPerMonth[lastYear] = {};
-    yearlyPlaysPerMonth[lastYear][lastMonth] = everPlayIndex.snapshotYearPlaysPerGame(lastYear);
-    const gamesIndex = makeGamesIndex(data.games);
-    const datesIndex = makeDatesIndex(data.counts);
-    const ownedGames = new Set<number>();
-    data.collection.forEach(gg => {
-      if (gg.owned) ownedGames.add(gg.bggid);
-    } );
-    years.sort();
-    months.sort();
-    return { everPlayIndex, gamesIndex, years, months, datesIndex, ownedGames, everPlaysPerMonth, yearlyPlaysPerMonth};
-  } else {
-    return { everPlayIndex: new PlayIndex(), gamesIndex: {}, years: [], months: [], datesIndex: {},
+export function indexPlays(data: MonthlyData): PlayAndGamesIndex {
+  if (!data) {
+    return { everPlayIndex: new PlayIndex(), years: [], months: [], datesIndex: {}, gamesIndex: {},
       ownedGames: new Set<number>(), everPlaysPerMonth: {}, yearlyPlaysPerMonth: {} };
   }
+  const plays = data.plays;
+  plays.sort((a, b) => ym(a) - ym(b));
+  const everPlayIndex = new PlayIndex();
+  const yearPlayIndices: YearTo<PlayIndex> = {};
+  const years: number[] = [];
+  const yearMonths: number[] = [];
+  const everPlaysPerMonth: Record<number, GamePlays> = {};
+  const yearlyPlaysPerMonth: Record<number, Record<number, GamePlays>> = {};
+  let lastYearMonth = -1;
+  let lastYear = -1;
+  for (const mp of plays) {
+    if (years.indexOf(mp.year) < 0) years.push(mp.year);
+    const ym = mp.year * 100 + mp.month;
+    if (ym != lastYearMonth && lastYearMonth >= 0) {
+      everPlaysPerMonth[lastYearMonth] = everPlayIndex.snapshotEverPlaysPerGame();
+      if (ym != lastYearMonth) {
+        if (!yearlyPlaysPerMonth[lastYear]) yearlyPlaysPerMonth[lastYear] = {};
+        yearlyPlaysPerMonth[lastYear][lastYearMonth] = everPlayIndex.snapshotYearPlaysPerGame(lastYear);
+      }
+    }
+    lastYearMonth = ym;
+    lastYear = mp.year;
+    if (yearMonths.indexOf(ym) < 0) yearMonths.push(ym);
+    if (!yearPlayIndices[mp.year]) {
+      yearPlayIndices[mp.year] = new PlayIndex();
+    }
+    const yearPlayIndex = yearPlayIndices[mp.year];
+    yearPlayIndex.addPlays(mp);
+    everPlayIndex.addPlays(mp);
+  }
+  const datesIndex = makeDatesIndex(data.counts);
+  if (!yearlyPlaysPerMonth[lastYear]) yearlyPlaysPerMonth[lastYear] = {};
+  yearlyPlaysPerMonth[lastYear][lastYearMonth] = everPlayIndex.snapshotYearPlaysPerGame(lastYear);
+  const ownedGames = new Set<number>();
+  const gamesIndex = {}
+  data.geekGames.forEach(gg => {
+    if (gg.owned) ownedGames.add(gg.bggid);
+    gamesIndex[gg.game.bggid] = gg.game;
+  } );
+  years.sort();
+  yearMonths.sort();
+  return { everPlayIndex, years, months: yearMonths, datesIndex, gamesIndex, ownedGames, everPlaysPerMonth, yearlyPlaysPerMonth };
 }
 
 /**
  * A set of plays with dates, indexed for easy retrieval of useful data.
  */
 export class PlayIndex {
-  private indexByPeriod: Record<number, MonthlyPlays[]> = {};
+  private indexByPeriod: Record<number, PlayData[]> = {};
   // new games played in period
   private newIndexByPeriod: Record<number, Set<GameID>> = {};
   private playedInPeriod: Record<number, Set<GameID>> = {};
@@ -88,13 +88,13 @@ export class PlayIndex {
   private everNDs: Record<number, NickelDime> = {};
   private yearlyNDs: MonthTo<NickelDime> = {};
 
-  public addPlays(pwd: MonthlyPlays) {
-    if (!this.playsPerGame[pwd.game]) this.playsPerGame[pwd.game] = 0;
+  addPlays(pwd: PlayData) {
+    if (!this.playsPerGame[pwd.bggid]) this.playsPerGame[pwd.bggid] = 0;
     if (!this.yearPlaysPerGame[pwd.year]) this.yearPlaysPerGame[pwd.year] = {};
-    if (!this.yearPlaysPerGame[pwd.year][pwd.game]) this.yearPlaysPerGame[pwd.year][pwd.game] = 0;
-    const before = this.playsPerGame[pwd.game];
+    if (!this.yearPlaysPerGame[pwd.year][pwd.bggid]) this.yearPlaysPerGame[pwd.year][pwd.bggid] = 0;
+    const before = this.playsPerGame[pwd.bggid];
     const after = before + pwd.quantity;
-    const yearBefore = this.yearPlaysPerGame[pwd.year][pwd.game];
+    const yearBefore = this.yearPlaysPerGame[pwd.year][pwd.bggid];
     const yearAfter = yearBefore + pwd.quantity;
     const y = pwd.year;
     const m = pwd.year * 100 + pwd.month;
@@ -103,16 +103,16 @@ export class PlayIndex {
     if (after >= 5) {
       if (!this.everNDs[pwd.year]) this.everNDs[pwd.year] = emptyNickelAndDime();
       if (!this.everNDs[m]) this.everNDs[m] = emptyNickelAndDime();
-      this.updateNickelsAndDimes(pwd.game, before, after, this.everNDs[y]);
-      this.updateNickelsAndDimes(pwd.game, before, after, this.everNDs[m]);
+      updateNickelsAndDimes(pwd.bggid, before, after, this.everNDs[y]);
+      updateNickelsAndDimes(pwd.bggid, before, after, this.everNDs[m]);
     }
     if (yearAfter >= 5) {
       if (!this.yearlyNDs[m]) this.yearlyNDs[m] = emptyNickelAndDime();
-      this.updateNickelsAndDimes(pwd.game, yearBefore, yearAfter, this.yearlyNDs[m]);
+      updateNickelsAndDimes(pwd.bggid, yearBefore, yearAfter, this.yearlyNDs[m]);
     }
-    this.playsPerGame[pwd.game] = after;
-    this.yearPlaysPerGame[pwd.year][pwd.game] = yearAfter;
-    this.everPlayed.add(pwd.game);
+    this.playsPerGame[pwd.bggid] = after;
+    this.yearPlaysPerGame[pwd.year][pwd.bggid] = yearAfter;
+    this.everPlayed.add(pwd.bggid);
   }
 
   snapshotEverPlaysPerGame(): GamePlays {
@@ -124,58 +124,45 @@ export class PlayIndex {
     return { ...this.yearPlaysPerGame[year] };
   }
 
-  private updateNickelsAndDimes(game: GameID, before: PlayCount, after: PlayCount, nd: NickelDime): void {
-    if (before < 5 && after >= 5) {
-      nd.nickel.add(game);
-    }
-    if (before < 10 && after >= 10) {
-      nd.dime.add(game);
-    }
-    if (before < 25 && after >= 25) {
-      nd.quarter.add(game);
-    }
-    if (before < 100 && after >= 100) {
-      nd.dollar.add(game);
-    }
-  }
 
-  private addPlayForPeriod(period: number, pwd: MonthlyPlays) {
+
+  private addPlayForPeriod(period: number, pwd: PlayData) {
     if (!this.indexByPeriod[period]) {
       this.indexByPeriod[period] = [pwd];
     } else {
       this.indexByPeriod[period].push(pwd);
     }
     if (!this.playedInPeriod[period]) this.playedInPeriod[period] = new Set<number>();
-    this.playedInPeriod[period].add(pwd.game);
-    if (!this.everPlayed.has(pwd.game)) {
+    this.playedInPeriod[period].add(pwd.bggid);
+    if (!this.everPlayed.has(pwd.bggid)) {
       if (!this.newIndexByPeriod[period]) {
-        this.newIndexByPeriod[period] = new Set<number>([pwd.game]);
+        this.newIndexByPeriod[period] = new Set<number>([pwd.bggid]);
       } else {
-        this.newIndexByPeriod[period].add(pwd.game);
+        this.newIndexByPeriod[period].add(pwd.bggid);
       }
     }
   }
 
-  public getTotalPlays(period: number): TotalPlays {
+  getTotalPlays(period: number): TotalPlays {
     let total = 0;
     const gamePlays = {};
     const ids = new Set<number>();
     const plays = this.indexByPeriod[period] || [];
     for (const p of plays) {
       if (!p.expansion) total += p.quantity;
-      const before = gamePlays[p.game] || 0;
-      gamePlays[p.game] = before + p.quantity;
-      ids.add(p.game);
+      const before = gamePlays[p.bggid] || 0;
+      gamePlays[p.bggid] = before + p.quantity;
+      ids.add(p.bggid);
     }
     const newGames = !!this.newIndexByPeriod[period] ? this.newIndexByPeriod[period] : new Set<number>();
     return { count: total, distinct: ids.size, new: newGames, played: ids, byGame: gamePlays };
   }
 
-  public getPlays(period: number): MonthlyPlays[] {
+  getPlays(period: number): PlayData[] {
     return this.indexByPeriod[period];
   }
 
-  public getEverNickelAndDimes(period: number): NickelDime {
+  getEverNickelAndDimes(period: number): NickelDime {
     if (!this.everNDs[period]) {
       return { nickel: new Set(), dime: new Set(), quarter: new Set(), dollar: new Set() };
     } else {
@@ -183,15 +170,15 @@ export class PlayIndex {
     }
   }
 
-  public getYearlyNickelAndDimes(period: number): NickelDime {
+  getYearlyNickelAndDimes(period: number): NickelDime {
     return this.yearlyNDs[period] || emptyNickelAndDime();
   }
 
-  public getNewGames(period: number): Set<number> {
+  getNewGames(period: number): Set<number> {
     return this.newIndexByPeriod[period];
   }
 
-  public getYearKeys(): number[] {
+  getYearKeys(): number[] {
     const result: number[] = [];
     for (const period in Object.keys(this.indexByPeriod)) {
       if (period.length === 4) {
@@ -201,7 +188,7 @@ export class PlayIndex {
     return result;
   }
 
-  public getMonthKeys(): number[] {
+  getMonthKeys(): number[] {
     const result: number[] = [];
     for (const period of Object.keys(this.indexByPeriod).filter(k => k.length === 6)) {
       result.push(parseInt(period));
@@ -231,7 +218,7 @@ export function buildTooltip(gameIndex: GameIndex, games: Set<number>) {
   return setToArray(games).map(id => gameIndex[id].name).join(", ");
 }
 
-function makeDatesIndex(mpcs: MonthlyPlayCount[]): Record<string, number> {
+function makeDatesIndex(mpcs: CountData[]): Record<string, number> {
   const result: Record<string, number> = {};
   for (const mpc of mpcs) {
     result[ym(mpc)] = mpc.count;
@@ -274,4 +261,19 @@ export function calcPercentPlayed(owned: Set<GameID>, played: Set<GameID>): numb
     if (owned.has(p)) count++;
   });
   return Math.floor((count * 10000) / owned.size) / 100;
+}
+
+function updateNickelsAndDimes(game: GameID, before: PlayCount, after: PlayCount, nd: NickelDime): void {
+  if (before < 5 && after >= 5) {
+    nd.nickel.add(game);
+  }
+  if (before < 10 && after >= 10) {
+    nd.dime.add(game);
+  }
+  if (before < 25 && after >= 25) {
+    nd.quarter.add(game);
+  }
+  if (before < 100 && after >= 100) {
+    nd.dollar.add(game);
+  }
 }

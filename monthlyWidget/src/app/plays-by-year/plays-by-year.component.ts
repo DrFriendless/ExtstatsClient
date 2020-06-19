@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { DataViewComponent } from "extstats-angular";
 import { ym } from "../library";
 import { Column } from "extstats-datatable";
 import { buildTooltip, PlayAndGamesIndex } from "../play-index";
+import {PlaysViewComponent} from "extstats-angular";
 
 @Component({
   selector: "plays-by-year",
   templateUrl: "./plays-by-year.component.html",
 })
-export class PlaysByYearComponent extends DataViewComponent<PlayAndGamesIndex> {
+export class PlaysByYearComponent extends PlaysViewComponent<PlayAndGamesIndex> {
   public rows: PlaysByYearRow[] = [];
   public columns: Column<PlaysByYearRow>[] = [
     new Column({ field: "year", name: "Year" }),
@@ -28,7 +28,7 @@ export class PlaysByYearComponent extends DataViewComponent<PlayAndGamesIndex> {
   ];
 
   protected processData(pg: PlayAndGamesIndex): void {
-    const rows = []
+    const rows = [];
     pg.years.forEach(y => {
       const totals = pg.everPlayIndex.getTotalPlays(y);
       const nd = pg.everPlayIndex.getEverNickelAndDimes(y);

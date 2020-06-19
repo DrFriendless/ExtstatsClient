@@ -1,5 +1,5 @@
 import { Component } from "@angular/core"
-import { DataViewComponent } from "extstats-angular"
+import {DataViewComponent, PlaysViewComponent} from "extstats-angular"
 import { Column } from "extstats-datatable";
 import { makeKeySingle } from "../library";
 import {
@@ -17,7 +17,7 @@ import {
   selector: "plays-by-month-ytd",
   templateUrl: "./plays-by-month-ytd.component.html",
 })
-export class PlaysByMonthYtdComponent extends DataViewComponent<PlayAndGamesIndex> {
+export class PlaysByMonthYtdComponent extends PlaysViewComponent<PlayAndGamesIndex> {
   public columns: Column<Row>[] = [
     new Column({ field: "month", name: "Month", tooltip: "The month this row is for.", classname: "month-column" }),
     new Column({ field: "plays", name: "Plays", tooltip: "How many games you played in this month." }),

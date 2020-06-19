@@ -4,6 +4,11 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "strictTemplates": true
+  },
   "exclude": [
     "test.ts",
     "**/*.spec.ts",

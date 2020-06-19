@@ -20,3 +20,9 @@ export function makeKey(year: number, month: number): string {
 export function sum(nums: number[]): number {
   return nums.reduce(function(a, b) { return a + b; }, 0);
 }
+
+export interface YMD {
+  year: number;
+  month: number;
+  day: number;
+}

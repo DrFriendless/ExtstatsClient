@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {DataViewComponent} from "extstats-angular";
+import { PlaysViewComponent} from "extstats-angular";
 import {
   buildTooltip,
   GameID,
@@ -21,7 +21,7 @@ interface Month {
   selector: 'monthly-skyline',
   templateUrl: './monthly-skyline.component.html'
 })
-export class MonthlySkylineComponent extends DataViewComponent<PlayAndGamesIndex> {
+export class MonthlySkylineComponent extends PlaysViewComponent<PlayAndGamesIndex> {
   months: Month[] = [];
   max: number;
   height = 200;
