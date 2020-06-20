@@ -1,0 +1,34 @@
+<div class="extstats-doc">
+  <extstats-button-group #buttongroup>
+    <button type="button" class="btn" [extstatsButtonGroup]="buttongroup" selector="config">Fiddle</button>
+  </extstats-button-group>
+</div>
+
+<div class="sliders" *ngIf="buttongroup.selected === 'config'">
+  <div class="slider-set">
+    <div class="slider-box">
+      <h3>Width of Chart = {{width}}</h3>
+      <ng5-slider [(value)]="width" [options]="widthOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>The width of the chart in pixels. By default, this is 1000.
+      </p>
+    </div>
+    <div class="slider-box">
+      <h3>Height of Chart = {{height}}</h3>
+      <ng5-slider [(value)]="height" [options]="heightOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>The height of the chart in pixels. By default, this is 600.
+      </p>
+    </div>
+  </div>
+  <div class="slider-set">
+    <div class="slider-box">
+      <h3>Plays Range = {{PLAYS_LO}} - {{PLAYS_HI}}</h3>
+      <ng5-slider [(value)]="PLAYS_LO" [(highValue)]="PLAYS_HI" [options]="playsOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>Choose the years for which plays will be displayed. By default, this is from 2005 till now.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="extstats-graph first-played-vs-rating">
+  <div #target style="flex-grow: 1; display: block"></div>
+</div>

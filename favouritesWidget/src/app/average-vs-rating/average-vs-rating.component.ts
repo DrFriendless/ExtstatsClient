@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from "@angular/core";
 import {DataViewComponent} from "extstats-angular";
 import embed, {VisualizationSpec} from "vega-embed";
 import {GameResult, Result} from "../app.component"
-import {star} from "../library";
+import {star, SUBDOMAIN_COLOUR, SUBDOMAIN_SHAPE} from "../library";
 
 type AverageVsRatingData = { rating: number, average: number, tooltip: string, subdomain: string };
 
@@ -59,19 +59,9 @@ export class AverageVsRatingComponent extends DataViewComponent<Result> {
         "nice": true, "zero": true,
         "domain": [0, 10],
         "range": "height"
-      }, {
-        "name": "sub",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ['#000000', '#f0d000', "#A4C639", '#20d0d0', '#f02020', '#4381b2', '#fab6b6', "#888888", '#BDB76B' ]
-      }, {
-        "name": "shape",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ['circle', 'square', "cross", 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left", star ]
-      }
+      },
+        SUBDOMAIN_COLOUR,
+        SUBDOMAIN_SHAPE
       ],
       "axes": [
         {"orient": "bottom", "scale": "x", "zindex": 1, "title": "Your Rating", "domain": false },

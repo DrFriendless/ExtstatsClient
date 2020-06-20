@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {DataViewComponent} from "extstats-angular";
 import {GameResult, Result} from "../app.component";
 import embed, {VisualizationSpec} from "vega-embed";
-import {BGG_DOMAINS, star} from "../library";
+import {BGG_DOMAINS, star, SUBDOMAIN_COLOUR, SUBDOMAIN_SHAPE} from "../library";
 
 type ComplexityVsPlaysData = { complexity: number, plays: number, tooltip: string, subdomain: string };
 
@@ -59,17 +59,9 @@ export class ComplexityVsPlaysComponent extends DataViewComponent<Result> {
         "nice": false,
         "range": "height",
         "domain": [1, 300]
-      }, {
-        "name": "sub",
-        "type": "ordinal",
-        "domain": BGG_DOMAINS,
-        "range": ['#000000', '#f0d000', "#A4C639", '#20d0d0', '#f02020', '#4381b2', '#fab6b6', "#888888", '#BDB76B' ]
-      }, {
-        "name": "shape",
-        "type": "ordinal",
-        "domain": BGG_DOMAINS,
-        "range": ['circle', 'square', "cross", 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left", star ]
-      }
+      },
+        SUBDOMAIN_COLOUR,
+        SUBDOMAIN_SHAPE
       ],
       "axes": [
         {"orient": "bottom", "scale": "x", "zindex": 1, "title": "BGG Weight", "domain": false },

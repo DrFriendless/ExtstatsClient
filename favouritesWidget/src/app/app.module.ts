@@ -15,6 +15,7 @@ import { YouShouldPlayComponent } from './you-should-play/you-should-play.compon
 import {Ng5SliderModule} from "ng5-slider";
 import { ComplexityVsRatingComponent } from './complexity-vs-rating/complexity-vs-rating.component';
 import { ComplexityVsPlaysComponent } from './complexity-vs-plays/complexity-vs-plays.component';
+import { FirstPlayedVsRatingComponent } from './first-played-vs-rating/first-played-vs-rating.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ComplexityVsPlaysComponent } from './complexity-vs-plays/complexity-vs-
     RatingVsMonthsPlayedComponent,
     YouShouldPlayComponent,
     ComplexityVsRatingComponent,
-    ComplexityVsPlaysComponent
+    ComplexityVsPlaysComponent,
+    FirstPlayedVsRatingComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, ExtstatsDatatableModule, TooltipModule.forRoot(), NgbModule, ExtstatsAngularModule,

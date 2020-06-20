@@ -1,3 +1,5 @@
+import { OrdinalScale} from "vega-typings";
+
 export function toDateString(date: number): string {
   if (!date) return "";
   const y = Math.floor(date / 10000)
@@ -29,3 +31,17 @@ export const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0
 
 export const BGG_DOMAINS = ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
   "Strategy Games", "Thematic Games", "Unknown", "Wargames"];
+
+export const SUBDOMAIN_COLOUR: OrdinalScale = {
+  "name": "sub",
+  "type": "ordinal",
+  "domain": BGG_DOMAINS,
+  "range": ['#000000', '#f0d000', "#A4C639", '#20d0d0', '#f02020', '#4381b2', '#fab6b6', "#888888", '#BDB76B' ]
+};
+
+export const SUBDOMAIN_SHAPE: OrdinalScale = {
+  "name": "shape",
+  "type": "ordinal",
+  "domain": BGG_DOMAINS,
+  "range": ['circle', 'square', "cross", 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left", star ]
+}

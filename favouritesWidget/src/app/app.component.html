@@ -1,6 +1,9 @@
 <div style="text-align:center">
   <extstats-loader *ngIf="loading"></extstats-loader>
 
+  <h2 id="fpvr">First Played vs Rating</h2>
+  <first-played-vs-rating [data]="data$"></first-played-vs-rating>
+
   <h2 id="wvr">Weight vs Rating</h2>
   <complexity-vs-rating [data]="data$"></complexity-vs-rating>
 

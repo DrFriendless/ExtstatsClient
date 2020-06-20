@@ -3,7 +3,7 @@ import { DataViewComponent } from "extstats-angular";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
 import { Data, Result } from "../app.component"
-import {star} from "../library";
+import {SUBDOMAIN_COLOUR, SUBDOMAIN_SHAPE} from "../library";
 
 type RatingVsMonthsData = { rating: number, months: number, tooltip: string, subdomain: string };
 
@@ -56,20 +56,9 @@ export class RatingVsMonthsPlayedComponent extends DataViewComponent<Result> {
         "range": "height",
         "nice": true, "zero": true,
         "domain": {"data": "table", "field": "months"}
-      }, {
-        "name": "sub",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ['#000000', '#f0d000', "#A4C639", '#20d0d0', '#f02020', '#4381b2', '#fab6b6', "#888888", '#BDB76B' ]
-      }, {
-        "name": "shape",
-        "type": "ordinal",
-        "domain": ["Abstract Games", "Children's Games", "Customizable Games", "Family Games", "Party Games",
-          "Strategy Games", "Thematic Games", "Unknown", "Wargames"],
-        "range": ['circle', 'square', "cross", 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', "triangle-left", star ]
-      }
-      ],
+      },
+        SUBDOMAIN_COLOUR,
+        SUBDOMAIN_SHAPE],
       "axes": [
         {"orient": "bottom", "scale": "x", "zindex": 1, "title": "Your Rating" },
         {"orient": "left", "scale": "y", "zindex": 1, "title": "Number of months in which you have played this game" }
