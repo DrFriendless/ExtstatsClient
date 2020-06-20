@@ -51,7 +51,7 @@ export class RatingVsPlaysComponent extends DataViewComponent<Result> {
 
   private static ratingsVsPlays(values: object): VisualizationSpec {
     return {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.13.0.json",
       "hconcat": [],
       "autosize": {
         "type": "fit",
@@ -87,7 +87,7 @@ export class RatingVsPlaysComponent extends DataViewComponent<Result> {
             "x": { "scale": "x", "field": "rating"},
             "y": { "scale": "y", "field": "plays"},
             "size": { "field": "size" },
-            "tooltip": {"field": "tooltip", "type": "quantitative"}
+            "tooltip": {"field": "tooltip"}
           }
         }
       }]

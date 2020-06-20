@@ -8,8 +8,8 @@ import { Observable, Subject } from "rxjs"
 export abstract class GraphQuerySourceComponent<T> implements AfterViewInit, OnInit {
   protected geek: string;
   private queries = new Subject<any>();
-  public data$: Observable<T>;
-  public loading = false;
+  data$: Observable<T>;
+  loading = false;
 
   protected constructor(private http: HttpClient, private userDataService: UserDataService) {
     this.data$ = this.queries.asObservable()
@@ -22,7 +22,7 @@ export abstract class GraphQuerySourceComponent<T> implements AfterViewInit, OnI
       );
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.userDataService.init();
     this.geek = this.userDataService.getAGeek();
   }
@@ -35,11 +35,11 @@ export abstract class GraphQuerySourceComponent<T> implements AfterViewInit, OnI
     return this.http.get("https://api.drfriendless.com/v1/retrieve" + query, options) as Observable<T>;
   }
 
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
     this.refresh();
   }
 
-  public refresh() {
+  refresh() {
     this.queries.next(null);
   }
 

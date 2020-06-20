@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { DataViewComponent } from "extstats-angular";
-import { Data, makeGamesIndex, Result } from "../app.component";
-import {Column} from "extstats-datatable/lib/src/DataTable";
+import { Data, Result } from "../app.component";
+import {Column} from "extstats-datatable";
+import {toDateString} from "../library";
+import {makeIndex} from "extstats-core";
 
 @Component({
   selector: 'you-should-play',
@@ -9,22 +11,22 @@ import {Column} from "extstats-datatable/lib/src/DataTable";
 })
 export class YouShouldPlayComponent extends DataViewComponent<Result> {
 
-  public columns: Column<Row>[] = [
+  columns: Column<Row>[] = [
     new Column({ field: "gameName", name: "Game",
       valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.game}">${row.gameName}</a>`
     }),
     new Column({ field: "rating", name: "Rating", tooltip: "Your rating for this game." }),
     new Column({ field: "plays", name: "Plays", tooltip: "The number of times you have played this game." }),
-    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game." }),
+    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game.", classname: "date-column" }),
     new Column({ field: "daysSincePlayed", name: "Days Since Last Play", tooltip: "Days since you last played this game." })
   ];
-  public rows: Row[] = [];
-  public data: Data;
+  rows: Row[] = [];
+  data: Data;
 
   protected processData(data: Result) {
     if (!data || !data.geekgames) return;
     this.data = data.geekgames;
-    const gamesIndex = makeGamesIndex(this.data.games);
+    const gamesIndex = makeIndex(this.data.games);
     const rows: Row[] = [];
     this.data.geekGames.forEach(gg => {
       if (gg.rating > 0) {
@@ -34,7 +36,7 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
           game: gg.bggid,
           rating: gg.rating,
           plays: gg.plays,
-          lastPlayed: YouShouldPlayComponent.toDateString(gg.lastPlay),
+          lastPlayed: toDateString(gg.lastPlay),
           shouldPlayScore: gg.shouldPlayScore,
           daysSincePlayed: gg.daysSincePlayed
         };
@@ -45,16 +47,6 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
       return b.shouldPlayScore - a.shouldPlayScore
     });
     this.rows = (rows.length > 20) ? rows.slice(0, 20) : rows
-  }
-
-  private static toDateString(date: number): string {
-    if (!date) return "";
-    const y = Math.floor(date / 10000);
-    const m = Math.floor(date / 100) % 100;
-    const d = date % 100;
-    const mm = (m < 10) ? "0" + m.toString() : m.toString();
-    const dd = (d < 10) ? "0" + d.toString() : d.toString();
-    return y.toString() + "-" + mm + "-" + dd;
   }
 }
 

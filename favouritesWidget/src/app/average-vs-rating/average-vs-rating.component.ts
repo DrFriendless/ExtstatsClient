@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DataViewComponent } from "extstats-angular";
-import embed, { VisualizationSpec } from "vega-embed";
-import { Data, GameResult, Result } from "../app.component"
+import {Component, ElementRef, ViewChild} from "@angular/core";
+import {DataViewComponent} from "extstats-angular";
+import embed, {VisualizationSpec} from "vega-embed";
+import {GameResult, Result} from "../app.component"
+import {star} from "../library";
 
 type AverageVsRatingData = { rating: number, average: number, tooltip: string, subdomain: string };
 
@@ -12,21 +13,15 @@ type AverageVsRatingData = { rating: number, average: number, tooltip: string, s
 export class AverageVsRatingComponent extends DataViewComponent<Result> {
   @ViewChild('target') target: ElementRef;
 
-  protected processData(data: Result): any {
-    if (data) {
-      const chartData = AverageVsRatingComponent.extractAvgVsRating(data.geekgames);
-      const spec = AverageVsRatingComponent.avrSpec(chartData);
-      embed(this.target.nativeElement, spec, { actions: true });
-    }
-  }
-
-  private static extractAvgVsRating(data: Data): AverageVsRatingData[] {
+  protected processData(result: Result): any {
+    if (!result || !result.geekgames) return;
+    const data = result.geekgames;
     const gameById: Record<string, GameResult> = {};
     for (const gd of data.games) gameById[gd.bggid] = gd;
-    const values = [];
+    const chartData: AverageVsRatingData[] = [];
     for (const gg of data.geekGames) {
       if (gg.rating > 0 && gameById[gg.bggid].bggRating) {
-        values.push({
+        chartData.push({
           rating: gg.rating,
           average: gameById[gg.bggid].bggRating,
           tooltip: gameById[gg.bggid].name,
@@ -34,19 +29,24 @@ export class AverageVsRatingComponent extends DataViewComponent<Result> {
         });
       }
     }
-    return values;
+    this.displayChart(chartData);
   }
 
-  private static avrSpec(values: AverageVsRatingData[]): VisualizationSpec {
-    const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
-    const spec = {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+  private displayChart(values: AverageVsRatingData[]): void {
+    const anno1 =  [{ text: [ "These are games", "you like more", "than BGG does." ]}];
+    const anno2 =  [{ text: [ "These are games", "BGG likes more", "than you do." ]}];
+    const spec: VisualizationSpec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.13.0.json",
       "hconcat": [],
       "autosize": { "type": "fit", "resize": true, "contains": "padding" },
       "width": 900,
       "height": 600,
       "config": { },
-      "data": [ { values, name: "table" } ],
+      "data": [
+        { values, name: "table" },
+        { name: "annotation1", values: anno1 },
+        { name: "annotation2", values: anno2 }
+        ],
       "scales": [ {
         "name": "x",
         "type": "linear",
@@ -84,11 +84,37 @@ export class AverageVsRatingComponent extends DataViewComponent<Result> {
           "enter": {
             "x": { "scale": "x", "field": "rating"},
             "y": { "scale": "y", "field": "average"},
-            "size": 150,
-            "tooltip": {"field": "tooltip", "type": "quantitative"},
+            "size": { "value": 150 },
+            "tooltip": {"field": "tooltip"},
             "stroke": { "field": "subdomain", "scale": "sub" },
             "shape": { "field": "subdomain", "scale": "shape" },
             "strokeWidth": {"value": 2}
+          }
+        }
+      }, {
+        "type": "text",
+        "from": { data: "annotation1" },
+        "encode": {
+          "enter": {
+            "x": { "scale": "x", "value": 7.5 },
+            "y": { "scale": "y", "value": 1.7 },
+            "fontSize": { value: 16 },
+            "text": { "field": "text" },
+            "zindex": { value: 10 },
+            "fill": { value: "#159588" }
+          }
+        }
+      }, {
+        "type": "text",
+        "from": { data: "annotation2" },
+        "encode": {
+          "enter": {
+            "x": { "scale": "x", "value": 0.1 },
+            "y": { "scale": "y", "value": 9.7 },
+            "fontSize": { value: 16 },
+            "text": { "field": "text" },
+            "zindex": { value: 10 },
+            "fill": { value: "#159588" }
           }
         }
       }],
@@ -98,6 +124,6 @@ export class AverageVsRatingComponent extends DataViewComponent<Result> {
         "shape": "shape"
       }]
     };
-    return spec as VisualizationSpec;
+    embed(this.target.nativeElement, spec, { actions: true });
   }
 }

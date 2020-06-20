@@ -24,7 +24,7 @@
 .extstats-table-controller a.extstats-page-link {
   color: white;
 }
-.favourites-table {
+.favourites-table, .you-should-play {
   margin-left: 16px;
   margin-right: 16px;
 }
@@ -33,7 +33,7 @@
   border-right-width: 0;
   border-left-width: 0;
 }
-.favourites-table th {
+.favourites-table th, .you-should-play th {
   background-color: #159588;
   color: white;
 }
@@ -72,9 +72,28 @@
 .favourites-table div.collapse {
   margin-top: 1rem;
 }
-
 .chart-button {
   border: solid 2px #617d8a;
   margin: 4px;
   height: 32px;
+}
+div.extstats-doc button {
+  border: 1px solid #fd9727;
+  border-radius: 0;
+  margin: 4px;
+}
+h2 {
+  margin-top: 40px;
+}
+p {
+  text-align: left;
+}
+td.date-column {
+  min-width: 100px;
+}
+.you-should-play.table.table-striped.extstats-table tbody tr:nth-child(even){
+  background-color: rgba(174, 255, 255, 0.5);
+}
+.you-should-play.table.table-striped.extstats-table tbody tr:nth-child(odd){
+  background-color: white;
 }

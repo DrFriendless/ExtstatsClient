@@ -4,12 +4,6 @@ import { UserDataService } from "extstats-angular";
 import { Subscription } from "rxjs/internal/Subscription";
 import { GraphQuerySourceComponent } from "./graph-query-source.component"
 
-export function makeGamesIndex<T extends {bggid: number}>(games: T[]): Record<string, T> {
-  const result = {};
-  games.forEach(g => result[g.bggid] = g);
-  return result;
-}
-
 export interface GeekGameResult {
   bggid: number;
   shouldPlayScore: number;
@@ -32,6 +26,7 @@ export interface GameResult {
   bggRating: number;
   yearPublished: number;
   subdomain: string;
+  weight: number;
 }
 export interface Data {
   geekGames: GeekGameResult[];
@@ -47,8 +42,8 @@ export interface Result {
 })
 export class FavouritesComponent extends GraphQuerySourceComponent<Result> implements OnInit, OnDestroy {
   private static DEFAULT_SELECTOR = "all(played(ME), rated(ME))";
-  public INITIAL_SELECTOR = FavouritesComponent.DEFAULT_SELECTOR;
-  public data: Data;
+  INITIAL_SELECTOR = FavouritesComponent.DEFAULT_SELECTOR;
+  data: Data;
   private selector = this.INITIAL_SELECTOR;
   private dataSubscription: Subscription;
 
@@ -56,7 +51,7 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
     super(http, userDataService);
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     super.ngOnInit();
     this.refresh();
     this.dataSubscription = this.data$.subscribe(data => {
@@ -65,11 +60,11 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
     });
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
   }
 
-  public selectorChanged(selector: string) {
+  selectorChanged(selector: string) {
     this.selector = selector;
     this.refresh();
   }
@@ -80,7 +75,7 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
 
   protected buildQuery(geek: string): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
-      " games { bggid name playTime bggRanking bggRating yearPublished subdomain } " +
+      " games { bggid name playTime bggRanking bggRating yearPublished subdomain weight } " +
       " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay daysSincePlayed } " +
       "}}";
   }

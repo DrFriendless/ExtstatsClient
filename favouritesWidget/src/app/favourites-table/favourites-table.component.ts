@@ -1,39 +1,58 @@
 import { Component } from "@angular/core"
-import { GameData } from "extstats-core"
+import {GameData, makeIndex} from "extstats-core"
 import { DataViewComponent } from "extstats-angular"
-import { Column } from "extstats-datatable/lib/src/DataTable"
-import { Data, GeekGameResult, makeGamesIndex, Result } from "../app.component"
+import {Column, ColumnParams} from "extstats-datatable"
+import { Data, GeekGameResult, Result } from "../app.component"
+import {daysBetween, intToDate, toDateString} from "../library";
+
+interface Row {
+  gameName: string;
+  rating: number;
+  plays: number;
+  bggRanking: number;
+  bggRating: number;
+  firstPlayed: string;
+  lastPlayed: string;
+  monthsPlayed: number;
+  hoursPlayed: number;
+  fhm: number;
+  hhm: number;
+  huberHeat: number;
+  ruhm: number;
+  yearPublished: number;
+}
 
 @Component({
   selector: "favourites-table",
   templateUrl: "./favourites-table.component.html",
 })
 export class FavouritesTableComponent extends DataViewComponent<Result> {
-  public columns = [
+  private params: ColumnParams<Row>[] = [
     {field: "gameName", name: "Game"},
     {field: "rating", name: "Rating", tooltip: "Your rating for this game."},
     {field: "plays", name: "Plays", tooltip: "The number of times you have played this game."},
     {field: "bggRanking", name: "BGG Ranking", tooltip: "This game's ranking on BoardGameGeek."},
     {field: "bggRating", name: "BGG Rating", tooltip: "This game's rating on BoardGameGeek."},
-    {field: "firstPlayed", name: "First Play", tooltip: "First date you played this game."},
-    {field: "lastPlayed", name: "Last Play", tooltip: "Last date you played this game."},
+    {field: "firstPlayed", name: "First Play", tooltip: "First date you played this game.", classname: "date-column"},
+    {field: "lastPlayed", name: "Last Play", tooltip: "Last date you played this game.", classname: "date-column"},
     {field: "monthsPlayed", name: "Months Played", tooltip: "Number of months in which you have played this game."},
     {field: "hoursPlayed", name: "Hours Played", tooltip: "Hours for which you have played this game."},
     {field: "fhm", name: "Friendless", tooltip: "Friendless Happiness Metric"},
     {field: "hhm", name: "Huber", tooltip: "Huber Happiness Metric"},
     {field: "huberHeat", name: "Huber Heat", tooltip: "Huber Heat"},
     {field: "ruhm", name: "R!UHM", tooltip: "Randy Cox Not Unhappiness Metric"},
-    {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published."},
-  ].map(c => new Column(c))
-  public rows: Row[] = []
-  public data: Data
+    {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published."}
+  ];
+  columns = this.params.map(c => new Column<Row>(c));
+  rows: Row[] = []
+  data: Data
 
   protected processData(data: Result) {
     if (!data) return
     this.data = data.geekgames
     const HUBER_BASELINE = 4.5
     const collection: GeekGameResult[] = this.data.geekGames
-    const gamesIndex = makeGamesIndex(this.data.games)
+    const gamesIndex = makeIndex(this.data.games)
     this.rows = []
     collection.forEach(gg => {
       if (!gg.rating) gg.rating = undefined
@@ -51,10 +70,10 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       }
       let ruhm = 0
       if (gg.months > 0 && gg.rating && gg.firstPlay && gg.lastPlay) {
-        const firstDate = FavouritesTableComponent.intToDate(gg.firstPlay)
-        const lastDate = FavouritesTableComponent.intToDate(gg.lastPlay)
-        const flash = FavouritesTableComponent.daysBetween(lastDate, firstDate)
-        const lag = FavouritesTableComponent.daysBetween(new Date(), lastDate)
+        const firstDate = intToDate(gg.firstPlay)
+        const lastDate = intToDate(gg.lastPlay)
+        const flash = daysBetween(lastDate, firstDate)
+        const lag = daysBetween(new Date(), lastDate)
         const flmr = flash / lag * gg.months * gg.rating
         const log = (flmr < 1) ? 0 : Math.log(flmr)
         ruhm = Math.round(log * 100) / 100
@@ -66,12 +85,12 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       const row = {
         gameName: game.name,
         game: gg.bggid,
-        rating: gg.rating,
+        rating: Math.floor(gg.rating * 100)/100,
         plays: gg.plays,
         bggRanking: game.bggRanking,
-        bggRating: game.bggRating,
-        firstPlayed: FavouritesTableComponent.toDateString(gg.firstPlay),
-        lastPlayed: FavouritesTableComponent.toDateString(gg.lastPlay),
+        bggRating: Math.floor(game.bggRating * 100)/100,
+        firstPlayed: toDateString(gg.firstPlay),
+        lastPlayed: toDateString(gg.lastPlay),
         monthsPlayed: gg.months,
         yearsPlayed: gg.years,
         yearPublished: game.yearPublished,
@@ -84,49 +103,5 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       this.rows.push(row)
     })
   }
-
-  private static intToDate(date: number): Date | undefined {
-    if (!date) return undefined
-    const y = Math.floor(date / 10000)
-    const m = Math.floor(date / 100) % 100
-    const d = date % 100
-    return new Date(y, m, d)
-  }
-
-  // https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
-  private static daysBetween(date1: Date, date2: Date) {
-    const ONE_DAY = 1000 * 60 * 60 * 24
-    const date1Ms = date1.getTime()
-    const date2Ms = date2.getTime()
-    const difference_ms = Math.abs(date1Ms - date2Ms)
-    return Math.round(difference_ms / ONE_DAY)
-  }
-
-  private static toDateString(date: number): string {
-    if (!date) return ""
-    const y = Math.floor(date / 10000)
-    const m = Math.floor(date / 100) % 100
-    const d = date % 100
-    const mm = (m < 10) ? "0" + m.toString() : m.toString()
-    const dd = (d < 10) ? "0" + d.toString() : d.toString()
-    return y.toString() + "-" + mm + "-" + dd
-  }
-}
-
-interface Row {
-  gameName: string;
-  rating: number;
-  plays: number;
-  bggRanking: number;
-  bggRating: number;
-  firstPlayed: string;
-  lastPlayed: string;
-  monthsPlayed: number;
-  hoursPlayed: number;
-  fhm: number;
-  hhm: number;
-  huberHeat: number;
-  ruhm: number;
-  yearPublished: number;
 }
 

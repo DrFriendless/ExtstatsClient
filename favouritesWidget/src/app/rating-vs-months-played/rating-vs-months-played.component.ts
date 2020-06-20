@@ -3,6 +3,7 @@ import { DataViewComponent } from "extstats-angular";
 import { VisualizationSpec } from "vega-embed";
 import embed from "vega-embed";
 import { Data, Result } from "../app.component"
+import {star} from "../library";
 
 type RatingVsMonthsData = { rating: number, months: number, tooltip: string, subdomain: string };
 
@@ -34,9 +35,8 @@ export class RatingVsMonthsPlayedComponent extends DataViewComponent<Result> {
   }
 
   private static ratingsVsMonths(values: RatingVsMonthsData[]): VisualizationSpec {
-    const star = "M0,0.2L0.2351,0.3236 0.1902,0.0618 0.3804,-0.1236 0.1175,-0.1618 0,-0.4 -0.1175,-0.1618 -0.3804,-0.1236 -0.1902,0.0618 -0.2351,0.3236 0,0.2Z";
     return {
-      "$schema": "https://vega.github.io/schema/vega/v4.json",
+      "$schema": "https://vega.github.io/schema/vega/v5.13.0.json",
       "hconcat": [],
       "autosize": {
         "type": "fit",
@@ -81,7 +81,7 @@ export class RatingVsMonthsPlayedComponent extends DataViewComponent<Result> {
           "enter": {
             "x": { "scale": "x", "field": "rating"},
             "y": { "scale": "y", "field": "months"},
-            "tooltip": {"field": "tooltip", "type": "quantitative"},
+            "tooltip": {"field": "tooltip"},
             "stroke": { "field": "subdomain", "scale": "sub" },
             "shape": { "field": "subdomain", "scale": "shape" },
             "strokeWidth": {"value": 2}
