@@ -110,3 +110,44 @@
 .skyline-legend td {
   text-align: left;
 }
+.slider-box {
+  flex: 1;
+  margin: 12px 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+.slider-box .ng5-slider .ng5-slider-pointer {
+  background-color: #00cc99;
+  width: 20px;
+  height: 20px;
+  top: -9px;
+  transition: all linear .1s;
+  margin-left: 5px;
+}
+.slider-box .ng5-slider .ng5-slider-pointer:after {
+  top: 6px;
+  left: 6px;
+}
+.slider-set {
+  display: flex;
+  flex-direction: row;
+}
+.sliders {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+div.extstats-doc button {
+  border: 1px solid #00cc99;
+  border-radius: 0;
+  margin: 4px;
+}
+h2 {
+  margin-top: 40px;
+}
+.ng5-slider-inner-tooltip {
+  font-size: 14px;
+}
+p {
+  text-align: left;
+}

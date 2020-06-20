@@ -17,12 +17,14 @@ export interface CountData {
   month: number;
   count: number;
 }
+export interface GameData {
+  bggid: number;
+  name: string;
+  yearPublished: number;
+}
 export interface GeekGameData {
   owned: boolean;
-  game: {
-    bggid: number;
-    name: string;
-  }
+  game: GameData;
 }
 export interface MonthlyData {
   plays: PlayData[];
@@ -55,7 +57,7 @@ export class MonthlyWidget extends GraphQuerySourceComponent<Result> {
     return `{monthly(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
       " plays { year month expansion quantity bggid } " +
       " counts { year month count } " +
-      " geekGames { owned game { bggid name } }" +
+      " geekGames { owned game { bggid name yearPublished } }" +
       "}}";
   }
 }

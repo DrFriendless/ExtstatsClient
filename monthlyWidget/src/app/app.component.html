@@ -1,6 +1,9 @@
 <div style="text-align:center">
   <extstats-loader *ngIf="loading"></extstats-loader>
 
+  <h2 id="new-releases">How Much Do You Play New Releases?</h2>
+  <new-releases [data]="data$"></new-releases>
+
   <h2 id="skyline">Monthly Skyline</h2>
   <monthly-skyline [data]="playsAndGame$"></monthly-skyline>
 

@@ -10,6 +10,8 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ExtstatsAngularModule} from "extstats-angular";
 import {ExtstatsDatatableModule} from "extstats-datatable";
 import { MonthlySkylineComponent } from './monthly-skyline/monthly-skyline.component';
+import { NewReleasesComponent } from './new-releases/new-releases.component';
+import {Ng5SliderModule} from "ng5-slider";
 
 @NgModule({
   declarations: [
@@ -17,10 +19,12 @@ import { MonthlySkylineComponent } from './monthly-skyline/monthly-skyline.compo
     PlaysByMonthEverComponent,
     PlaysByMonthYtdComponent,
     PlaysByYearComponent,
-    MonthlySkylineComponent
+    MonthlySkylineComponent,
+    NewReleasesComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, ExtstatsDatatableModule, TooltipModule.forRoot(), NgbModule, ExtstatsAngularModule
+    BrowserModule, HttpClientModule, ExtstatsDatatableModule, TooltipModule.forRoot(), NgbModule, ExtstatsAngularModule,
+    Ng5SliderModule
   ],
   providers: [],
   bootstrap: [MonthlyWidget]
