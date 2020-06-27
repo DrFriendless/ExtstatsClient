@@ -15,6 +15,7 @@ import { BestDaysComponent } from './best-days/best-days.component';
 import {ExtstatsDatatableModule} from "extstats-datatable";
 import {CommonModule} from "@angular/common";
 import {Ng5SliderModule} from "ng5-slider";
+import { RatingOfPlayedComponent } from './rating-of-played/rating-of-played.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {Ng5SliderModule} from "ng5-slider";
     TemporalByDayComponent,
     MostPlayedByYearComponent,
     FlorenceNightingaleComponent,
-    BestDaysComponent
+    BestDaysComponent,
+    RatingOfPlayedComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, TooltipModule.forRoot(), ExtstatsAngularModule, FormsModule,

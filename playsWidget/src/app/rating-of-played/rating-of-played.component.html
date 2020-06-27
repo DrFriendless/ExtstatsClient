@@ -1,0 +1,36 @@
+<div class="extstats-doc">
+  <extstats-button-group #buttongroup>
+    <button type="button" class="btn" [extstatsButtonGroup]="buttongroup" selector="config">Fiddle</button>
+  </extstats-button-group>
+</div>
+
+<div *ngIf="buttongroup.selected === 'config'" class="sliders">
+  <div class="slider-set">
+    <div class="slider-box">
+      <h3>Size of Chart = {{width}}</h3>
+      <ng5-slider [(value)]="width" [options]="widthOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>The width and height of the chart in pixels. By default, this is 600.
+      </p>
+    </div>
+    <div class="slider-box">
+      <h3>How Many Games to Highlight = {{howMany}}</h3>
+      <ng5-slider [(value)]="howMany" [options]="howManyOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>This slider controls how many of your top played games get their own arc on this chart. By default, this is 30.
+      </p>
+    </div>
+  </div>
+  <div class="slider-set">
+    <div class="slider-box">
+      <h3>Plays Range = {{PLAYS_LO}} - {{PLAYS_HI}}</h3>
+      <ng5-slider [(value)]="PLAYS_LO" [(highValue)]="PLAYS_HI" [options]="playsOptions" (userChange)="fiddle.next()"></ng5-slider>
+      <p>Choose the years for which plays will be displayed. By default, this is from 2005 till now.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="extstats-graph ratingofplayed">
+  <div #target style="flex-grow: 1; display: block"></div>
+</div>
+
+<p>Are you playing games you like? Does that change over time?</p>

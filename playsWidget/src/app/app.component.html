@@ -1,6 +1,9 @@
 <div style="text-align:center">
   <extstats-loader *ngIf="loading"></extstats-loader>
 
+  <h2 id="ratingofplayed">Your Rating of Games Played</h2>
+  <rating-of-played [data]="data$"></rating-of-played>
+
   <h2 id="bestdays">Your Best Days in Gaming</h2>
   <best-days [data]="data$"></best-days>
 
