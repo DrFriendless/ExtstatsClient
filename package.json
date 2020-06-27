@@ -5,9 +5,9 @@
   "private": true,
   "dependencies": {
     "@types/aws-lambda": "0.0.17",
-    "aws-sdk": "^2.701.0",
+    "aws-sdk": "^2.706.0",
     "npm": "^6.14.5",
-    "serverless": "^1.73.1"
+    "serverless": "^1.74.0"
   },
   "devDependencies": {
     "@angular/cli": "^7.3.10",
