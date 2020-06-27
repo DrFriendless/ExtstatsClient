@@ -49,3 +49,9 @@
   margin-top: 1rem;
 }
 
+.narrow {
+  width: 75px;
+}
+.narrow a {
+  white-space: normal;
+}

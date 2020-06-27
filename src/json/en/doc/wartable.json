@@ -1,0 +1,27 @@
+[{
+  "title": "Spiel des Jahre",
+  "text": ["The Spiel des Jahre (German Game of the Year) is an annual prize awarded since 1978. This metric is how many SdJ winners the geek has played."]
+}, {
+  "title": "BGG Top 50",
+  "text": ["This metric is how many of the current (or at least recent) <a href=\"https://boardgamegeek.com/browse/boardgame\">BoardGameGeek.com Top 50</a> games the geek has played."]
+}, {
+  "title": "ExtStats Top 100",
+  "text": ["This is how many of the <a href=\"/rankings.html\">Extended Stats Top 100</a> the geek has played."]
+}, {
+  "title": "Friendless Metric",
+  "text": ["To calculate the Friendless metric, make a list of all of your games in descending order of how many times you've played them. Scrabble with 173 plays comes first, Triominos with 0 plays comes last. For each game at the beginning with 10 or more plays, we consider that game to have earned its keep. Even better, having played one game that many times, you're forgiven one at the other end which you haven't played so much. So for playing Scrabble so many times we'll forgive you for never playing Triominos. People who play games tend to accumulate them, so we'll assume that was a gift. Then, we look at how many times you've played the last game remaining on the list... and that's your Friendless metric. The higher the better.",
+    "Most bggeeks have a value of zero, so I extended the definition to go into negatives. A value of -x tells you that to get to a Friendless metric of 1 you need to play x more of your games that you've never played."]
+}, {
+  "title": "CFM",
+  "text": ["The standard Friendless metric has a weakness in that once you get that value above zero you can't increase it by playing your games with 0 plays any more. You can ensure that if you buy more games it will stay above zero for a while longer, but until you do that there's no motivation to play (or otherwise deal with) those games you've been ignoring. The Continuous Friendless Metric changes the Friendless metric so that you're ALWAYS rewarded for playing a game you own, but you're rewarded more for playing a game you've played less."]
+}, {
+  "title": "H-Index",
+  "text": ["Your h-index is the largest number H such that you have played H games H times each. See <a href=\"https://en.wikipedia.org/wiki/H-index\">Wikipedia</a> for too many details."]
+}, {
+  "title": "Rational H-Index",
+  "text": ["Your rational h-index (h<sub>r</sub>) is your h-index with a fractional part added. The fractional part represents how close you are to getting a h-index of H + 1.",
+    "To achieve a h-index of H, you must have recorded at least H<sup>2</sup> plays. To achieve a h-index of H+1, you must have recorded (at least) an additional 2H + 1 plays. Let N be the highest number of plays already recorded that could be included in that 2H + 1. Then your rational h-index is your h-index plus N / (2H + 1)."]
+}, {
+  "title": "G-Index",
+  "text": ["Your g-index is the largest number G such that you have played G games on average G times each. See <a href=\"https://en.wikipedia.org/wiki/G-index\">Wikipedia</a> for too many details."]
+}]
