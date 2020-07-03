@@ -68,4 +68,49 @@
   background-color: #e62565;
   background-color: #673fb4;
 */
-
+.extstats-navbar div.hidden {
+  display: none;
+}
+#geeklink {
+  width: 90px;
+  height: 28px;
+  background-image: url("/img/bands.png");
+  background-size: cover;
+  color: white;
+  border: 0;
+}
+.go-button {
+  margin-right: 2px;
+}
+.geek-collection {
+  background-color: #0099cc;
+  color: white;
+}
+.geek-owned {
+  background-color: #4054b2;
+  color: white;
+}
+.geek-favourites {
+  background-color: #2c992d;
+  color: white;
+}
+.geek-plays {
+  background-color: #00cc99;
+  color: white;
+}
+.geek-monthly {
+  background-color: #b3b300;
+  color: white;
+}
+.geek-yearly {
+  background-color: #e68a00;
+  color: white;
+}
+.geek-comparative {
+  background-color: #d34533;
+  color: white;
+}
+.geek-updates {
+  background-color: #cc0066;
+  color: white;
+}
