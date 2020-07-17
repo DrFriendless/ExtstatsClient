@@ -6,18 +6,24 @@ import { flatMap, tap } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { FAQCount } from "extstats-core";
 
+interface FaqEntry {
+  index: number;
+  head: string;
+  body: string;
+}
+
 @Component({
   selector: 'extstats-faq',
   templateUrl: './app.component.html'
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
-  public selected = 0;
+  selected = 0;
   private clicks = new Subject<number[]>();
   private readonly subscription: Subscription;
   private readonly faqSubscription: Subscription;
-  public faqCounts: { [index: number]: FAQCount } = {};
-  public faqs: object[] = [];
-  public geek: string;
+  faqCounts: { [index: number]: FAQCount } = {};
+  faqs: FaqEntry[] = [];
+  geek: string;
 
   constructor(private http: HttpClient) {
     const options = {
@@ -28,16 +34,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .subscribe(faqData => {
         this.indexFAQData(faqData as FAQCount[]);
       });
-    this.faqSubscription = (this.http.get("/json/en/doc/faqs.json") as Observable<object[]>).pipe(
+    this.faqSubscription = (this.http.get("/json/en/doc/faqs.json") as Observable<FaqEntry[]>).pipe(
       tap(x => console.log(x)),
     ).subscribe(faqs => this.faqs = faqs);
   }
 
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
     this.clicks.next([]);
   }
 
-  public ngOnDestroy() {
+  ngOnDestroy() {
     if (this.subscription) this.subscription.unsubscribe();
     if (this.faqSubscription) this.faqSubscription.unsubscribe();
   }
@@ -50,7 +56,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  public toggle(index: number) {
+  toggle(index: number) {
     if (this.selected === index) {
       this.selected = 0;
     } else {
