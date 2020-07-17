@@ -51,7 +51,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   public toggle(index: number) {
-    console.log("toggle " + index);
     if (this.selected === index) {
       this.selected = 0;
     } else {
