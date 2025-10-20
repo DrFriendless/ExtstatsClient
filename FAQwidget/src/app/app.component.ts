@@ -3,7 +3,7 @@ import { Subject } from "rxjs/internal/Subject";
 import { Subscription } from "rxjs/internal/Subscription";
 import { Observable } from "rxjs/internal/Observable";
 import { mergeMap, tap } from "rxjs/operators";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { FAQCount } from "extstats-core";
 import { GeekComboComponent } from "extstats-angular";
 
@@ -12,6 +12,9 @@ interface FAQ {
   head: string;
   body: string;
 }
+
+// const API = "https://api.drfriendless.com/eb";
+const API = "http://localhost:3000";
 
 @Component({
   selector: 'extstats-faq',
@@ -31,12 +34,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   public geek: string | undefined;
 
   constructor(private http: HttpClient) {
-    // TODO - don't put API keys in the code, you twerp
-    const options = {
-      headers: new HttpHeaders().set("x-api-key", "gb0l7zXSq47Aks7YHnGeEafZbIzgmGBv5FouoRjJ")
-    };
     this.subscription = this.clicks.asObservable().pipe(
-      mergeMap(clix => this.http.post("https://api.drfriendless.com/eb/faqcount", clix, options)))
+      mergeMap(clix => this.http.post(`${API}/faqcount`, clix)))
       .subscribe(faqData => {
         this.indexFAQData(faqData as FAQCount[]);
       });

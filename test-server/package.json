@@ -1,0 +1,29 @@
+{
+  "name": "test-server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "serve": "tsc && node dist/server.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "errorhandler": "^1.5.1",
+    "express": "^5.1.0",
+    "express-basic-auth": "^1.2.1",
+    "extstats-core": "^1.13.0",
+    "nocache": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/dotenv": "^6.1.1",
+    "@types/errorhandler": "0.0.32",
+    "@types/express": "^5.0.3",
+    "@types/shelljs": "^0.8.8",
+    "typescript": "^5.9.3"
+  }
+}
