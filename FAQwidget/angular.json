@@ -10,7 +10,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "./dist",
             "index": "./src/index.html",
@@ -18,7 +18,13 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.json",
-            "main": "./src/main.ts"
+            "browser": "./src/main.ts",
+            "sourceMap": false
+          },
+          "configurations": {
+            "debug": {
+              "sourceMap": true
+            }
           }
         }}
     }
