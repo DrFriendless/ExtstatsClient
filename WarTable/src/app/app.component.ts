@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { WarTableRow } from "extstats-core";
 import {LoaderComponent} from "extstats-angular";
 import {TabDirective, TabsetComponent} from "ngx-bootstrap/tabs";
+import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -12,17 +13,23 @@ import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
     LoaderComponent,
     TabsetComponent,
     TabDirective,
+    DataTableController,
+    DataTable,
+    DataTableHead,
+    DataTableBody,
     NgbCollapse,
   ],
   templateUrl: './app.component.html'
 })
 export class WarTableComponent implements OnDestroy, AfterViewInit {
   public rows: WarTableRow[] = [];
+  public columns: Column<WarTableRow>[] = [];
   private subscription: Subscription | undefined;
   public isCollapsed = true;
   public loading = false;
 
   constructor(private http: HttpClient) {
+    this.columns.push(new Column<WarTableRow>({ name: "Geek", field: "geek", tooltip: "BGG User" }));
   }
 
   public ngAfterViewInit(): void {

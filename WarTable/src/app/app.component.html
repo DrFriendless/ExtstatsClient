@@ -56,59 +56,60 @@
   </div>
 </div>
 
-@if (!!rows) {
-  <div class="war-table">
-    <!--    <div class="extstats-table-block">-->
-    <!--      <es-table-controller [table]="warTable" [searchColumn]="'geekName'" [placeholder]="'geek'"></es-table-controller>-->
-    <!--      <table es-table class="table table-striped extstats-table" [data]="rows" #warTable="esTable" [rowsOnPage]="30" [sortBy]="'geekName'" [sortOrder]="'asc'">-->
-    <!--        <thead>-->
-    <!--        <tr>-->
-    <!--          <th><es-default-sorter by="geekName">Geek</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="totalPlays" title="Total plays of all games as recorded by Extended Stats">Total Plays</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="distinctGames" title="Number of different games with recorded plays">Distinct<br>Games</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="owned" title="Number of games this geek owns">Owned</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="want" title="Number of games this geek wants in trade">Want in<br>Trade</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="wish" title="Number of games on this geek's wishlist">Wishlist</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="trade" title="Number of games this geek has for trade">For<br>Trade</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="sdj" title="Number of different Spiel des Jahre winners played">SdJ</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="top50" title="Number of different games in the BGG Top 50 played">BGG<br>Top 50</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="ext100" title="Number of different games in the Extended Stats Top 100 played">ExtStats<br>Top 100</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="prevOwned" title="Number of games previously owned by this geek">Prev<br>Owned</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="friendless" title="Friendless Metric for this geek">Friendless</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="cfm" title="Continuous Friendless Metric for this geek">CFM</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="zeros" title="Number of games this geek owns that they have played 0 times">0s</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="tens" title="Number of games this geek owns that they have played 10+ times">10s</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="hindex" title="This geek's H-index">H-index</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="hrindex" title="This geek's rational H-index">H<sub>r</sub>-index</es-default-sorter></th>-->
-    <!--          <th><es-default-sorter by="gindex" title="This geek's G-index">G-index</es-default-sorter></th>-->
-    <!--        </tr>-->
-    <!--        </thead>-->
-    <!--        <tbody>-->
-    <!--        @for (row of warTable.data; track row) {-->
-    <!--        <tr>-->
-    <!--          <td><a href="/geek.html?geek={{row.geekName}}">{{row.geekName}}</a></td>-->
-    <!--          <td>{{row.totalPlays}}</td>-->
-    <!--          <td>{{row.distinctGames}}</td>-->
-    <!--          <td>{{row.owned}}</td>-->
-    <!--          <td>{{row.want}}</td>-->
-    <!--          <td>{{row.wish}}</td>-->
-    <!--          <td>{{row.trade}}</td>-->
-    <!--          <td>{{row.sdj}}</td>-->
-    <!--          <td>{{row.top50}}</td>-->
-    <!--          <td>{{row.ext100}}</td>-->
-    <!--          <td>{{row.prevOwned}}</td>-->
-    <!--          <td>{{row.friendless}}</td>-->
-    <!--          <td>{{row.cfm}}</td>-->
-    <!--          <td>{{row.zeros}}</td>-->
-    <!--          <td>{{row.tens}}</td>-->
-    <!--          <td>{{row.hindex}}</td>-->
-    <!--          <td>{{row.hrindex}}</td>-->
-    <!--          <td>{{row.gindex}}</td>-->
-    <!--        </tr>-->
-    <!--        }-->
-    <!--        </tbody>-->
-    <!--      </table>-->
-    <!--    </div>-->
+<div class="war-table">
+  <div class="extstats-table-block">
+    <es-table-controller [table]="warTable" [searchColumn]="'geekName'" [placeholder]="'geek'"></es-table-controller>
+    <table es-table class="table table-striped extstats-table" [data]="rows" #warTable="esTable" [rowsOnPage]="30" [sortBy]="'geekName'" [sortOrder]="'asc'">
+      <thead es-table-head [columns]="columns">Head</thead>
+      <tbody es-table-body [columns]="columns">Body</tbody>
+      <!--      <thead>-->
+      <!--            <tr>-->
+      <!--              <th><es-default-sorter by="geekName">Geek</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="totalPlays" title="Total plays of all games as recorded by Extended Stats">Total Plays</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="distinctGames" title="Number of different games with recorded plays">Distinct<br>Games</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="owned" title="Number of games this geek owns">Owned</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="want" title="Number of games this geek wants in trade">Want in<br>Trade</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="wish" title="Number of games on this geek's wishlist">Wishlist</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="trade" title="Number of games this geek has for trade">For<br>Trade</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="sdj" title="Number of different Spiel des Jahre winners played">SdJ</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="top50" title="Number of different games in the BGG Top 50 played">BGG<br>Top 50</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="ext100" title="Number of different games in the Extended Stats Top 100 played">ExtStats<br>Top 100</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="prevOwned" title="Number of games previously owned by this geek">Prev<br>Owned</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="friendless" title="Friendless Metric for this geek">Friendless</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="cfm" title="Continuous Friendless Metric for this geek">CFM</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="zeros" title="Number of games this geek owns that they have played 0 times">0s</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="tens" title="Number of games this geek owns that they have played 10+ times">10s</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="hindex" title="This geek's H-index">H-index</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="hrindex" title="This geek's rational H-index">H<sub>r</sub>-index</es-default-sorter></th>-->
+      <!--              <th><es-default-sorter by="gindex" title="This geek's G-index">G-index</es-default-sorter></th>-->
+      <!--            </tr>-->
+      <!--      </thead>-->
+      <!--      <tbody>-->
+      <!--            @for (row of warTable.data; track row) {-->
+      <!--            <tr>-->
+      <!--              <td><a href="/geek.html?geek={{row.geekName}}">{{row.geekName}}</a></td>-->
+      <!--              <td>{{row.totalPlays}}</td>-->
+      <!--              <td>{{row.distinctGames}}</td>-->
+      <!--              <td>{{row.owned}}</td>-->
+      <!--              <td>{{row.want}}</td>-->
+      <!--              <td>{{row.wish}}</td>-->
+      <!--              <td>{{row.trade}}</td>-->
+      <!--              <td>{{row.sdj}}</td>-->
+      <!--              <td>{{row.top50}}</td>-->
+      <!--              <td>{{row.ext100}}</td>-->
+      <!--              <td>{{row.prevOwned}}</td>-->
+      <!--              <td>{{row.friendless}}</td>-->
+      <!--              <td>{{row.cfm}}</td>-->
+      <!--              <td>{{row.zeros}}</td>-->
+      <!--              <td>{{row.tens}}</td>-->
+      <!--              <td>{{row.hindex}}</td>-->
+      <!--              <td>{{row.hrindex}}</td>-->
+      <!--              <td>{{row.gindex}}</td>-->
+      <!--            </tr>-->
+      <!--            }-->
+      <!--      </tbody>-->
+    </table>
   </div>
-}
+</div>
+
 
