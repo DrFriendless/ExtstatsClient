@@ -6,6 +6,7 @@ import {LoaderComponent} from "extstats-angular";
 import {TabDirective, TabsetComponent} from "ngx-bootstrap/tabs";
 import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'war-table',
@@ -29,12 +30,30 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
   public loading = false;
 
   constructor(private http: HttpClient) {
-    this.columns.push(new Column<WarTableRow>({ name: "Geek", field: "geek", tooltip: "BGG User" }));
+    this.columns.push(new Column<WarTableRow>({ name: "Geek", field: "geek", tooltip: "BGG User",
+      valueHtml: r => `<a href="/geek.html?geek=${r.geekName}">${r.geekName}</a>` }));
+    this.columns.push(new Column<WarTableRow>({ name: "Total Plays", field: "totalPlays", tooltip: "Total plays of all games as recorded by Extended Stats"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Distinct Games", field: "distinctGames", tooltip: "Number of different games with recorded plays"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Owned", field: "owned", tooltip: "Number of games this geek owns"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Want in Trade", field: "want", tooltip: "Number of games this geek wants in trade"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Wishlist", field: "wish", tooltip: "Number of games on this geek's wishlist"}));
+    this.columns.push(new Column<WarTableRow>({ name: "For Trade", field: "trade", tooltip: "Number of games this geek has for trade"}));
+    this.columns.push(new Column<WarTableRow>({ name: "SdJ", field: "sdj", tooltip: "Number of different Spiel des Jahre winners played"}));
+    this.columns.push(new Column<WarTableRow>({ name: "BGG Top 50", field: "top50", tooltip: "Number of different games in the BGG Top 50 played"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Top 100", field: "ext100", tooltip: "Number of different games in the Extended Stats Top 100 played"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Prev Owned", field: "prevOwned", tooltip: "Number of games previously owned by this geek"}));
+    this.columns.push(new Column<WarTableRow>({ name: "Friendless", field: "friendless", tooltip: "Friendless Metric for this geek"}));
+    this.columns.push(new Column<WarTableRow>({ name: "CFM", field: "cfm", tooltip: "Continuous Friendless Metric for this geek"}));
+    this.columns.push(new Column<WarTableRow>({ name: "0s", field: "zeros", tooltip: "Number of games this geek owns that they have played 0 times"}));
+    this.columns.push(new Column<WarTableRow>({ name: "10s", field: "tens", tooltip: "Number of games this geek owns that they have played 10+ times"}));
+    this.columns.push(new Column<WarTableRow>({ name: "H-index", field: "hindex", tooltip: "This geek's H-index"}));
+    this.columns.push(new Column<WarTableRow>({ name: "H<sub>r</sub>-index", field: "hrindex", tooltip: "This geek's rational H-index"}));
+    this.columns.push(new Column<WarTableRow>({ name: "G-index", field: "gindex", tooltip: "This geek's G-index"}));
   }
 
   public ngAfterViewInit(): void {
     console.log('ngAfterViewInit');
-    const loadData$ = this.http.get("https://api.drfriendless.com/v1/wartable");
+    const loadData$ = this.http.get(`${environment.api}/wartable`);
     this.loading = true;
     this.subscription = loadData$.subscribe(result => {
       console.log(result);

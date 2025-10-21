@@ -12,7 +12,7 @@
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "extstats-angular": "file:../../repo/extstats-angular-7.2.0.tgz",
     "extstats-core": "file:../../repo/extstats-core-1.13.0.tgz",
-    "extstats-datatable": "file:../../repo/extstats-datatable-4.0.0.tgz",
+    "extstats-datatable": "file:../../repo/extstats-datatable-4.0.4.tgz",
     "zone.js": "^0.15.1"
   },
   "devDependencies": {

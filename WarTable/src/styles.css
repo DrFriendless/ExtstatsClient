@@ -15,7 +15,7 @@
   border-right-width: 0;
   border-left-width: 0;
 }
-.war-table th {
+.war-table th, .war-table th a {
   background-color: #673fb4;
   color: white;
 }
