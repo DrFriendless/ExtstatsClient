@@ -11,6 +11,7 @@ import * as indexRoute from "./routes/index.mjs";
 import * as findGeeksRoute from "./routes/findgeeks.mjs";
 import * as auth from "./routes/auth.mjs";
 import {faqcount} from "./routes/faqcount.mjs";
+import {wartable} from "./routes/wartable.mjs";
 
 // Create Express server
 const app = express();
@@ -24,6 +25,7 @@ app.get("/findgeeks/:fragment", findGeeksRoute.findgeeks);
 app.get("/login", nocache(), auth.login);
 app.get("/", indexRoute.index);
 app.post("/faqcount", nocache(), faqcount);
+app.get("/wartable", nocache(), wartable);
 
 if (process.env.NODE_ENV === "development") {
     // only use in development

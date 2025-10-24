@@ -18,7 +18,6 @@ export async function faqcount(req: Request, res: Response) {
             year: Math.floor(n / 5)
         }
     });
-    console.log(result);
     res.send(result);
     res.status(200);
 }
