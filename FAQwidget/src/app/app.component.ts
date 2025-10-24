@@ -6,15 +6,13 @@ import { mergeMap, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { FAQCount } from "extstats-core";
 import { GeekComboComponent } from "extstats-angular";
+import {environment} from "../environments/environment";
 
 interface FAQ {
   index: number;
   head: string;
   body: string;
 }
-
-// const API = "https://api.drfriendless.com/eb";
-const API = "http://localhost:3000";
 
 @Component({
   selector: 'extstats-faq',
@@ -35,7 +33,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   constructor(private http: HttpClient) {
     this.subscription = this.clicks.asObservable().pipe(
-      mergeMap(clix => this.http.post(`${API}/faqcount`, clix)))
+      mergeMap(clix => this.http.post(`${environment.api}/faqcount`, clix)))
       .subscribe(faqData => {
         this.indexFAQData(faqData as FAQCount[]);
       });
