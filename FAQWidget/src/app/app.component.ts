@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import {AfterViewInit, Component, OnDestroy} from '@angular/core';
 import { Subject } from "rxjs/internal/Subject";
 import { Subscription } from "rxjs/internal/Subscription";
 import { Observable } from "rxjs/internal/Observable";
@@ -6,7 +6,7 @@ import { mergeMap, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { FAQCount } from "extstats-core";
 import { GeekComboComponent } from "extstats-angular";
-import {environment} from "../environments/environment";
+import {ExtstatsApi} from "extstats-api";
 
 interface FAQ {
   index: number;
@@ -31,9 +31,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   public faqs: FAQ[] = [];
   public geek: string | undefined;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private api: ExtstatsApi) {
     this.subscription = this.clicks.asObservable().pipe(
-      mergeMap(clix => this.http.post(`${environment.api}/faqcount`, clix)))
+      mergeMap(clix => this.api.incFAQCount(clix)))
       .subscribe(faqData => {
         this.indexFAQData(faqData as FAQCount[]);
       });
