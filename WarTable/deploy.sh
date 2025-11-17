@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-rm ./dist/browser/*.js.map
-npm run build
 cp ./dist/browser/*.js ../../extstats-home/public/WarTable/
 cp ./dist/browser/*.js.map ../../extstats-home/public/WarTable/
 cp ./src/styles.css ../../extstats-home/public/WarTable/

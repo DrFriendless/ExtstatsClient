@@ -6,7 +6,7 @@ import {LoaderComponent} from "extstats-angular";
 import {TabDirective, TabsetComponent} from "ngx-bootstrap/tabs";
 import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
-import {environment} from "../environments/environment";
+import {ExtstatsApi} from "extstats-api";
 
 @Component({
   selector: 'war-table',
@@ -29,7 +29,7 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
   public isCollapsed = true;
   public loading = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private api: ExtstatsApi) {
     this.columns.push(new Column<WarTableRow>({ name: "Geek", field: "geek", tooltip: "BGG User",
       valueHtml: r => `<a href="/geek.html?geek=${r.geekName}">${r.geekName}</a>` }));
     this.columns.push(new Column<WarTableRow>({ name: "Total Plays", field: "totalPlays", tooltip: "Total plays of all games as recorded by Extended Stats"}));
@@ -51,19 +51,14 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
     this.columns.push(new Column<WarTableRow>({ name: "G-index", field: "gindex", tooltip: "This geek's G-index"}));
   }
 
-  public ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    const loadData$ = this.http.get(`${environment.api}/wartable`);
+  public async ngAfterViewInit(): Promise<void> {
     this.loading = true;
-    this.subscription = loadData$.subscribe(result => {
-      console.log(result);
-      this.rows = (result as WarTableRow[]) || [];
-      this.rows.forEach(r => {
-        // round to a number of digits which is nice to look at
-        r.hrindex = Math.floor(r.hrindex * 100) / 100;
-      });
-      this.loading = false;
+    this.rows = await this.api.getWarTable();
+    this.rows.forEach(r => {
+      // round to a number of digits which is nice to look at
+      r.hrindex = Math.floor(r.hrindex * 100) / 100;
     });
+    this.loading = false;
   }
 
   public ngOnDestroy(): void {

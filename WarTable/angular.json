@@ -13,12 +13,12 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "./dist",
-            "index": "./src/index.html",
+            "index": false,
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.json",
-            "browser": "./src/main.ts",
+            "browser": "src/main.ts",
             "sourceMap": false
           },
           "configurations": {
