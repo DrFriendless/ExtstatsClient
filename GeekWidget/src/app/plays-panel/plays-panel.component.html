@@ -1,0 +1,9 @@
+<div class="geekPanel plays-panel">
+  <h3>Plays</h3>
+  @if (data && data.warData) {
+    <p>
+      You have recorded {{data.warData.totalPlays}} plays of {{data.warData.distinctGames}} different games.
+      Your H-Index is {{data.warData.hindex}}.
+    </p>
+  }
+</div>

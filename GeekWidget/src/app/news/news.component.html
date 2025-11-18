@@ -1,0 +1,9 @@
+<div class="news">
+  <table>
+    @for (item of data; track item.id) {
+      <tr>
+        <td class="date">{{item.date | date:'mediumDate' }}</td><td [innerHtml]="item.html"></td>
+      </tr>
+    }
+  </table>
+</div>
