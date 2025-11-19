@@ -1,0 +1,30 @@
+{
+  "name": "plays-widget",
+  "version": "1.0.0",
+  "scripts": {
+    "serve": "ng serve",
+    "build": "ng build --configuration debug"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/core": "^20.3.6",
+    "@angular/platform-browser": "^20.3.6",
+    "@ng-bootstrap/ng-bootstrap": "^19.0.1",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-7.5.1.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-1.0.7.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-1.21.0.tgz",
+    "extstats-datatable": "file:/home/john/projects/repo/extstats-datatable-4.1.0.tgz",
+    "@angular-slider/ngx-slider": "^20.0.0",
+    "rxjs": "^7.8.2",
+    "vega-embed": "^7.1.0",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.3.6",
+    "@angular/cli": "^20.3.6",
+    "@angular/compiler-cli": "^20.3.6",
+    "@types/node": "^24.7.1",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.9.3"
+  }
+}

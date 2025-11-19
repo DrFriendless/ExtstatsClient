@@ -1,0 +1,32 @@
+<table class="hotness">
+  @if (rows[0]) {
+    <thead>
+    <td>Total</td>
+    <td>Year</td>
+      @for (name of monthNames; track name) {
+        <td>{{name}}</td>
+      }
+    </thead>
+  }
+
+  <tbody class="month">
+  @for (row of rows; track row.name) {
+    <tr>
+      <td [class]="row.totalStyle">{{row.total}}</td>
+      <td [ngClass]="{total: row.name === 'Total'}">{{row.name}}</td>
+      @for (i of row.indexes; track i) {
+        <td [class]="row.style[i]">{{row.months[i]}}</td>
+      }
+    </tr>
+  }
+
+  </tbody>
+</table>
+<P>
+<table class="hotness">
+  <tr><td class="doc class1">1+ standard deviations below the mean</td></tr>
+  <tr><td class="doc class2">0.5 - 1 standard deviations below the mean</td></tr>
+  <tr><td class="doc class3">within 0.5 standard deviations of the mean</td></tr>
+  <tr><td class="doc class4">0.5 - 1 standard deviations above the mean</td></tr>
+  <tr><td class="doc class5">1+ standard deviations above the mean</td></tr>
+</table>
