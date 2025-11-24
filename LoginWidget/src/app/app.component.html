@@ -1,0 +1,107 @@
+<div class="login-container">
+  @if (state === "PASSWORD_FORM") {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">After you submit this form you will be given a code to post on boardgamegeek.com in a nominated thread.
+          When Extended Stats has seen this code, your password will be changed and you will be able to login.
+        </p>
+        <input #username
+               [ngClass]="{'error': usernameError}"
+               (focus)="usernameError = false"
+               type="text" placeholder="BGG Username" required autocomplete="username"/>
+        <input #password
+               [ngClass]="{'error': passwordError}"
+               (focus)="passwordError = false"
+               type="password" placeholder="New Password" required autocomplete="new-password"/>
+        <button class="login-button" type="submit" (click)="doChangePassword()">Change</button>
+      </form>
+    </div>
+  } @else if (state === "LOGOUT_BUTTON") {
+    <button class="login-button" (click)="showLogoutForm()">Logout</button>
+  } @else if (state === "LOGOUT_FORM") {
+    <div class="login-panel">
+      <p class="advice"><a href="/blog/passwords" target="_blank">Advice on Passwords</a></p>
+      <p class="advice"><a href="#" (click)="changePassword()">Change Password</a></p>
+      <form class="login-form">
+        <button class="login-button" (click)="logout()">Logout</button>
+      </form>
+    </div>
+  } @else if (state === "SHOW_SIGNUP_CODE") {
+    <div class="login-panel">
+      <form class="login-form">
+        <p>Okay, your account has been created.
+          To prove that you own that BGG username, please go to
+          <a href="https://boardgamegeek.com/thread/3614520/authentication-thread" target="_blank">the authentication thread</a>
+          and post a message with just this code:
+          <span class="code">{{code}}</span>
+        </p>
+        <button class="login-button" type="submit" (click)="close()">OK</button>
+      </form>
+    </div>
+  } @else if (state === "ALREADY_SIGNED_UP") {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">You're already signed up. You can just login, or change your password if needed.</p>
+        <button class="login-button" type="submit" (click)="goToLogin()">OK</button>
+      </form>
+    </div>
+  } @else if (state === "SIGNUP_FORM") {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">After you submit this form you will be given a code to post on boardgamegeek.com in a nominated thread.
+          When Extended Stats has seen this code, your account will be created and you will be able to login.
+        </p>
+        <input #username
+               [ngClass]="{'error': usernameError}"
+               (focus)="usernameError = false"
+               type="text" placeholder="BGG Username" required autocomplete="username"/>
+        <input #password
+               [ngClass]="{'error': passwordError}"
+               (focus)="passwordError = false"
+               type="password" placeholder="New Password" required autocomplete="new-password"/>
+        <p class="advice"><a href="/blog/passwords" target="_blank">Advice on Passwords</a></p>
+        <button class="login-button" type="submit" (click)="signup()">Sign Up</button>
+      </form>
+    </div>
+  } @else if (state === 'NEED_TO_SIGN_UP') {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">You need to sign up first.</p>
+        <button class="login-button" type="submit" (click)="close()">OK</button>
+      </form>
+    </div>
+  } @else if (state === 'WRONG_PASSWORD') {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">That's the wrong username or password.</p>
+        <button class="login-button" type="submit" (click)="goToLogin()">OK</button>
+      </form>
+    </div>
+  } @else if (state === 'NOT_CONFIRMED') {
+    <div class="login-panel">
+      <form class="login-form">
+        <p class="help">Your account is not yet confirmed. Please complete the sign-up process, or wait till we catch up.</p>
+        <button class="login-button" type="submit" (click)="close()">OK</button>
+      </form>
+    </div>
+  } @else if (state === "LOGIN_FORM") {
+    <div class="login-panel">
+      <form class="login-form">
+        <button class="login-button" type="button" (click)="showSignup()">Sign Up</button>
+        <input #username
+               [ngClass]="{'error': usernameError}"
+               (focus)="usernameError = false"
+               type="text" placeholder="BGG Username" required autocomplete="username"/>
+        <input #password
+               [ngClass]="{'error': passwordError}"
+               (focus)="passwordError = false"
+               type="password" placeholder="Extstats Password" required autocomplete="current-password"/>
+        <p class="advice"><a href="/blog/passwords" target="_blank">Advice on Passwords</a></p>
+        <p class="advice"><a href="#" (click)="changePassword()">Change Password</a></p>
+        <button class="login-button" type="submit" (click)="login()">Login</button>
+      </form>
+    </div>
+  } @else if (state === "LOGIN_BUTTON") {
+    <button class="login-button" (click)="expand()">Login</button>
+  }
+</div>

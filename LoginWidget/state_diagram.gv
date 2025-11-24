@@ -1,0 +1,27 @@
+digraph G {
+  start -> "Login Button" [headlabel="not logged in", fontsize=10];
+  start -> "Logout Button" [headlabel="logged in", fontsize=10];
+  "Login Button" -> "Login Form" [headlabel="click",fontsize=10];
+  "Logout Button" -> start [headlabel="click",fontsize=10];
+  "Login Form" -> "Signup Form" [headlabel="click Sign Up",fontsize=10]
+  "Login Form" -> "login wait" [headlabel="submit",fontsize=10]
+  "Signup Form" -> "signup wait" [headlabel="submit",fontsize=10];
+  "login wait" -> "need to sign up";
+  "login wait" -> "not confirmed";
+  "login wait" -> "wrong password";
+  "login wait" -> "start";
+  "wrong password" -> "Login Form" [headlabel="OK",fontsize=10];
+  "not confirmed" -> "start" [headlabel="OK",fontsize=10];
+  "need to sign up" -> "Signup Form" [headlabel="OK";fontsize=10];
+  "Signup Form" -> "Login Form" [headlabel=ESC;fontsize=10];
+  "Login Form" -> "Login Button" [headlabel=ESC;fontsize=10];
+  "signup wait" -> "Show Signup Code";
+  "Show Signup Code" -> start [headlabel="OK";fontsize=10];
+  "signup wait" -> "already signed up";
+  "already signed up" -> "Login Form" [headlabel="OK";fontsize=10];
+  "Login Form" -> "Change Password" [headlabel="change password";fontsize=10];
+
+  start [style=dashed];
+  "login wait" [shape=rectangle];
+  "signup wait" [shape=rectangle];
+}
