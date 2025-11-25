@@ -10,9 +10,16 @@
   gap: 10px;
 }
 .login-button {
-  width: 80px;
   margin-left: 140px;
   cursor: pointer;
+  background: #2424e5;
+  color: white;
+  border: 0;
+  width: 90px;
+  height: 28px;
+}
+.login-button:hover {
+  background: #8524e5;
 }
 .login-panel {
   position: absolute;
