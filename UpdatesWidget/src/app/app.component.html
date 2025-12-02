@@ -1,0 +1,76 @@
+<p>
+  Extended Stats downloads data from boardgamegeek.
+  Older data is downloaded less frequently.
+  If you log plays on BGG, Extended Stats won't automatically notice, and if the plays were a long time ago, it won't ever look.
+  This page lets you tell Extended Stats that it needs to redownload old data.
+</p>
+<p>
+  When you choose to refresh one of these files, it will be marked as needing a refresh.
+  You will know this because the "Last Update" column will go blank.
+  The downloader will eventually reprocess it.
+  Depending on how much work the downloader has to do, that could be as soon as a couple of minutes.
+</p>
+<p>
+  The timestamps are in UTC timezone.
+</p>
+
+<p>
+Refresh This List:&nbsp;
+<button class="update-button" type="button" (click)="onRefreshAll()">Refresh</button>
+</p>
+
+<h2>Miscellaneous</h2>
+<table class="update-table">
+  <thead>
+  <td>File</td>
+  <td class="date-column">Last Update</td>
+  <td class="date-column">Next Update</td>
+  <td></td>
+  </thead>
+  <tbody>
+    @for (file of other; track file.id) {
+      <tr>
+        <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+        <td class="date-column">{{file.lastUpdate}}</td>
+        <td class="date-column">{{file.nextUpdate}}</td>
+        <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+      </tr>
+    }
+
+  </tbody>
+</table>
+
+<h2>Plays</h2>
+<table class="update-table">
+  <thead>
+  <td>File</td>
+  <td class="date-column">Last Update</td>
+  <td class="date-column">Next Update</td>
+  <td></td>
+<!--  <td class="plays-columns"># Plays</td>-->
+  </thead>
+  <tbody>
+    @for (file of plays; track file.id) {
+      <tr>
+        <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+        <td class="date-column">{{file.lastUpdate}}</td>
+        <td class="date-column">{{file.nextUpdate}}</td>
+        <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+<!--        <td class="plays-columns">{{file['recorded'] || 0}}</td>-->
+      </tr>
+    }
+  </tbody>
+</table>
+
+<h2>Update Old Stuff</h2>
+<p>
+  This button will update all files which haven't been updated in a week.
+  Use this when you've made lots of changes and can't remember what months they were in.
+  Of course after you use it, it won't work again for a week.
+</p>
+
+<p>
+  Refresh Old Files:&nbsp;
+  <button class="update-button" type="button" (click)="onRefreshOld()">Refresh</button>
+</p>
+
