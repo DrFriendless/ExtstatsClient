@@ -1,13 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { ToProcessElement } from "extstats-core";
-import { UserDataService } from "extstats-angular";
+import {LoaderComponent, UserDataService} from "extstats-angular";
 import { switchMap } from "rxjs/operators";
 import dateFormat from "dateformat";
 import {ExtstatsApi} from "extstats-api";
 
 @Component({
   selector: 'extstats-updates',
+  imports: [
+    LoaderComponent
+  ],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
@@ -20,6 +23,7 @@ export class AppComponent implements OnInit {
   plays: ToProcessElement[] = [];
   geek: string | undefined = undefined;
   downloaderQueue: Record<string, number> = {};
+  loading = false;
 
   constructor(private api: ExtstatsApi, private userService: UserDataService) {
   }
@@ -113,7 +117,10 @@ export class AppComponent implements OnInit {
     forGeek: ToProcessElement[];
     forSystem: Record<string, number>;
   }> {
-    return await this.api.getUpdates(geek);
+    this.loading = true;
+    const d = await this.api.getUpdates(geek);
+    this.loading = false;
+    return d;
   }
 
   protected readonly Object = Object;

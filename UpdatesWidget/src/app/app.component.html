@@ -14,6 +14,12 @@
   The timestamps are in UTC timezone.
 </p>
 
+<div>
+  @if (loading) {
+    <extstats-loader/>
+  }
+</div>
+
 <p>
   Refresh This List:&nbsp;
   <button class="update-button" type="button" (click)="onRefreshAll()">Refresh</button>
