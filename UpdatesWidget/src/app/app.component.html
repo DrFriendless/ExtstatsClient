@@ -15,8 +15,8 @@
 </p>
 
 <p>
-Refresh This List:&nbsp;
-<button class="update-button" type="button" (click)="onRefreshAll()">Refresh</button>
+  Refresh This List:&nbsp;
+  <button class="update-button" type="button" (click)="onRefreshAll()">Refresh</button>
 </p>
 
 <h2>Miscellaneous</h2>
@@ -28,9 +28,13 @@ Refresh This List:&nbsp;
   <td></td>
   </thead>
   <tbody>
-    @for (file of other; track file.id) {
+    @for (file of other; track file) {
       <tr>
-        <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+        @if (file.url.toLowerCase().startsWith("http")) {
+          <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
+        } @else {
+          <td class="url-column">{{file.description}}</td>
+        }
         <td class="date-column">{{file.lastUpdate}}</td>
         <td class="date-column">{{file.nextUpdate}}</td>
         <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
@@ -41,13 +45,14 @@ Refresh This List:&nbsp;
 </table>
 
 <h2>Plays</h2>
+<p>Files with no "Last Update" will be processed in due course.</p>
 <table class="update-table">
   <thead>
   <td>File</td>
   <td class="date-column">Last Update</td>
   <td class="date-column">Next Update</td>
   <td></td>
-<!--  <td class="plays-columns"># Plays</td>-->
+  <!--  <td class="plays-columns"># Plays</td>-->
   </thead>
   <tbody>
     @for (file of plays; track file.id) {
@@ -56,7 +61,27 @@ Refresh This List:&nbsp;
         <td class="date-column">{{file.lastUpdate}}</td>
         <td class="date-column">{{file.nextUpdate}}</td>
         <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
-<!--        <td class="plays-columns">{{file['recorded'] || 0}}</td>-->
+        <!--        <td class="plays-columns">{{file['recorded'] || 0}}</td>-->
+      </tr>
+    }
+  </tbody>
+</table>
+
+<h2>Downloader Activity</h2>
+<p>The downloader currently has these files outstanding to be processed.
+  If there are a lot of these, don't expect your files to be reprocessed soon.
+</p>
+
+<table class="update-table">
+  <thead>
+  <th style="width: 150px">File Type</th>
+  <th style="width: 60px">Count</th>
+  </thead>
+  <tbody>
+    @for (row of Object.entries(downloaderQueue); track row[0]) {
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
       </tr>
     }
   </tbody>

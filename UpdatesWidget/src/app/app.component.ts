@@ -1,23 +1,27 @@
-import { Component, OnInit } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-import { Observable, Subject } from "rxjs"
-import { ToProcessElement } from "extstats-core"
-import { UserDataService } from "extstats-angular"
-import { switchMap } from "rxjs/operators"
+import { Component, OnInit } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { ToProcessElement } from "extstats-core";
+import { UserDataService } from "extstats-angular";
+import { switchMap } from "rxjs/operators";
 import dateFormat from "dateformat";
+import {ExtstatsApi} from "extstats-api";
 
 @Component({
   selector: 'extstats-updates',
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  private data$: Observable<ToProcessElement[]> | undefined;
+  private data$: Observable<{
+    forGeek: ToProcessElement[];
+    forSystem: Record<string, number>;
+  }> | undefined;
   private subject = new Subject<any>();
   other: ToProcessElement[] = [];
   plays: ToProcessElement[] = [];
   geek: string | undefined = undefined;
+  downloaderQueue: Record<string, number> = {};
 
-  constructor(private http: HttpClient, private userService: UserDataService) {
+  constructor(private api: ExtstatsApi, private userService: UserDataService) {
   }
 
   ngOnInit(): void {
@@ -25,16 +29,22 @@ export class AppComponent implements OnInit {
     this.data$ = this.subject
       .asObservable()
       .pipe(
-        switchMap(() => this.doQuery(this.geek!))
-      ) as Observable<ToProcessElement[]>;
+        switchMap(() => this.doQuery(this.geek!).then())
+      ) as Observable<{
+      forGeek: ToProcessElement[];
+      forSystem: Record<string, number>;
+    }>;
     this.data$.subscribe(vs => this.processData(vs));
     this.subject.next(undefined);
   }
 
-  private processData(data: ToProcessElement[]) {
+  private processData(data: {
+    forGeek: ToProcessElement[];
+    forSystem: Record<string, number>;
+  }) {
     this.other = [];
     this.plays = [];
-    for (const tpe of data) {
+    for (const tpe of data.forGeek) {
       tpe.lastUpdate = transform(tpe.lastUpdate);
       tpe.nextUpdate = transform(tpe.nextUpdate);
       if (tpe.processMethod === 'processYear') {
@@ -44,6 +54,7 @@ export class AppComponent implements OnInit {
       }
     }
     this.plays.sort(byDateDescending);
+    this.downloaderQueue = data.forSystem;
   }
 
   private patch(tpe: ToProcessElement): void {
@@ -83,25 +94,29 @@ export class AppComponent implements OnInit {
   }
 
   onRefresh(url: string): void {
-    this.doRefresh(url).subscribe(tpe => this.patch(tpe));
+    this.doRefresh(url).then(tpe => this.patch(tpe));
   }
 
   onRefreshOld(): void {
-    this.doRefreshOld(this.geek!).subscribe(urls => urls.forEach(url => this.noLastUpdate(url)));
+    this.doRefreshOld(this.geek!).then(urls => urls.forEach(url => this.noLastUpdate(url)));
   }
 
-  private doRefreshOld(geek: string): Observable<string[]> {
-    return this.http.post("/api/updateOld?geek=" + encodeURIComponent(geek), {}) as Observable<string[]>;
+  private async doRefreshOld(geek: string): Promise<string[]> {
+    return await this.api.updateOld(geek);
   }
 
-  private doRefresh(url: string): Observable<ToProcessElement> {
-    const body = { url };
-    return this.http.post("/api/update", body) as Observable<ToProcessElement>;
+  private async doRefresh(url: string): Promise<ToProcessElement> {
+    return await this.api.markForUpdate(url)
   }
 
-  private doQuery(geek: string): Observable<ToProcessElement[]> {
-    return this.http.get("/api/updates?geek=" + encodeURIComponent(geek)) as Observable<ToProcessElement[]>;
+  private async doQuery(geek: string): Promise<{
+    forGeek: ToProcessElement[];
+    forSystem: Record<string, number>;
+  }> {
+    return await this.api.getUpdates(geek);
   }
+
+  protected readonly Object = Object;
 }
 
 function byDateDescending(t1: ToProcessElement, t2: ToProcessElement): number {
