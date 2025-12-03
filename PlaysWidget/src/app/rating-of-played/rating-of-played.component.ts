@@ -88,14 +88,14 @@ export class RatingOfPlayedComponent extends DataViewComponent<Result> implement
     if (this.data) {
       for (const play of this.data.plays) {
         if (play.year < this.PLAYS_LO || play.year > this.PLAYS_HI) continue;
-        const game = this.gameIndex[play.game];
-        const gg = this.geekGameIndex[play.game];
+        const game = this.gameIndex[play.bggid];
+        const gg = this.geekGameIndex[play.bggid];
         if (!game || !gg || gg.rating <= 0) continue;
         const r = roundRating(gg.rating);
         if (r < 1) continue;
         playsByRating[r] = (playsByRating[r] || 0) + play.quantity;
         const pbgbr = playsByGameByRating[r] || {};
-        pbgbr[play.game] = (pbgbr[play.game] || 0) + play.quantity;
+        pbgbr[play.bggid] = (pbgbr[play.bggid] || 0) + play.quantity;
         playsByGameByRating[r] = pbgbr;
         totalPlays += play.quantity;
       }

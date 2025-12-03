@@ -20,9 +20,9 @@ interface Row {
 function renderPlays(plays: PlayData[], gi: { [bggid: string]: GameData }): string {
   const strs = plays.map((pd: PlayData) => {
     if (pd.quantity === 1) {
-      return "a play of " + gi[pd.game].name;
+      return "a play of " + gi[pd.bggid].name;
     } else {
-      return `${pd.quantity} plays of ${gi[pd.game].name}`;
+      return `${pd.quantity} plays of ${gi[pd.bggid].name}`;
     }
   });
   return strs.join(", ");
@@ -76,6 +76,7 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
     this.data = d.plays;
     this.gi = makeIndex(this.data.games);
     this.ggi = makeIndex(this.data.geekgames);
+    console.log(this.data.geekgames);
     this.fiddle.next(undefined);
   }
 
@@ -107,9 +108,15 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
     let score = 0;
     for (const play of plays) {
       const q = play.quantity > this.maxPlays ? this.maxPlays : play.quantity;
-      if (!this.ggi[play.game]) continue;
-      const rating = this.ggi[play.game].rating;
-      if (!rating || rating < 0) continue;
+      if (!this.ggi[play.bggid]) {
+        console.log("no ggi");
+        continue;
+      }
+      const rating = this.ggi[play.bggid].rating;
+      if (!rating || rating < 0) {
+        console.log("no rating");
+        continue;
+      }
       const sign = Math.sign(rating - this.mediumRating);
       const s = q * Math.pow(Math.abs(rating - this.mediumRating), this.bias);
       score += sign * s;

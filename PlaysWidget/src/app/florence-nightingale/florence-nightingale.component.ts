@@ -62,10 +62,10 @@ export class FlorenceNightingaleComponent extends PlaysViewComponent<Result> imp
     this.playsBySubdomain = {};
     this.playsByGame = {};
     for (const play of data.plays) {
-      const game = this.gi[play.game];
+      const game = this.gi[play.bggid];
       if (!game || !game.subdomain) continue;
       this.playsBySubdomain[game.subdomain as Subdomain] = (this.playsBySubdomain[game.subdomain as Subdomain] || 0) + play.quantity;
-      this.playsByGame[play.game.toString()] = (this.playsByGame[play.game.toString()] || 0) + play.quantity;
+      this.playsByGame[play.bggid.toString()] = (this.playsByGame[play.bggid.toString()] || 0) + play.quantity;
     }
     if (Object.keys(this.playsBySubdomain).length === 0) return;
     this.fiddle.next(undefined);

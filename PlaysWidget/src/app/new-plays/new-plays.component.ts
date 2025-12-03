@@ -39,8 +39,8 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
     let firstYear = Math.min(...lotsYears.map(y => parseInt(y)));
     if (firstYear < 1996) firstYear = 1996;
     for (const play of plays) {
-      if (playedByThisGeek.indexOf(play.game) >= 0) continue;
-      playedByThisGeek.push(play.game);
+      if (playedByThisGeek.indexOf(play.bggid) >= 0) continue;
+      playedByThisGeek.push(play.bggid);
       if (play.year >= firstYear) {
         const playedThisYear = playedByYear[play.year] || [];
         playedByYear[play.year] = playedThisYear;
@@ -54,7 +54,7 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
           });
           first = false;
         }
-        const game = gamesIndex[play.game];
+        const game = gamesIndex[play.bggid];
         firstPlays.push({
           count: playedByThisGeek.length,
           gameName: game.name,

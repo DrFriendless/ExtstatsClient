@@ -80,8 +80,8 @@ export class MostPlayedByYearComponent extends PlaysViewComponent<Result> {
       if (!this.byYear.years[p.year]) this.byYear.years[p.year] =
         { year: p.year, plays: {}, top10: [], top10Count: [], otherPlayCount: 0 } as PlaysOfGames;
       const pog: PlaysOfGames = this.byYear.years[p.year];
-      pog.plays[p.game] = (pog.plays[p.game] || 0) + p.quantity;
-      this.allPlays[p.game] = (this.allPlays[p.game] || 0) + p.quantity;
+      pog.plays[p.bggid] = (pog.plays[p.bggid] || 0) + p.quantity;
+      this.allPlays[p.bggid] = (this.allPlays[p.bggid] || 0) + p.quantity;
     });
     this.fiddle.next(undefined);
   }

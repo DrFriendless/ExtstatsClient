@@ -32,7 +32,7 @@ export class TemporalByDateComponent extends PlaysViewComponent<Result> {
     const plays = data.plays;
     const gameIndex = makeIndex(data.games);
     for (const play of plays) {
-      play['name'] = gameIndex[play.game].name;
+      play['name'] = gameIndex[play.bggid].name;
       if (play.month === 0) continue;
       const month = this.rows[play.month - 1];
       month.days[play.day - 1] += play.quantity;
