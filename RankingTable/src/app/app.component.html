@@ -1,0 +1,29 @@
+<div>
+    @if (loading) {
+        <extstats-loader/>
+    }
+</div>
+
+<div class="ranking-table">
+
+    <div class="extstats-doc">
+        <extstats-button-group #buttongroup>
+            <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
+        </extstats-button-group>
+
+      @if (buttongroup.selected === 'doc') {
+        <extstats-documentation id="rankingTableDoc" [src]="'/json/en/doc/ranking.json'">
+        </extstats-documentation>
+      }
+
+    </div>
+
+    <div class="extstats-table-block">
+        <es-table-controller [table]="rankingTable" [searchColumn]="'game_name'" [placeholder]="'game'"></es-table-controller>
+        <table es-table class="table table-striped extstats-table" [data]="rows" #rankingTable="esTable" [rowsOnPage]="30" [sortBy]="'name'" [sortOrder]="'asc'">
+            <thead es-table-head [columns]="columns">Head</thead>
+            <tbody es-table-body [columns]="columns">Body</tbody>
+        </table>
+    </div>
+</div>
+
