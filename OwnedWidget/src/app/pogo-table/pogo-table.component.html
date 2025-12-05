@@ -1,0 +1,40 @@
+<div class="pogo-table">
+  @if (!!rows) {
+    <div class="extstats-table-block">
+      <es-table-controller [table]="pogoTable" [searchColumn]="'name'" [placeholder]="'game'"></es-table-controller>
+      <table es-table class="table table-striped extstats-table" [data]="rows" #pogoTable="esTable" [rowsOnPage]="30"
+             [sortBy]="'plays'" [sortOrder]="'desc'">
+        <thead>
+        <tr>
+          <th><es-default-sorter by="name">Name</es-default-sorter></th>
+          <th><es-default-sorter by="plays">Plays</es-default-sorter></th>
+          <th><es-default-sorter by="bggRank">BGG Rank</es-default-sorter></th>
+          <th><es-default-sorter by="bggRating">BGG Rating</es-default-sorter></th>
+          <th><es-default-sorter by="rating">Your Rating</es-default-sorter></th>
+          <th><es-default-sorter by="firstPlay">First Play</es-default-sorter></th>
+          <th><es-default-sorter by="lastPlay">Last Play</es-default-sorter></th>
+          <th><es-default-sorter by="utilisation">Utilisation</es-default-sorter></th>
+          <th><es-default-sorter by="playsInLastYear">Plays in Last Year</es-default-sorter></th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (row of pogoTable.data; track row.bggid) {
+            <tr>
+              <td class="name"><a href="https://boardgamegeek.com/boardgame/{{row.bggid}}">{{row.name}}</a></td>
+              <td>{{row.plays}}</td>
+              <td>{{row.bggRank}}</td>
+              <td>{{row.bggRating}}</td>
+              <td>{{row.rating}}</td>
+              <td>{{row.firstPlay}}</td>
+              <td>{{row.lastPlay}}</td>
+              <td>{{row.utilisation}}</td>
+              <td>{{row.playsInLastYear}}</td>
+            </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
