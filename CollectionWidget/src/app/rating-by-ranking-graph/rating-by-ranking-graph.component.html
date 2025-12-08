@@ -1,0 +1,35 @@
+<div class="rbyr-table">
+  <table>
+    @for (row of rows; track row) {
+      <tr>
+        <td style="border: none; font-size: 12px">{{row.title}}</td>
+        @for (col of row.columns; track col) {
+          <td [ngClass]="'rating'+col.rating" title="{{col.tooltip}}" height="12px">&nbsp;</td>
+        }
+      </tr>
+    }
+
+  </table>
+</div>
+<style>
+  .rbyr-table,
+  .rbyr-table table {
+    width: 100%;
+  }
+  .rating1 { background: #ff0000 }
+  .rating2 { background: #ff3366 }
+  .rating3 { background: #ff6699 }
+  .rating4 { background: #ff66cc }
+  .rating5 { background: #cc99ff }
+  .rating6 { background: #9999ff }
+  .rating7 { background: #99ffff }
+  .rating8 { background: #66ff99 }
+  .rating9 { background: #33cc99 }
+  .rating10 { background: #00cc00 }
+  .rbyr-table td {
+    border: 1px solid black;
+  }
+  .rbyr-table table {
+    border-collapse: collapse;
+  }
+</style>

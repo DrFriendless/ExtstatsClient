@@ -1,0 +1,10 @@
+<div class="fby-table">
+  <div class="extstats-table-block">
+    <es-table-controller [table]="favesByYearTable"></es-table-controller>
+    <table es-table class="table table-striped extstats-table" [data]="rows" #favesByYearTable="esTable"
+           [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+      <thead es-table-head [columns]="columns"></thead>
+      <tbody es-table-body [columns]="columns"></tbody>
+    </table>
+  </div>
+</div>

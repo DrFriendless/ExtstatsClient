@@ -1,0 +1,47 @@
+/* Styles for favourites by year table */
+
+.fby-table table.extstats-table td,
+.fby-table table.extstats-table tbody,
+.fby-table table.extstats-table thead,
+.fby-table table.extstats-table.table thead th {
+  border-color: #fee94e;
+}
+.fby-table table.extstats-table {
+  border-collapse: collapse;
+}
+.fby-table div.extstats-doc li.nav-item a.nav-link {
+  color: #777777;
+  font-size: 14px;
+  border-radius: unset;
+}
+
+.fby-table .table.table-striped.extstats-table tbody tr:nth-child(even){
+  background-color: rgba(242, 255, 184, 0.5);
+}
+.fby-table .table.table-striped.extstats-table tbody tr:nth-child(odd){
+  background-color: white;
+}
+.extstats-page-item.active {
+  background-color: rgba(242, 255, 184, 0.5);
+}
+.extstats-table-controller {
+  background-color: #fee94e;
+  color: black;
+  border: 1px solid #fee94e;
+}
+.extstats-table-controller a.extstats-page-link {
+  color: black;
+}
+.fby-table {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.fby-table .table.extstats-table thead td,
+.fby-table .table.extstats-table tbody td {
+  border-right-width: 0;
+  border-left-width: 0;
+}
+.fby-table th {
+  background-color: #fee94e;
+  color: black;
+}
