@@ -17,7 +17,16 @@
       </form>
     </div>
   } @else if (state === "LOGOUT_BUTTON") {
-    <button class="login-button" (click)="showLogoutForm()">Logout</button>
+    @if (accounts.length > 0) {
+      <select #account class="account-select" [ngModel]="geek" (click)="setGeek(account.value)">
+        @for (account of accounts; track account) {
+          <option value="{{account}}">{{account}}</option>
+        }
+      </select>
+      <button class="login-button" style="margin-left: 0" (click)="showLogoutForm()">Logout</button>
+    } @else {
+      <button class="login-button" (click)="showLogoutForm()">Logout</button>
+    }
   } @else if (state === "LOGOUT_FORM") {
     <div class="login-panel">
       <p class="advice"><a href="/blog/passwords" target="_blank">Advice on Passwords</a></p>

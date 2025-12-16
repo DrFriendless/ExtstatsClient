@@ -1,0 +1,27 @@
+@if (!editing) {
+  <div class="buddy-set-ro">
+    <div class="buddy-set-top ro">
+      <input [(ngModel)]="name" readonly style="margin-right: 12px">
+      <button type="button" class="extstats-button" (click)="edit()">Edit</button>
+      <button type="button" class="extstats-button" (click)="delete()">Delete</button>
+    </div>
+    <geek-chips [editable]="false" [geeks]="geeks"></geek-chips>
+  </div>
+} @else {
+  <div class="buddy-set-rw">
+    <div>
+      <div class="buddy-set-top">
+        <label>Buddy group name</label>
+        <input [(ngModel)]="name" style="margin-left: 12px; margin-right: 12px">
+        <button type="button" class="extstats-button" (click)="save()" [disabled]="!saveable()">Save</button>
+        <button type="button" class="extstats-button" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+    <div style="height: 0; margin-top: 8px"></div>
+    <geek-combo (geekChosen)="chips.addGeek($event)" [placeholder]="'Buddy name'"></geek-combo>
+    <div style="height: 0; margin-top: 8px"></div>
+    <geek-chips style="width: 100%" #chips [editable]="true" [geeks]="geeks"></geek-chips>
+  </div>
+}
+
+

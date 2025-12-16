@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-cp ./dist/browser/*.js ../../extstats-home/public/LoginWidget/
-cp ./dist/browser/*.js.map ../../extstats-home/public/LoginWidget/
-cp ./src/styles.css ../../extstats-home/public/LoginWidget/
+COMPONENT=LoginWidget
+mkdir -p ../../extstats-home/public/$COMPONENT
+cp ./dist/browser/*.js ../../extstats-home/public/$COMPONENT/
+cp ./dist/browser/*.js.map ../../extstats-home/public/$COMPONENT/
+cp ./src/styles.css ../../extstats-home/public/$COMPONENT/
 echo Files were copied to extstats-home.

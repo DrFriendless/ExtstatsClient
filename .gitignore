@@ -64,3 +64,4 @@ typings/
 static
 staging
 /jwks.json
+dist

@@ -63,3 +63,15 @@ input.error {
   font-family: sans-serif;
   font-size: larger;
 }
+.account-select {
+  width: 130px;
+  float: left;
+  display: block;
+  margin-top: 3px;
+  margin-right: 10px;
+  border: 0;
+  background: transparent;
+}
+.account-select:hover {
+  border: 1px solid black;
+}

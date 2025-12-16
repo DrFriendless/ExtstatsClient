@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import {AuthResult, ExtstatsApi} from "extstats-api";
 import {FormsModule} from "@angular/forms";
 import {NgClass} from "@angular/common";
-import {CookieService} from "extstats-angular";
+import {CookieService, UserDataService} from "extstats-angular";
 
 type LoginState = "START" | "LOGIN_BUTTON" | "LOGOUT_BUTTON" | "LOGIN_FORM" | "SIGNUP_FORM" |
   "PASSWORD_FORM" | "NOT_CONFIRMED" | "NEED_TO_SIGN_UP" | "SHOW_SIGNUP_CODE" | "ALREADY_SIGNED_UP" |
@@ -27,8 +27,11 @@ export class LoginComponent implements AfterViewInit {
   code: string | undefined = undefined;
   error: string | undefined = undefined;
   disabled = false;
+  accounts: string[] = [];
+  geek: string | undefined;
 
-  constructor(private eRef: ElementRef, private api: ExtstatsApi, private cookieService: CookieService) {
+  constructor(private eRef: ElementRef, private api: ExtstatsApi, private cookieService: CookieService,
+              private userService: UserDataService) {
   }
 
   showLogoutForm() {
@@ -36,8 +39,8 @@ export class LoginComponent implements AfterViewInit {
   }
 
   logout() {
-    this.api.logout().then(() => {
-      this.close();
+    this.api.logout().then(async () => {
+      await this.close();
       window.postMessage("logout");
     });
   }
@@ -47,11 +50,11 @@ export class LoginComponent implements AfterViewInit {
     this.passwordError = false;
   }
 
-  close() {
-     this.state = "START";
-     this.disabled = false;
-     this.clearErrors();
-     this.checkForLoggedIn();
+  async close() {
+    this.state = "START";
+    this.disabled = false;
+    this.clearErrors();
+    await this.checkForLoggedIn();
   }
 
   goToLogin() {
@@ -84,7 +87,7 @@ export class LoginComponent implements AfterViewInit {
     return undefined;
   }
 
-  async login(): Promise<any> {
+  async login(): Promise<void> {
     if (this.username && this.password) {
       this.usernameError = !this.username.nativeElement.value;
       this.passwordError = !this.password.nativeElement.value;
@@ -93,10 +96,9 @@ export class LoginComponent implements AfterViewInit {
         const result: AuthResult = await this.api.login(this.username.nativeElement.value, this.password.nativeElement.value);
         if (result.type === "userdata") {
           this.disabled = false;
-          // TODO - tell the page about the user's data
-          this.close();
+          await this.close();
+          await this.userService.setAndSave("user.username", this.cookieService.getCookie("extstatsid"));
           window.postMessage("login");
-          return result.data;
         } else if (result.type === "failure") {
           this.state = result.state as LoginState;
         }
@@ -121,7 +123,7 @@ export class LoginComponent implements AfterViewInit {
           this.state = result.state as LoginState;
         }
         this.disabled = false;
-        if (this.state === "START") this.checkForLoggedIn();
+        if (this.state === "START") await this.checkForLoggedIn();
       }
     }
   }
@@ -134,22 +136,22 @@ export class LoginComponent implements AfterViewInit {
     this.state = "SIGNUP_FORM";
   }
 
-  public ngAfterViewInit() {
-    this.checkForLoggedIn();
+  async ngAfterViewInit() {
+    await this.checkForLoggedIn();
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(event: MouseEvent) {
+  async clickout(event: MouseEvent) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      this.close();
+      await this.close();
     }
   }
 
   @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
+  async keyEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       if (this.state === "LOGIN_FORM") {
-        this.close();
+        await this.close();
       } else if (this.state === "SIGNUP_FORM") {
         this.clearErrors();
         this.state = "LOGIN_FORM";
@@ -157,10 +159,42 @@ export class LoginComponent implements AfterViewInit {
     }
   }
 
-  private checkForLoggedIn() {
-    console.log("checkForLoggedIn");
+  getGeek(): string | undefined {
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
+    for (let i=0; i<vars.length; i++) {
+      const pair = vars[i].split("=");
+      if (pair[0] === "geek") return pair[1];
+    }
+    return undefined;
+  }
+
+  setGeek(geek: string): void {
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
+    const newVars = [ `geek=${geek}` ];
+    for (const v of vars) {
+      if (!v.trim()) continue;
+      const pair = v.split("=");
+      if (pair[0] && pair[0] !== "geek") newVars.push(v);
+    }
+    if (newVars.length) {
+      window.location.search = '?' + newVars.join("&");
+    } else {
+      window.location.search = "";
+    }
+  }
+
+  private async checkForLoggedIn() {
     const cookie = this.cookieService.getCookie(this.COOKIE_NAME);
-    console.log(`cookie = ${cookie}`);
     this.state = (!!cookie) ? "LOGOUT_BUTTON" : "LOGIN_BUTTON";
+    if (cookie) {
+      const usernames: string[] = await this.userService.get("user.usernames", []);
+      if (usernames.length === 0) usernames.push(cookie);
+      this.accounts = usernames;
+      let g = this.getGeek();
+      if (!g) g = cookie;
+      this.geek = g;
+    }
   }
 }
