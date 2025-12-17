@@ -1,8 +1,0 @@
-{
-  "extends": "tslint:recommended",
-  "rulesDirectory": [
-    "codelyzer"
-  ],
-  "rules": {
-  }
-}

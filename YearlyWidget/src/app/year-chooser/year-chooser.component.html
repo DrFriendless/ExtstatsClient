@@ -1,0 +1,5 @@
+<div class="year-chooser">
+  @for (y of years; track y) {
+    <button type="button" class="year-button" (click)="emit(y)" [class.selected]="y === selected">{{y}}</button>
+  }
+</div>

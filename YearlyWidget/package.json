@@ -1,0 +1,30 @@
+{
+  "name": "yearly-widget",
+  "version": "2.0.0",
+  "scripts": {
+    "serve": "ng serve",
+    "build": "ng build --configuration debug"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/core": "^20.3.6",
+    "@angular/platform-browser": "^20.3.6",
+    "@ng-bootstrap/ng-bootstrap": "^19.0.1",
+    "dateformat": "^5.0.3",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-7.11.4.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-1.2.2.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-1.32.0.tgz",
+    "ngx-bootstrap": "^20.0.2",
+    "vega-embed": "^7.1.0",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.3.6",
+    "@angular/cli": "^20.3.6",
+    "@angular/compiler-cli": "^20.3.6",
+    "@types/dateformat": "^5.0.3",
+    "@types/node": "^24.7.1",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,12 @@
+<h3 class="extstats-table-title">{{title}}</h3>
+<table class="table table-striped extstats-table nickel-dime-table">
+  <thead><th>Plays</th><th>Game</th></thead>
+  <tbody>
+    @for (g of data; track g.url) {
+      <tr>
+        <td class="plays">{{g.plays}}</td>
+        <td class="name"><a href="{{g.url}}">{{g.name}}</a></td>
+      </tr>
+    }
+  </tbody>
+</table>

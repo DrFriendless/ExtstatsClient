@@ -1,0 +1,21 @@
+<table class="table table-striped extstats-table yearly-best-days">
+  <thead><th>Date</th><th>Score</th><th>Plays</th></thead>
+  <tbody>
+    @for (row of rows; track row) {
+      <tr>
+        <td class="date">{{row.ymd.toDateString()}}</td>
+        <td class="score">{{row.score.toFixed(0)}}</td>
+        <td class="plays">
+          @for (desc of row.playDescs; track desc.bggid) {
+            @if (!$first) {
+              <span>, </span>
+            }
+            <span>
+            {{desc.quantity}} plays of <a href="https://boardgamegeek.com/boardgame/{{desc.bggid}}">{{desc.game}}</a>
+            </span>
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
