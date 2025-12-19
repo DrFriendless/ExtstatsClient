@@ -22,3 +22,56 @@
 .system-stats ul {
   margin-bottom: 40px;
 }
+.system-stats {
+  --processPlayed: deepskyblue;
+  --processUser: goldenrod;
+  --processGame: mediumblue;
+  --processCollection: brown;
+  --processYear: forestgreen;
+}
+.upcoming-graph {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-top: 40px;
+  margin-left: 20px;
+}
+.upcoming-labels {
+  margin-left: 20px;
+}
+.upcoming-column {
+  display: flex;
+  flex-direction: column;
+}
+.upcoming-stack {
+  width: 1in;
+}
+td.legend {
+  width: 25px;
+  height: 25px;
+  margin-right: 16px;
+}
+span.day-count {
+  margin-left: 30px;
+  color: white;
+  display: inline-block;
+  margin-top: 1em;
+}
+.column-label {
+  width: 1in;
+  display: inline-block;
+  margin-top: 12px;
+}
+.column-label span {
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+  font-size: small;
+}
+table.legend td.label {
+  padding-left: 8px;
+}
+.update-button {
+  background: hotpink;
+  color: black;
+}

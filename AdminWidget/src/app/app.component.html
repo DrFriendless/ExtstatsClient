@@ -1,3 +1,7 @@
+@if (loading) {
+  <extstats-loader></extstats-loader>
+}
+
 <div class="system-stats">
   <ul>
     @if (stats) {
@@ -28,6 +32,66 @@
       }
     }
   </table>
+
+  <h2>Upcoming Work</h2>
+
+  <table class="legend">
+    <tr><td class="legend" style="background: var(--processPlayed)"></td><td class="label" title="processPlayed">Years in which user has played games</td></tr>
+    <tr><td class="legend" style="background: var(--processUser)"></td><td class="label" title="processUser">Get user details</td></tr>
+    <tr><td class="legend" style="background: var(--processGame)"></td><td class="label" title="processGame">Get game details</td></tr>
+    <tr><td class="legend" style="background: var(--processCollection)"></td><td class="label" title="processCollection">Update user collection</td></tr>
+    <tr><td class="legend" style="background: var(--processYear)"></td><td class="label" title="processYear">Plays for a user for a year</td></tr>
+  </table>
+
+  <div class="upcoming-graph">
+    @for (day of days; track day.index) {
+      <div class="upcoming-column">
+        <div class="upcoming-stack">
+          @if (day.processPlayed) {
+            <div style="width: 99%; background: var(--processPlayed)" [style.height.px]="day.processPlayed" title="{{day.label}} - processPlayed {{day.processPlayedLabel}}">
+              @if (day.processPlayed > 30) {
+                <span class="day-count">{{day.processPlayedLabel}}</span>
+              }
+            </div>
+          }
+          @if (day.processUser) {
+            <div style="width: 99%; background: var(--processUser)" [style.height.px]="day.processUser" title="{{day.label}} - processUser {{day.processUserLabel}}">
+              @if (day.processUser > 30) {
+                <span class="day-count">{{day.processUserLabel}}</span>
+              }
+            </div>
+          }
+          @if (day.processGame) {
+            <div style="width: 99%; background: var(--processGame)" [style.height.px]="day.processGame" title="{{day.label}} - processGame {{day.processGameLabel}}">
+              @if (day.processGame > 30) {
+                <span class="day-count">{{day.processGameLabel}}</span>
+              }
+            </div>
+          }
+          @if (day.processCollection) {
+            <div style="width: 99%; background: var(--processCollection)" [style.height.px]="day.processCollection" title="{{day.label}} - processCollection {{day.processCollectionLabel}}">
+              @if (day.processCollection > 30) {
+                <span class="day-count">{{day.processCollectionLabel}}</span>
+              }
+            </div>
+          }
+          @if (day.processYear) {
+            <div style="width: 99%; background: var(--processYear)" [style.height.px]="day.processYear" title="{{day.label}} - processYear {{day.processYearLabel}}">
+                  @if (day.processYear > 30) {
+                    <span class="day-count">{{day.processYearLabel}}</span>
+                  }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+  <div class="upcoming-labels">
+    @for (day of days; track day.index) {
+      <div class="column-label"><span>{{day.label}}</span></div>
+    }
+  </div>
 
   <button class="update-button" (click)="refresh()">Refresh</button>
 </div>
