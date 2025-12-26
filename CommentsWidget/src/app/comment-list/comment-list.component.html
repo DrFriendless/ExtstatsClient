@@ -1,0 +1,20 @@
+@for (c of comments; track c.id) {
+  <div class="comment" [style.padding-left.px]="indent * 24">
+    <comment-editor [comment]="c" [newComment]="newComment" saveText="Save"/>
+    @if (newComment && newComment.isInReplyTo(c.id)) {
+      <div style="padding-left: 24px; width: 100%;  margin-top: 20px">
+      <comment-editor [comment]="undefined" [newComment]="newComment" saveText="Save"/>
+      </div>
+    } @else if (newComment && !c.me && !c.deleted) {
+      <div class="buttonbar">
+        <button class="comment-button" (click)="replyTo(c.id)">Reply</button>
+      </div>
+    }
+
+    @if (c.children.length > 0) {
+      <div class="children">
+        <comment-list [indent]="indent + 1" [comments]="c.children" [newComment]="newComment"></comment-list>
+      </div>
+    }
+  </div>
+}

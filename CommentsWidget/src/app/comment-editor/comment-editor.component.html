@@ -1,0 +1,32 @@
+<div class="comment-editor" [ngClass]="{ 'me': comment && comment.me }">
+  @if (!!comment) {
+    @if (comment.deleted) {
+      <p class="attribution">
+        <span class="text">This comment has been deleted</span>
+      </p>
+    } @else {
+      <p class="attribution">
+        <span class="text">Posted by </span>
+        <span class="poster">{{comment.poster}}</span>
+        <span class="text"> at </span>
+        <span class="when">{{comment.when | date:'medium' }}</span>
+      </p>
+    }
+  }
+  <textarea #ta class="content" [ngClass]="{ 'editing': editing, 'deleted': comment?.deleted }" [readonly]="!editing"
+            [attr.placeholder]="comment?.deleted ? '' : 'Enter your text'">{{text}}</textarea>
+
+  @if (comment && comment.deleted) {
+    <div class="buttonbar"></div>
+  } @else if (comment && comment.me && !editing) {
+    <div class="buttonbar">
+      <button class="comment-button" (click)="edit()" type="button">Edit</button>
+      <button class="comment-button" (click)="delete()" type="button">Delete</button>
+    </div>
+  } @else if (editing) {
+    <div class="buttonbar">
+      <button #s class="comment-button" (click)="save(ta.value, s)" type="button">{{saveText}}</button>
+      <button class="comment-button" (click)="cancel(ta.value)" type="button">Cancel</button>
+    </div>
+  }
+</div>

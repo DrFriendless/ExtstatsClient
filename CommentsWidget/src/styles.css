@@ -1,0 +1,55 @@
+.comments-section {
+  width: 100%;
+  max-width: 890px;
+}
+.comment-button {
+  height: 28px;
+  background-color: #fc5830;
+  color: black;
+  cursor: pointer;
+  border: 0;
+  width: 90px;
+}
+textarea.content {
+  width: 100%;
+  height: fit-content;
+  display: block;
+  border: 1px solid lightgray;
+  resize: none;
+  padding: 4px 8px;
+}
+textarea.content.editing {
+  height: 180px;
+  resize: vertical;
+  border: 1px solid black;
+}
+textarea.content.deleted {
+  display: none;
+}
+.buttonbar {
+  clear: both;
+  display: flex;
+  column-gap: 12px;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 12px;
+  width: 100%;
+}
+.comment-editor {
+  display: flex;
+  flex-direction: column;
+}
+p.attribution {
+  font-style: italic;
+  margin-bottom: 0;
+}
+p.attribution span.poster {
+  font-style: normal;
+  font-weight: bold;
+}
+.me textarea {
+  background: lightgoldenrodyellow;
+}
+div.comment {
+  width: 100%;
+}

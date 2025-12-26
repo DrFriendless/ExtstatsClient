@@ -1,0 +1,19 @@
+<div class="comments-section">
+<h2>Comments</h2>
+
+@if (newComment) {
+  @if (newComment.isTopLevel()) {
+    <comment-editor [newComment]="newComment" saveText="Post"/>
+  } @else {
+    <div class="buttonbar">
+      <button class="comment-button" (click)="newComment.doNewPost()">Comment</button>
+    </div>
+  }
+}
+
+@if (comments && comments.length > 0) {
+  <comment-list [comments]="comments" [indent]="0" [newComment]="newComment"></comment-list>
+} @else {
+  <P>There are no comments yet.</P>
+}
+</div>
