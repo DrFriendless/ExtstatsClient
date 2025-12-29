@@ -1,0 +1,18 @@
+h2 {
+  text-align: center;
+}
+.editor-root {
+  width: 80%;
+  margin: 40px auto 0;
+}
+multiplays-widget button.extstats-button {
+  background: #d34533;
+  color: white;
+  margin: 2px;
+  border: 2px transparent solid;
+  width: auto;
+  height: 24px;
+}
+multiplays-widget button.extstats-button:hover {
+  border: 2px black solid;
+}

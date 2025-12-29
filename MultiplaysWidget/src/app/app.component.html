@@ -1,0 +1,18 @@
+<div>
+  @if (loading) {
+    <extstats-loader></extstats-loader>
+  }
+  <h2 id="newplays">Rate of Play of Games New to You</h2>
+  <new-plays [data]="data$"></new-plays>
+
+  <div class="editor-root">
+    <span>Use these controls to edit which users are shown on the graph.</span>
+    <div style="width: 100%">
+      <geek-combo (geekChosen)="chips.addGeek($event)" [placeholder]="'Geek name'"></geek-combo>
+      <button type="button" class="extstats-button" style="margin-left: 12px" (click)="apply()" [disabled]="false">Apply</button>
+    </div>
+    <div style="height: 0; margin-top: 8px"></div>
+    <geek-chips style="width: 100%" #chips [editable]="true" [geeks]="geeks"></geek-chips>
+  </div>
+</div>
+
