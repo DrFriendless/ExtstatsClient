@@ -24,27 +24,35 @@ export class UserConfigComponent implements OnDestroy, OnInit {
   loading = false;
 
   constructor(private api: ExtstatsApi, private userService: UserDataService) {
+    console.log("constructor");
   }
 
   public async ngOnInit(): Promise<void> {
+    console.log("ngOnInit");
     await this.reload();
   }
 
   private async reload() {
-    this.loading = true;
-    const pd = await this.api.getPersonalData();
-    console.log(pd);
-    this.personalData = JSON.stringify(pd);
-    this.username = await this.userService.get("user.username", undefined);
-    this.geekids = await this.userService.get<string[]>("user.usernames", []);
-    this.buddyGroups = await this.userService.get<BuddySet[]>("user.buddies", []);
-    console.log(this.geekids, this.username);
-    if ((!this.geekids || this.geekids.length === 0) && this.username) {
-      this.geekids = [ this.username ];
-      await this.userService.setAndSave("user.usernames", this.geekids);
+    if (this.userService.isLoggedIn()) {
+      console.log("logged in");
+      this.loading = true;
+      this.personalData = JSON.stringify(await this.api.getPersonalData());
+      this.username = await this.userService.get("user.username", undefined);
+      this.geekids = await this.userService.get<string[]>("user.usernames", []) || [];
+      this.buddyGroups = await this.userService.get<BuddySet[]>("user.buddies", []) || [];
+      if ((!this.geekids || this.geekids.length === 0) && this.username) {
+        this.geekids = [ this.username ];
+        await this.userService.setAndSave("user.usernames", this.geekids);
+      }
+      this.loading = false;
+    } else {
+      console.log("not loggied in");
+      this.personalData = "";
+      this.username = undefined;
+      this.buddyGroups = [];
+      this.geekids = [];
+      this.loading = false;
     }
-    this.loading = false;
-    console.log(this.geekids);
   }
 
   public async save() {
@@ -65,6 +73,7 @@ export class UserConfigComponent implements OnDestroy, OnInit {
 
   public buddiesChanged(event: BuddySet) {
     if (event.getName() === "") this.buddyGroups = this.buddyGroups.filter(bg => bg !== event);
+    console.log("buddiesChanged");
     console.log(this.buddyGroups);
   }
 
@@ -76,6 +85,7 @@ export class UserConfigComponent implements OnDestroy, OnInit {
 
   @HostListener('window:message', ['$event'])
   async onMessage(event: any) {
+    console.log("onMessage");
     await this.reload();
   }
 }

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 COMPONENT=UserWidget
-mkdir -p ../../extstats-home/public/$COMPONENT
-cp ./dist/browser/*.js ../../extstats-home/public/$COMPONENT/
-cp ./dist/browser/*.js.map ../../extstats-home/public/$COMPONENT/
-cp ./src/styles.css ../../extstats-home/public/$COMPONENT/
-echo Files were copied to extstats-home/$COMPONENT
+DEST=../../extstats-home/public/$COMPONENT
+mkdir -p $DEST
+cp ./dist/browser/*.js $DEST
+cp ./dist/browser/*.js.map $DEST
+cp ./src/styles.css $DEST
+echo Files were copied to $DEST
 date
