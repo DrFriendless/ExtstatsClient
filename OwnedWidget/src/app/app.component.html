@@ -26,6 +26,11 @@
 
   <h2 id="ratingByLifetime">Lifetime of Games by Rating</h2>
   <rating-by-lifetime [data]="pageData$"></rating-by-lifetime>
+
+  @if (geek) {
+    <h2 id="checklist">Owned Games Checklist</h2>
+    <p>Print off <a href="/api/checklist?geek={{geek}}" target="_blank">this checklist</a> to do a physical stocktake of your collection.</p>
+  }
 </div>
 
 
