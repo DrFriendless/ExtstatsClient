@@ -61,14 +61,60 @@ export class MonthlyWidget extends GraphQuerySourceComponent<Result> {
 
   constructor(api: ExtstatsApi, userDataService: UserDataService) {
     super(api, userDataService);
-    this.playsAndGame$ = this.data$.pipe(map(r => indexPlays(r.monthly)), share());
+    this.playsAndGame$ = this.data$.pipe(map((r: any) => indexPlays(this.inflate(r.monthly2))), share());
+  }
+
+  inflatePlays(plays: any[]): PlayData[] {
+    return plays.map((p: any) => {
+      return {
+        bggid: p.bggid,
+        expansion: p.e,
+        month: p.ym % 100,
+        year: Math.floor(p.ym / 100),
+        quantity: p.q
+      };
+    })
+  }
+
+  inflateCounts(counts: any[]): CountData[] {
+    return counts.map((c: any) => {
+      return {
+        count: c.c,
+        month: c.ym % 100,
+        year: Math.floor(c.ym / 100)
+      };
+    })
+  }
+
+  inflateGeekGames(ggs: any[]): GeekGameData[] {
+    return ggs.map((gg: any) => {
+      return {
+        owned: gg.o,
+        game: {
+          bggid: gg.game.bggid,
+          name: gg.game.name,
+          isExpansion: gg.game.e,
+          playTime: gg.game.pt,
+          yearPublished: gg.game.yearPublished
+        }
+      };
+    })
+  }
+
+  // turn the squished JSON into what the code expects
+  inflate(monthly: any): MonthlyData {
+    return {
+      plays: this.inflatePlays(monthly.plays),
+      counts: this.inflateCounts(monthly.counts),
+      geekGames: this.inflateGeekGames(monthly.geekGames),
+    }
   }
 
   protected buildQuery(geek: string): string {
-    return `{monthly(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
-      " plays { year month expansion quantity bggid } " +
-      " counts { year month count } " +
-      " geekGames { owned game { bggid name yearPublished playTime isExpansion } }" +
+    return `{monthly2(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+      " plays { ym e q bggid } " +
+      " counts { ym c } " +
+      " geekGames { o game { bggid n yp pt e } }" +
       "}}";
   }
 }

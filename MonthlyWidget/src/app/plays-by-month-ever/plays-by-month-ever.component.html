@@ -4,8 +4,10 @@
       <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
     </extstats-button-group>
 
-    <extstats-documentation id="pbmeverTableDoc" *ngIf="buttongroup.selected === 'doc'" [src]="'/json/en/doc/pbmever.json'">
-    </extstats-documentation>
+    @if (buttongroup.selected === 'doc') {
+      <extstats-documentation id="pbmeverTableDoc" [src]="'/json/en/doc/pbmever.json'">
+      </extstats-documentation>
+    }
   </div>
 
   <div class="extstats-table-block">
