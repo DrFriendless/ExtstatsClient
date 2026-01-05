@@ -15,6 +15,22 @@ export function ymd(play: PlaysWithDate) {
   return play.year * 10000 + play.month * 100 + play.date;
 }
 
+export function ymdToString(ymd: string | number | YMD): string {
+  if (typeof ymd === typeof "") ymd = parseInt(ymd as string);
+  if (typeof ymd === typeof 0) {
+    const year = Math.floor((ymd as number)/10000);
+    const month = Math.floor((ymd as number)/100) % 100;
+    const day = (ymd as number) % 100;
+    ymd = { year, month, day };
+  }
+  const y = (ymd as YMD).year.toString();
+  let m = (ymd as YMD).month.toString();
+  let d = (ymd as YMD).day.toString();
+  if (m.length === 1) m = `0${m}`;
+  if (d.length === 1) d = `0${d}`;
+  return `${y}-${m}-${d}`;
+}
+
 export interface YMD {
   year: number;
   month: number;

@@ -9,6 +9,7 @@ import {GameData, GeekGameData, PlayData, PlaysData, Result} from "../app.compon
 import {makeIndex} from "extstats-core";
 import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
+import {ymdToString} from "../library";
 
 interface Row {
   rank: number;
@@ -97,8 +98,7 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
     }
     scored.sort((a, b) => b.score - a.score);
     this.rows = scored.map((row, index) => {
-      const ymd = parseInt(row.ymd);
-      const date = `${Math.floor(ymd/10000)}-${Math.floor(ymd/100) % 100}-${ymd%100}`;
+      const date = ymdToString(row.ymd);
       return { rank: index+1 , score: Math.floor(row.score*10)/10, date,
         playstr: renderPlays(row.plays, this.gi) };
     });
