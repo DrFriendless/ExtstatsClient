@@ -12,6 +12,7 @@ interface Row {
   plays: Record<string, number>;
   total: number;
   sd?: StddevRange;
+  bggid: number;
 }
 
 @Component({
@@ -45,7 +46,7 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
   }
 
   ngOnInit(): void {
-    this.fiddle.subscribe(junk => {
+    this.fiddle.subscribe(ignored => {
       this.recalc();
     });
   }
@@ -81,7 +82,13 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
     years.sort((y1, y2) => parseInt(y1) - parseInt(y2));
     // build the columns
     this.columns = [
-      new Column<Row>({ field: "name", name: "Game", tooltip: "The name of the game", classname: "wide" }),
+      new Column<Row>({
+        field: "name",
+        name: "Game",
+        tooltip: "The name of the game",
+        valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
+        classname: "wide"
+      }),
       new Column<Row>({ field: "total", name: "Total", tooltip: "Total plays ever for this game" }),
     ];
     this.rows = [];
@@ -112,7 +119,8 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
       const row = {
         name: this.gamesIndex[gs].name,
         plays,
-        total: playsByGame[gs]
+        total: playsByGame[gs],
+        bggid: g
       };
       years.forEach(year => values.push(plays[year] || 0));
       this.rows.push(row);
