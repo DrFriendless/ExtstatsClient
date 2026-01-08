@@ -11,6 +11,7 @@ import {MostPlayedByYearComponent} from "./most-played-by-year/most-played-by-ye
 import {TemporalByDateComponent} from "./temporal-by-date/temporal-by-date.component";
 import {TemporalByMonthComponent} from "./temporal-by-month/temporal-by-month.component";
 import {TemporalByDayComponent} from "./temporal-by-day/temporal-by-day.component";
+import {PlaysByYearTableComponent} from "./plays-by-year/plays-by-year.component";
 
 // these types are the shape of the data returned by the GraphQL query.
 export interface GameData {
@@ -48,17 +49,20 @@ export interface Result {
     MostPlayedByYearComponent,
     TemporalByDateComponent,
     TemporalByMonthComponent,
-    TemporalByDayComponent
+    TemporalByDayComponent,
+    MostPlayedByYearComponent,
+    MostPlayedByYearComponent,
+    MostPlayedByYearComponent,
+    PlaysByYearTableComponent
   ],
   styleUrls: ['./app.component.css']
 })
 export class PlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
-  constructor(api: ExtstatsApi, userDataService: UserDataService, private loginService: LoginService) {
-    super(api, userDataService);
+  constructor(api: ExtstatsApi, private userDataService: UserDataService, private loginService: LoginService) {
+    super(api);
   }
 
-  override ngOnInit() {
-    super.ngOnInit();
+  ngOnInit() {
     console.log("features", this.loginService.features);
     this.loginService.isLoggedIn.subscribe(yes => {
       console.log("logged in = ", yes);
@@ -77,8 +81,8 @@ export class PlaysWidget extends GraphQuerySourceComponent<Result> implements On
   private clearSettings(): void {
   }
 
-  protected buildQuery(geek: string): string {
-    const geeks = `"${geek}"`;
+  protected buildQuery(): string {
+    const geeks = `"${this.userDataService.getAGeek()}"`;
     return `{plays(geeks: [${geeks}]) { games { bggid name subdomain } plays { bggid year month day quantity } geekgames { bggid rating } } }`;
   }
 }

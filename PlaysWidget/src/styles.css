@@ -1,20 +1,20 @@
-table.hotness td.class0 {
+table td.class0 {
   background-color: white;
   color: black;
 }
-table.hotness td.class1 {
+table td.class1 {
   background-color: khaki;
 }
-table.hotness td.class2 {
+table td.class2 {
   background-color: palegreen;
 }
-table.hotness td.class3 {
+table td.class3 {
   background-color: lime;
 }
-table.hotness td.class4 {
+table td.class4 {
   background-color: springgreen;
 }
-table.hotness td.class5 {
+table td.class5 {
   background-color: forestgreen;
   color: white;
 }
@@ -152,4 +152,7 @@ h2 {
 }
 p {
   text-align: left;
+}
+th.wide {
+  min-width: 200px;
 }

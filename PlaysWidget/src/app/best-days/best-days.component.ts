@@ -109,12 +109,10 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
     for (const play of plays) {
       const q = play.quantity > this.maxPlays ? this.maxPlays : play.quantity;
       if (!this.ggi[play.bggid]) {
-        console.log("no ggi");
         continue;
       }
       const rating = this.ggi[play.bggid].rating;
       if (!rating || rating < 0) {
-        console.log("no rating");
         continue;
       }
       const sign = Math.sign(rating - this.mediumRating);
