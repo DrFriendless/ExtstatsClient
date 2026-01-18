@@ -65,3 +65,4 @@ static
 staging
 /jwks.json
 dist
+.angular/
