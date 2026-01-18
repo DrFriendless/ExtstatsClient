@@ -13,6 +13,7 @@ interface Row {
   total: number;
   sd?: StddevRange;
   bggid: number;
+  years: number;
 }
 
 @Component({
@@ -111,6 +112,13 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
         }
       }));
     }
+    this.columns.push(new Column<Row>({
+      field: "years",
+      name: "Total",
+      tooltip: "Total years in which this game has been played",
+      valueHtml: (row: Row) => `<b>${row.years}</b>`,
+      valueTooltip: (row: Row) => `${row.years}`
+    }));
     // build the rows
     const values: number[] = [];
     for (const g of games) {
@@ -120,7 +128,8 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
         name: this.gamesIndex[gs].name,
         plays,
         total: playsByGame[gs],
-        bggid: g
+        bggid: g,
+        years: years.filter(y => !!plays[y]).length
       };
       years.forEach(year => values.push(plays[year] || 0));
       this.rows.push(row);
