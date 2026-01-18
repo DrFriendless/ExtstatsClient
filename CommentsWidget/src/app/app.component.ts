@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
+import {AfterViewInit, Component, ElementRef} from '@angular/core';
 import {ExtstatsApi} from "extstats-api";
 import {UserDataService} from "extstats-angular";
 import {CommentListComponent} from "./comment-list/comment-list.component";
@@ -33,7 +33,7 @@ export class CommentsWidget implements AfterViewInit {
   // if it's undefined, you cannot comment.
   newComment: NewComment | undefined = undefined;
 
-  constructor(elementRef: ElementRef, private changeDetector: ChangeDetectorRef,
+  constructor(elementRef: ElementRef,
               private api: ExtstatsApi, private userService: UserDataService) {
     this.loggedIn = userService.isLoggedIn();
     // maybe there is another way to do this, but @Input and @Attribute simply don't work.
