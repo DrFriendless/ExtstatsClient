@@ -22,14 +22,13 @@ type GraphData = {
   count: number;
   tooltip: string;
   expansion: boolean;
-  tickX?: number;
   url: string;
   key: string;
   colourCode: number;
   name: string;
 };
 type MarkData = {
-  bucket: number;
+  bucket: string;
   x: number;
 };
 
@@ -63,8 +62,13 @@ export class PlaysOfGamesOwnedComponent extends DataViewComponent<Data> {
     const url = (bucket.lo === 0 && `https://boardgamegeek.com/collection/user/${this.geek}?own=1&played=0`) ||
       `https://boardgamegeek.com/collection/user/${this.geek}?own=1&minplays=${bucket.lo}&maxplays=${bucket.hi}`;
     return {
-      bucket, count: 0, bucketLo: bucket.lo, name: bucket.name,
-      tooltip: "", url, expansion,
+      bucket,
+      count: 0,
+      bucketLo: bucket.lo,
+      name: bucket.name,
+      tooltip: "",
+      url,
+      expansion,
       key: bucket.lo.toString() + "-" + expansion,
       colourCode: (bucket.lo >= 10 ? 2 : 0) + (expansion ? 0 : 1),
     };
@@ -97,14 +101,14 @@ export class PlaysOfGamesOwnedComponent extends DataViewComponent<Data> {
       data.names.push(game.name);
     });
     // figure out where the mark goes
-    let markData = { bucket: 0, x: 0 };
+    let markData = { bucket: "", x: 0 };
     const los = Object.keys(countByLo);
     for (const lo of los) {
       const count = countByLo[parseInt(lo)] || 0;
       if (count <= tens) {
         tens -= count;
       } else {
-        markData.bucket = parseInt(lo);
+        markData.bucket = calcPlaysBucket(parseInt(lo)).name;
         markData.x = tens;
         break;
       }
