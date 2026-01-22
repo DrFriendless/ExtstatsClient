@@ -17,7 +17,7 @@
       </form>
     </div>
   } @else if (state === "LOGOUT_BUTTON") {
-    @if (accounts.length > 0) {
+    @if (showAccounts && accounts.length > 0) {
       <select #account class="account-select" [ngModel]="geek" (click)="setGeek(account.value)">
         @for (account of accounts; track account) {
           <option value="{{account}}">{{account}}</option>

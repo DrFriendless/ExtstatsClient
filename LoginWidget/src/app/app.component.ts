@@ -29,9 +29,14 @@ export class LoginComponent implements AfterViewInit {
   disabled = false;
   accounts: string[] = [];
   geek: string | undefined;
+  showAccounts = true;
 
-  constructor(private eRef: ElementRef, private api: ExtstatsApi, private cookieService: CookieService,
+  constructor(private elementRef: ElementRef,
+              private api: ExtstatsApi,
+              private cookieService: CookieService,
               private userService: UserDataService) {
+    console.log(elementRef);
+    this.showAccounts = elementRef.nativeElement.attributes.showAccounts.value !== "false";
   }
 
   showLogoutForm() {
@@ -142,7 +147,7 @@ export class LoginComponent implements AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   async clickout(event: MouseEvent) {
-    if (!this.eRef.nativeElement.contains(event.target)) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
       await this.close();
     }
   }
