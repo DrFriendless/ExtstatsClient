@@ -43,7 +43,7 @@ export class UserConfigComponent implements OnDestroy, OnInit {
       this.loading = true;
       this.loading2 = true;
       const p1 = this.api.getPersonalData();
-      const p2 = this.api.getDisambiguationData(this.userService.getAGeek()!);
+      const p2 = this.api.getDisambiguationData();
       this.personalData = JSON.stringify(await p1);
       this.disambiguationUserConfig = await this.userService.get("disambiguation.defaults", {}) || {};
       this.username = await this.userService.get("user.username", undefined);
