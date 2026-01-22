@@ -36,7 +36,7 @@ export class LoginComponent implements AfterViewInit {
               private cookieService: CookieService,
               private userService: UserDataService) {
     console.log(elementRef);
-    this.showAccounts = elementRef.nativeElement.attributes.showAccounts.value !== "false";
+    this.showAccounts = elementRef.nativeElement.attributes.showAccounts && (elementRef.nativeElement.attributes.showAccounts.value !== "false");
   }
 
   showLogoutForm() {
