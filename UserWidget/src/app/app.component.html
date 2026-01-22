@@ -36,6 +36,51 @@
       <button type="button" class="extstats-button" (click)="more()" style="margin: 20px">Another Buddy Group</button>
     </div>
 
+    <button type="button" class="extstats-button" (click)="save()">Save</button>
+
+    @if (disambiguationData) {
+      <h4>Base Game Disambiguation</h4>
+      <h5>Default Base Games</h5>
+      <p>These are expansions for which we don't necessarily know the base game.</p>
+      <dl>
+        @for (item of disambiguationData.items; track item; ) {
+          @let base = assignedBaseGame(item.expansion.bggid);
+          <dt class="disambiguation-expansion" [ngClass]="{ 'unassigned': base === undefined }">{{item.expansion.name}}</dt>
+          @for (bg of item.basegames; track bg.bggid) {
+            <dd class="disambiguation-basegame" [ngClass]="{ 'assigned': base === bg.bggid }" (click)="assign(item.expansion.bggid, bg.bggid)">
+              <input type="radio" [checked]="base === bg.bggid">
+              <span>{{bg.name}}</span>
+            </dd>
+          }
+          <dd class="disambiguation-basegame" [ngClass]="{ 'assigned': base === undefined }" (click)="unassign(item.expansion.bggid)">
+            <input type="radio" [checked]="base === undefined">
+            <span>(no default)</span>
+          </dd>
+        }
+      </dl>
+      <button type="button" class="extstats-button" (click)="saveDisambiguation()">Save</button>
+
+      <h5>Ambiguous Plays</h5>
+      <p>
+        These are plays you've recorded on BGG for which we coudln't infer a base game.
+        You can fix these by either adding a base game to your plays on BGG on the day,
+        or by setting a default base game in the options above.
+        Those changes will take effect when Extended Stats next downloads the play -
+        in this case of historical plays you will need to initiate that on the Updates page.
+      </p>
+      <ul>
+        @for (play of disambiguationData.plays; track play) {
+          <li>Played {{play.name}} in {{play.year}}</li>
+        } @empty {
+          <P>None of your plays are ambiguous!</P>
+        }
+      </ul>
+    }
+
+    @if (loading2) {
+      <extstats-loader/>
+    }
+
     <div>
       <h4>Your Personal Data</h4>
       <p>These are the data which Extended Stats stores about you (as currently in the database).</p>
@@ -43,7 +88,6 @@
       {{personalData}}
     </textarea>
     </div>
+
   </div>
 }
-
-<button type="button" class="extstats-button" (click)="save()">Save</button>
