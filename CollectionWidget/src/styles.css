@@ -48,3 +48,6 @@
 .rbyr-table {
   line-height: 13px;
 }
+.fc-item.default {
+  font-weight: bold;
+}

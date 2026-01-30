@@ -1,4 +1,6 @@
 <div style="text-align:center">
+  <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+
   @if (loading) {
     <extstats-loader></extstats-loader>
   }

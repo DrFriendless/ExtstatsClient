@@ -1,5 +1,5 @@
-import { Component } from "@angular/core"
-import {GraphQuerySourceComponent, LoaderComponent, UserDataService} from "extstats-angular";
+import {AfterViewInit, Component, ViewChild} from "@angular/core"
+import {GraphQuerySourceComponent, LoaderComponent, UserConfigService, SelectorComboComponent} from "extstats-angular";
 import {map} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {ExtstatsApi} from "extstats-api";
@@ -35,22 +35,36 @@ interface Result {
     RatingsByYearGraphComponent,
     FavesByYearTableComponent,
     RatingVsWeightComponent,
-    RatingByRankingGraphComponent
+    RatingByRankingGraphComponent,
+    SelectorComboComponent
   ],
   templateUrl: './app.component.html'
 })
-export class UserCollectionComponent extends GraphQuerySourceComponent<Result> {
+export class UserCollectionComponent extends GraphQuerySourceComponent<Result> implements AfterViewInit {
   private static DEFAULT_SELECTOR = "rated(ME)";
   private selector = UserCollectionComponent.DEFAULT_SELECTOR;
   public pageData$: Observable<Data> = this.data$.pipe(map(d => d.geekgames));
+  @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
 
-  constructor(api: ExtstatsApi, userDataService: UserDataService) {
-    super(api, userDataService);
+  constructor(api: ExtstatsApi, private userConfigService: UserConfigService) {
+    super(api);
   }
 
-  protected buildQuery(geek: string): string {
-    this.geek = geek;
-    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    if (this.selectorCombo) {
+      this.selectorCombo.setDefault(UserCollectionComponent.DEFAULT_SELECTOR);
+      this.selectorCombo.setSelected(UserCollectionComponent.DEFAULT_SELECTOR);
+    }
+  }
+
+  onSelectorChosen(event: string) {
+    this.selector = event;
+    super.refresh();
+  }
+
+  protected buildQuery(): string {
+    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userConfigService.getAGeek()}"}]) {` +
       " games { bggid name bggRanking yearPublished weight subdomain } " +
       " geekGames { bggid rating } " +
       "}}";
