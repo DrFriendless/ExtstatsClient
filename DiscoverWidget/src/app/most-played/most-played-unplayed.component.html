@@ -1,0 +1,16 @@
+<p>This table shows the most-played games (by users of this site) that you haven't recorded a play for.</p>
+
+<div class="most-played-table">
+  @if (loading) {
+    <extstats-loader [mini]="true"></extstats-loader>
+  } @else {
+    <div class="extstats-table-block mpu-table">
+      <es-table-controller [table]="mostPlayedUnplayedTable"></es-table-controller>
+      <table es-table class="table extstats-table" [data]="rows" #mostPlayedUnplayedTable="esTable"
+             [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+        <thead es-table-head [columns]="columns"></thead>
+        <tbody es-table-body [columns]="columns"></tbody>
+      </table>
+    </div>
+  }
+</div>
