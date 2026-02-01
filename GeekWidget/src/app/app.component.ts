@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { GeekSummary } from 'extstats-core';
-import {GeekComboComponent, LoaderComponent, UserDataService} from 'extstats-angular';
+import {GeekComboComponent, LoaderComponent, UserConfigService} from 'extstats-angular';
 import {ExtstatsApi} from "extstats-api";
 import {CollectionPanelComponent} from "./collection-panel/collection-panel.component";
 import {OwnedPanelComponent} from "./owned-panel/owned-panel.component";
@@ -11,6 +11,7 @@ import {YearlyPanelComponent} from "./yearly-panel/yearly-panel.component";
 import {MultiplaysPanelComponent} from "./multiplays-panel/multiplays-panel.component";
 import {UpdatesPanelComponent} from "./updates-panel/updates-panel.component";
 import {NewsComponent} from "./news/news.component";
+import {DiscoverPanelComponent} from "./discover-panel/discover-panel.component";
 
 @Component({
   selector: 'extstats-geek',
@@ -21,6 +22,7 @@ import {NewsComponent} from "./news/news.component";
     PlaysPanelComponent,
     MonthlyPanelComponent,
     YearlyPanelComponent,
+    DiscoverPanelComponent,
     MultiplaysPanelComponent,
     UpdatesPanelComponent,
     LoaderComponent,
@@ -35,11 +37,11 @@ export class GeekWidget implements AfterViewInit {
   public foundGeek: string | undefined;
   public loading = true;
 
-  public constructor(private api: ExtstatsApi, private userDataService: UserDataService) {
+  public constructor(private api: ExtstatsApi, private userService: UserConfigService) {
   }
 
   async ngAfterViewInit() {
-    this.geek = this.userDataService.getAGeek();
+    this.geek = this.userService.getAGeek();
     if (this.geek) {
       this.loading = true;
       this.data = await this.api.getGeekSummary(this.geek);
