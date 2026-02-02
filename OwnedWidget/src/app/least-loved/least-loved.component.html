@@ -1,7 +1,7 @@
 <div id="least-loved-table" class="least-loved-table">
   <div class="extstats-table-block">
     <es-table-controller [table]="leastLovedTable"></es-table-controller>
-    <table es-table class="table table-striped extstats-table" [data]="rows" #leastLovedTable="esTable" [rowsOnPage]="30"
+    <table es-table class="table extstats-table" [data]="rows" #leastLovedTable="esTable" [rowsOnPage]="30"
            [sortBy]="'fhm'" [sortOrder]="'desc'">
       <thead es-table-head [columns]="columns"></thead>
       <tbody es-table-body [columns]="columns"></tbody>

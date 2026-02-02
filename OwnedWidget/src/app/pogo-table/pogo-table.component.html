@@ -2,7 +2,7 @@
   @if (!!rows) {
     <div class="extstats-table-block">
       <es-table-controller [table]="pogoTable" [searchColumn]="'name'" [placeholder]="'game'"></es-table-controller>
-      <table es-table class="table table-striped extstats-table" [data]="rows" #pogoTable="esTable" [rowsOnPage]="30"
+      <table es-table class="table extstats-table" [data]="rows" #pogoTable="esTable" [rowsOnPage]="30"
              [sortBy]="'plays'" [sortOrder]="'desc'">
         <thead>
         <tr>
