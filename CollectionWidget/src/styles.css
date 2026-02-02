@@ -1,10 +1,16 @@
+.user-collection {
+  --primary-colour: #0099cc;
+  --text-colour: white;
+  --even-colour: rgba(179, 236, 255, 0.5);
+}
+
 /* Styles for favourites by year table */
 
 .fby-table table.extstats-table td,
 .fby-table table.extstats-table tbody,
 .fby-table table.extstats-table thead,
 .fby-table table.extstats-table.table thead th {
-  border-color: #fee94e;
+  border-color: var(--primary-colour);
 }
 .fby-table table.extstats-table {
   border-collapse: collapse;
@@ -15,22 +21,22 @@
   border-radius: unset;
 }
 
-.fby-table .table.table-striped.extstats-table tbody tr:nth-child(even){
-  background-color: rgba(242, 255, 184, 0.5);
+.fby-table .table.extstats-table tbody tr:nth-child(even){
+  background-color: var(--even-colour);
 }
-.fby-table .table.table-striped.extstats-table tbody tr:nth-child(odd){
+.fby-table .table.extstats-table tbody tr:nth-child(odd){
   background-color: white;
 }
 .extstats-page-item.active {
-  background-color: rgba(242, 255, 184, 0.5);
+  background-color: var(--even-colour);
 }
 .extstats-table-controller {
-  background-color: #fee94e;
-  color: black;
-  border: 1px solid #fee94e;
+  background-color: var(--primary-colour);
+  color: var(--text-colour);
+  border: 1px solid var(--primary-colour);
 }
 .extstats-table-controller a.extstats-page-link {
-  color: black;
+  color: var(--text-colour);
 }
 .fby-table {
   margin-left: 16px;
@@ -42,8 +48,11 @@
   border-left-width: 0;
 }
 .fby-table th {
-  background-color: #fee94e;
-  color: black;
+  background-color: var(--primary-colour);
+  color: var(--text-colour);
+}
+.fby-table thead a {
+  color: var(--text-colour);
 }
 .rbyr-table {
   line-height: 13px;
