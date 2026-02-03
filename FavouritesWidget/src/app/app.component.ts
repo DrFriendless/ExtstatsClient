@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewInit, ViewChild} from '@angular/core';
 import {
-  ButtonGroupButtonDirective,
-  ButtonGroupComponent, ConfigComponent,
   GraphQuerySourceComponent,
-  LoaderComponent,
-  UserDataService
+  LoaderComponent, SelectorComboComponent, UserConfigService,
 } from "extstats-angular";
 import { Subscription } from "rxjs/internal/Subscription";
 import {FirstPlayedVsRatingComponent} from "./first-played-vs-rating/first-played-vs-rating.component";
@@ -61,25 +58,31 @@ export interface Result {
     RatingVsMonthsPlayedComponent,
     RatingVsPlaysComponent,
     YouShouldPlayComponent,
-    ButtonGroupComponent,
-    ButtonGroupButtonDirective,
-    ConfigComponent
+    SelectorComboComponent
   ],
   templateUrl: './app.component.html'
 })
-export class FavouritesComponent extends GraphQuerySourceComponent<Result> implements OnInit, OnDestroy {
-  private static DEFAULT_SELECTOR = "all(played(ME), rated(ME))";
+export class FavouritesComponent extends GraphQuerySourceComponent<Result> implements OnInit, OnDestroy, AfterViewInit {
+  private static DEFAULT_SELECTOR = "all(played(ME),rated(ME))";
   INITIAL_SELECTOR = FavouritesComponent.DEFAULT_SELECTOR;
   data: Data | undefined;
   private selector = this.INITIAL_SELECTOR;
   private dataSubscription: Subscription | undefined;
+  @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
 
-  constructor(api: ExtstatsApi, userDataService: UserDataService) {
-    super(api, userDataService);
+  constructor(api: ExtstatsApi, private userService: UserConfigService) {
+    super(api);
   }
 
-  override ngOnInit() {
-    super.ngOnInit();
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    if (this.selectorCombo) {
+      this.selectorCombo.setDefault(FavouritesComponent.DEFAULT_SELECTOR);
+      this.selectorCombo.setSelected(FavouritesComponent.DEFAULT_SELECTOR);
+    }
+  }
+
+  ngOnInit() {
     this.refresh();
     this.dataSubscription = this.data$.subscribe(data => {
       this.data = data.geekgames;
@@ -91,13 +94,13 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
     if (this.dataSubscription) this.dataSubscription.unsubscribe();
   }
 
-  selectorChanged(selector: string) {
-    this.selector = selector;
-    this.refresh();
+  onSelectorChosen(event: string) {
+    this.selector = event;
+    super.refresh();
   }
 
-  protected buildQuery(geek: string): string {
-    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+  protected buildQuery(): string {
+    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRanking bggRating yearPublished subdomain weight } " +
       " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay daysSincePlayed } " +
       "}}";

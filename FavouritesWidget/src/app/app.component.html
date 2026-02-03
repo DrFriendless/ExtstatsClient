@@ -1,4 +1,14 @@
-<div style="text-align:center">
+<div class="favourites-widget">
+  <div class="features-header">
+    <p>This page looks at games you've played and rated to try to determine which are your favourites.</p>
+
+    <p>This combo lets you modify the selector, i.e. the set of games that the page considers.
+      Given the page's focus, not all options will produce useful results.
+      The standard option is shown in bold in case you want to return to sanity.
+    </p>
+    <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+  </div>
+
   @if (loading) {
     <extstats-loader></extstats-loader>
   }
@@ -12,23 +22,11 @@
   <h2 id="wvp">Weight vs Plays</h2>
   <complexity-vs-plays [data]="data$"></complexity-vs-plays>
 
-  <extstats-button-group #buttongroup>
-    <button type="button" class="btn table-button svg-button extstats-button" [extstatsButtonGroup]="buttongroup" selector="settings">
-      <img src="/img/settings.svg">
-    </button>
-  </extstats-button-group>
-
   <h2 id="avr">BGG Average vs Rating</h2>
   <extstats-average-vs-rating [data]="data$"></extstats-average-vs-rating>
 
   <h2 id="faves">Your Favourite Games</h2>
   <favourites-table [data]="data$"></favourites-table>
-
-  @if (buttongroup.selected === 'settings') {
-    <div id="favouritesSettings">
-      <extstats-config [initial]="INITIAL_SELECTOR" [choices]="[]" (chosen)="selectorChanged($event)"></extstats-config>
-    </div>
-  }
 
   <h2 id="rvmp">Rating vs Months Played</h2>
   <extstats-rating-vs-months-played [data]="data$"></extstats-rating-vs-months-played>

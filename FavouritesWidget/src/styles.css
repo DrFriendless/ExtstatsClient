@@ -1,41 +1,13 @@
+.favourites-widget {
+  --primary-colour: #2c992d;
+  --text-colour: white;
+  --even-colour: rgba(176, 232, 177, 0.5);
+}
+
 /* Styles for favourites-table */
-.favourites-table .table.extstats-table td,
-.favourites-table .table.extstats-table tbody,
-.favourites-table .table.extstats-table thead,
-.favourites-table .table.extstats-table.table thead th {
-  border-color: #159588;
-}
-/* border colour lightened 60% with 0.5 alpha */
-/* https://www.hexcolortool.com/#e52464 */
-.favourites-table .table.table-striped.extstats-table tbody tr:nth-child(even){
-  background-color: rgba(174, 255, 255, 0.5);
-}
-.favourites-table .table.table-striped.extstats-table tbody tr:nth-child(odd){
-  background-color: white;
-}
-.extstats-page-item.active {
-  background-color: rgba(174, 255, 255, 0.5);
-}
-.extstats-table-controller {
-  background-color: #159588;
-  color: white;
-  border: 1px solid #159588;
-}
-.extstats-table-controller a.extstats-page-link {
-  color: white;
-}
 .favourites-table, .you-should-play {
   margin-left: 16px;
   margin-right: 16px;
-}
-.favourites-table .table.extstats-table thead td,
-.favourites-table .table.extstats-table tbody td {
-  border-right-width: 0;
-  border-left-width: 0;
-}
-.favourites-table th, .you-should-play th {
-  background-color: #159588;
-  color: white;
 }
 .favourites-table div.extstats-doc button {
   border: solid 1px #159588;
@@ -93,12 +65,6 @@ p {
 }
 td.date-column {
   min-width: 100px;
-}
-.you-should-play.table.table-striped.extstats-table tbody tr:nth-child(even){
-  background-color: rgba(174, 255, 255, 0.5);
-}
-.you-should-play.table.table-striped.extstats-table tbody tr:nth-child(odd){
-  background-color: white;
 }
 .slider-box {
   flex: 1;

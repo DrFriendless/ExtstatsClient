@@ -11,6 +11,7 @@ import { Data, GeekGameResult, Result } from "../app.component"
 import {daysBetween, intToDate, toDateString} from "../library";
 
 interface Row {
+  bggid: number;
   gameName: string;
   rating: number;
   plays: number;
@@ -42,7 +43,8 @@ interface Row {
 })
 export class FavouritesTableComponent extends DataViewComponent<Result> {
   private params: ColumnParams<Row>[] = [
-    {field: "gameName", name: "Game"},
+    {field: "gameName", name: "Game",
+      valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.bggid}">${row.gameName}</a>`},
     {field: "rating", name: "Rating", tooltip: "Your rating for this game."},
     {field: "plays", name: "Plays", tooltip: "The number of times you have played this game."},
     {field: "bggRanking", name: "BGG Ranking", tooltip: "This game's ranking on BoardGameGeek."},
@@ -98,7 +100,7 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       // gg["ruhm"] = ruhm
       const row = {
         gameName: game.name,
-        game: gg.bggid,
+        bggid: gg.bggid,
         rating: Math.floor(gg.rating * 100)/100,
         plays: gg.plays,
         bggRanking: game.bggRanking,
