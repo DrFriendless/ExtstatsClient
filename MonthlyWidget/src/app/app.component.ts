@@ -1,5 +1,10 @@
-import {Component} from "@angular/core"
-import {GraphQuerySourceComponent, LoaderComponent, UserDataService} from 'extstats-angular';
+import {Component, ViewChild} from "@angular/core"
+import {
+  GraphQuerySourceComponent,
+  LoaderComponent,
+  SelectorComboComponent,
+  UserConfigService,
+} from 'extstats-angular';
 import {Observable} from "rxjs";
 import {indexPlays, PlayAndGamesIndex} from "./play-index";
 import {map, share} from "rxjs/operators";
@@ -50,7 +55,8 @@ export interface Result {
     MonthlySkylineComponent,
     PlaysByMonthYtdComponent,
     PlaysByMonthEverComponent,
-    PlaysByYearComponent
+    PlaysByYearComponent,
+    SelectorComboComponent
   ],
   templateUrl: './app.component.html'
 })
@@ -58,10 +64,25 @@ export class MonthlyWidget extends GraphQuerySourceComponent<Result> {
   private static DEFAULT_SELECTOR = "any(played(ME),owned(ME))";
   playsAndGame$: Observable<PlayAndGamesIndex>;
   selector = MonthlyWidget.DEFAULT_SELECTOR;
+  @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
 
-  constructor(api: ExtstatsApi, userDataService: UserDataService) {
-    super(api, userDataService);
+
+  constructor(api: ExtstatsApi, private userService: UserConfigService) {
+    super(api);
     this.playsAndGame$ = this.data$.pipe(map((r: any) => indexPlays(this.inflate(r.monthly2))), share());
+  }
+
+  onSelectorChosen(event: string) {
+    this.selector = event;
+    super.refresh();
+  }
+
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    if (this.selectorCombo) {
+      this.selectorCombo.setDefault(MonthlyWidget.DEFAULT_SELECTOR);
+      this.selectorCombo.setSelected(MonthlyWidget.DEFAULT_SELECTOR);
+    }
   }
 
   inflatePlays(plays: any[]): PlayData[] {
@@ -110,8 +131,8 @@ export class MonthlyWidget extends GraphQuerySourceComponent<Result> {
     }
   }
 
-  protected buildQuery(geek: string): string {
-    return `{monthly2(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+  protected buildQuery(): string {
+    return `{monthly2(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " plays { ym e q bggid } " +
       " counts { ym c } " +
       " geekGames { o game { bggid n yp pt e } }" +

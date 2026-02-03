@@ -1,32 +1,15 @@
+.monthly-widget {
+  --primary-colour: #b3b300;
+  --text-colour: black;
+  --even-colour: rgba(255, 255, 153, 0.5);
+}
+
 .chart-button {
   border: solid 2px #617d8a;
   margin: 4px;
   height: 32px;
 }
 
-/* Styles for monthly tables */
-.monthly-table .table.extstats-table td,
-.monthly-table .table.extstats-table tbody,
-.monthly-table .table.extstats-table thead,
-.monthly-table .table.extstats-table.table thead th {
-  border-color: #8cc152;
-}
-/* border colour lightened 60% with 0.5 alpha */
-/* https://www.hexcolortool.com/#e52464 */
-.monthly-table .table.table-striped.extstats-table tbody tr:nth-child(odd){
-  background-color: rgba(242, 255, 184, 0.5);
-}
-.monthly-table .table.table-striped.extstats-table tbody tr:nth-child(even){
-  background-color: white;
-}
-.extstats-page-item.active {
-  background-color: rgba(242, 255, 184, 0.5);
-}
-.extstats-table-controller {
-  background-color: #8cc152;
-  color: black;
-  border: 1px solid #8cc152;
-}
 .extstats-table-controller a.extstats-page-link {
   color: black;
 }
@@ -39,15 +22,11 @@
   border-right-width: 0;
   border-left-width: 0;
 }
-.monthly-table th {
-  background-color: #8cc152;
-  color: black;
-}
 .monthly-table div.extstats-doc button {
-  border: solid 1px #8cc152;
+  border: solid 1px var(--primary-colour);
 }
 .monthly-table div.extstats-doc li.nav-item a.nav-link.active {
-  color: #8cc152;
+  color: var(--primary-colour);
 }
 .monthly-table div.extstats-doc li.nav-item a.nav-link {
   color: #777777;
