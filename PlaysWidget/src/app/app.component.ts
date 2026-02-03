@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GraphQuerySourceComponent, LoaderComponent, UserDataService} from "extstats-angular";
+import {GraphQuerySourceComponent, LoaderComponent, UserConfigService} from "extstats-angular";
 import {YMD} from "./library";
 import {LoginService} from "./login.service";
 import {ExtstatsApi} from "extstats-api";
@@ -58,7 +58,7 @@ export interface Result {
   styleUrls: ['./app.component.css']
 })
 export class PlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
-  constructor(api: ExtstatsApi, private userDataService: UserDataService, private loginService: LoginService) {
+  constructor(api: ExtstatsApi, private userService: UserConfigService, private loginService: LoginService) {
     super(api);
   }
 
@@ -82,7 +82,6 @@ export class PlaysWidget extends GraphQuerySourceComponent<Result> implements On
   }
 
   protected buildQuery(): string {
-    const geeks = `"${this.userDataService.getAGeek()}"`;
-    return `{plays(geeks: [${geeks}]) { games { bggid name subdomain } plays { bggid year month day quantity } geekgames { bggid rating } } }`;
+    return `{plays(geeks: ["${this.userService.getAGeek()}"]) { games { bggid name subdomain } plays { bggid year month day quantity } geekgames { bggid rating } } }`;
   }
 }
