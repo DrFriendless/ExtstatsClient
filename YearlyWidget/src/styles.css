@@ -1,8 +1,14 @@
+.yearly-widget {
+  --primary-colour: #e68a00;
+  --text-colour: black;
+  --even-colour: rgba(255, 224, 179, 0.5);
+}
+
 .table.extstats-table td,
 .table.extstats-table tbody,
 .table.extstats-table thead,
 .table.extstats-table.table thead th {
-  border-color: #fdc02f;
+  border-color: var(--primary-colour);
   max-width: 450px;
 }
 td.name {
@@ -10,19 +16,19 @@ td.name {
 }
 /* border colour lightened 60% with 0.5 alpha */
 /* https://www.hexcolortool.com/#fdc02f */
-.table.table-striped.extstats-table tbody tr:nth-child(even){
-  background-color: rgba(253, 191, 48, 0.5);
+.table.extstats-table tbody tr:nth-child(even){
+  background-color: var(--even-colour);
 }
-.table.table-striped.extstats-table tbody tr:nth-child(odd){
+.table.extstats-table tbody tr:nth-child(odd){
   background-color: white;
 }
 .extstats-page-item.active {
-  background-color: rgba(253, 191, 48, 0.5);
+  background-color: var(--even-colour);
 }
 .extstats-table-controller {
-  background-color: #e68a00;
-  color: black;
-  border: 1px solid #e68a00;
+  background-color: var(--primary-colour);
+  color: var(--text-colour);
+  border: 1px solid var(--primary-colour);
 }
 .extstats-table-controller a.extstats-page-link {
   color: black;
@@ -33,14 +39,14 @@ td.name {
   border-left-width: 0;
 }
 th {
-  background-color: #e68a00;
-  color: black;
+  background-color: var(--primary-colour);
+  color: var(--text-colour);
 }
 div.extstats-doc button {
-  border: solid 1px #e68a00;
+  border: solid 1px var(--primary-colour);
 }
 div.extstats-doc li.nav-item a.nav-link.active {
-  color: #e68a00;
+  color: var(--primary-colour);
 }
 div.extstats-doc li.nav-item a.nav-link {
   color: #777777;

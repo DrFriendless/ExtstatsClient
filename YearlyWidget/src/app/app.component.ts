@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {GraphQuerySourceComponent, LoaderComponent, UserDataService} from "extstats-angular";
+import {GraphQuerySourceComponent, LoaderComponent, UserConfigService} from "extstats-angular";
 import {YearChooserComponent} from "./year-chooser/year-chooser.component";
 import {YearlyBestDaysComponent} from "./yearly-best-days/yearly-best-days.component";
 import {NickelAndDimeComponent} from "./nickel-and-dime/nickel-and-dime.component";
@@ -50,36 +50,27 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
   years: number[] = [];
   year = new Date().getFullYear();
 
-  constructor(api: ExtstatsApi, userDataService: UserDataService) {
-    super(api, userDataService);
+  constructor(api: ExtstatsApi, private userService: UserConfigService) {
+    super(api);
   }
 
   setYear(year: number) {
-    console.log(`setYear ${year}`);
     this.year = year;
     this.refresh();
   }
 
-  override async ngOnInit() {
-    await super.ngOnInit();
+  async ngOnInit() {
     this.years = (await this.getYears()).years;
     this.year = (this.years.length) ? this.years[this.years.length-1] : new Date().getFullYear();
   }
 
   private async getYears(): Promise<{ years: number[] }> {
-    return await this.api.retrieve(`{years(geek: "${this.geek}")}`) as { years: number[] };
+    return await this.api.retrieve(`{years(geek: "${this.userService.getAGeek()}")}`) as { years: number[] };
   }
 
-  protected buildQuery(geek: string): string {
-    let q: string;
-    if (geek) {
+  protected buildQuery(): string {
       const s = this.year * 10000;
       const e = this.year * 10000 + 1231;
-      q = `{plays(geeks: ["${geek}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid name isExpansion } plays { game { bggid } quantity ymd } geekgames { bggid rating } } }`;
-    } else {
-      q = "";
-    }
-    console.log(q);
-    return q;
+      return `{plays(geeks: ["${this.userService.getAGeek()}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid name isExpansion } plays { game { bggid } quantity ymd } geekgames { bggid rating } } }`;
   }
 }

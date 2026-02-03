@@ -1,4 +1,8 @@
-<div style="text-align:center">
+<div class="yearly-widget">
+  <div class="features-header">
+    <p>This page illustrates your plays year by year over time.</p>
+  </div>
+
   <year-chooser [years]="years" [selected]="year" (year)="setYear($event)"></year-chooser>
   @if (loading) {
     <extstats-loader></extstats-loader>

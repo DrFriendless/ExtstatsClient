@@ -46,8 +46,6 @@ export class YearlyBestDaysComponent extends PlaysViewComponent<Result> {
   }
 
   protected processData(data: Result): any {
-    console.log(JSON.stringify(data));
-
     if (!data || !data.plays || !data.plays.geeks || !data.plays.geeks.length) return;
     const gamesIndex = makeIndex(data.plays.games);
     const ggIndex = makeIndex(data.plays.geekgames);
