@@ -49,7 +49,7 @@ export class FirstPlayedVsRatingComponent extends DataViewComponent<Result> {
   private recalc(): void {
     const chartData: FirstPlayedVsRatingData[] = [];
     for (const gg of this.data!.geekGames) {
-      if (!gg.firstPlay) continue;
+      if (!gg.firstPlay || gg.rating < 0) continue;
       const year = Math.floor(gg.firstPlay / 10000);
       if (year < this.PLAYS_LO || year > this.PLAYS_HI) continue;
       const game = this.gameIndex[gg.bggid];

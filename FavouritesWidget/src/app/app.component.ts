@@ -64,9 +64,8 @@ export interface Result {
 })
 export class FavouritesComponent extends GraphQuerySourceComponent<Result> implements OnInit, OnDestroy, AfterViewInit {
   private static DEFAULT_SELECTOR = "all(played(ME),rated(ME))";
-  INITIAL_SELECTOR = FavouritesComponent.DEFAULT_SELECTOR;
   data: Data | undefined;
-  private selector = this.INITIAL_SELECTOR;
+  selector = FavouritesComponent.DEFAULT_SELECTOR;
   private dataSubscription: Subscription | undefined;
   @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
 
