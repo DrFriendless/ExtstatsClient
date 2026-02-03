@@ -1,8 +1,13 @@
-<div style="text-align:center" class="user-collection">
+<div class="user-collection">
+  <div class="features-header">
+    <p>We define "your collection" as games you have some knowledge of, usually illustrated by you having rated them.</p>
 
-  <p>We define "your collection" as games you have some knowledge of, usually illustrated by you having rated them.</p>
-
-  <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+    <p>This combo lets you modify the selector, i.e. the set of games that the page considers.
+      Given the page's focus, not all options will produce useful results.
+      The standard option is shown in bold in case you want to return to sanity.
+    </p>
+    <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+  </div>
 
   @if (loading) {
     <extstats-loader></extstats-loader>
