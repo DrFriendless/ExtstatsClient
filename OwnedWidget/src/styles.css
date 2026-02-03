@@ -9,39 +9,10 @@
 .table.extstats-table tbody,
 .table.extstats-table thead,
 .table.extstats-table.table thead th {
-  border-color: var(--primary-colour);
   max-width: 450px;
 }
 td.name {
   text-align: left;
-}
-/* border colour lightened 60% with 0.5 alpha */
-/* https://www.hexcolortool.com/#e52464 */
-.table.extstats-table tbody tr:nth-child(even){
-  background-color: var(--even-colour);
-}
-.table.extstats-table tbody tr:nth-child(odd){
-  background-color: white;
-}
-.extstats-page-item.active {
-  background-color: var(--even-colour);
-}
-.extstats-table-controller {
-  background-color: var(--primary-colour);
-  color: var(--text-colour);
-  border: 1px solid var(--primary-colour);
-}
-.extstats-table-controller a.extstats-page-link {
-  color: var(--text-colour);
-}
-.table.extstats-table thead td,
-.table.extstats-table tbody td {
-  border-right-width: 0;
-  border-left-width: 0;
-}
-th {
-  background-color:var(--primary-colour);
-  color: var(--text-colour);
 }
 div.extstats-doc button {
   border: solid 1px var(--primary-colour);
@@ -59,7 +30,9 @@ div.collapse {
 }
 .pogo-table, .least-loved-table {
   line-height: 1.5em;
+  text-align: center;
 }
 .pogo-table td.date {
   width: 110px;
 }
+

@@ -1,5 +1,13 @@
-<div style="text-align:center" class="owned-widget">
-  <p>This page examines the games you own, what you think of them, and what others think of them.</p>
+<div class="owned-widget">
+  <div class="features-header">
+    <p>This page examines the games you own, what you think of them, and what others think of them.</p>
+
+    <p>This combo lets you modify the selector, i.e. the set of games that the page considers.
+      Given the page's focus, not all options will produce useful results.
+      The standard option is shown in bold in case you want to return to sanity.
+    </p>
+    <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+  </div>
 
   @if (loading) {
     <extstats-loader></extstats-loader>

@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import {GraphQuerySourceComponent, LoaderComponent, UserDataService} from "extstats-angular";
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {
+  GraphQuerySourceComponent,
+  LoaderComponent,
+  SelectorComboComponent,
+  UserConfigService,
+} from "extstats-angular";
 import {ExtstatsApi} from "extstats-api";
 import {map} from "rxjs";
 import {
@@ -55,25 +60,39 @@ interface Result {
     OwnedByPublishedYearComponent,
     PogoTableComponent,
     PlaysOfGamesOwnedComponent,
-    LoaderComponent
+    LoaderComponent,
+    SelectorComboComponent
   ],
   templateUrl: './app.component.html'
 })
-export class UserOwnedComponent extends GraphQuerySourceComponent<Result> {
+export class UserOwnedComponent extends GraphQuerySourceComponent<Result> implements AfterViewInit {
   private static DEFAULT_SELECTOR = "owned(ME)";
   private selector = UserOwnedComponent.DEFAULT_SELECTOR;
   public pageData$ = this.data$.pipe(map(d => d.geekgames));
+  @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
 
-  constructor(api: ExtstatsApi, userDataService: UserDataService) {
-    super(api, userDataService);
+  constructor(api: ExtstatsApi, private userService: UserConfigService) {
+    super(api);
   }
 
-  protected buildQuery(geek: string): string {
-    this.geek = geek;
-    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    if (this.selectorCombo) {
+      this.selectorCombo.setDefault(UserOwnedComponent.DEFAULT_SELECTOR);
+      this.selectorCombo.setSelected(UserOwnedComponent.DEFAULT_SELECTOR);
+    }
+  }
+
+  protected buildQuery(): string {
+    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRanking bggRating yearPublished isExpansion } " +
       " geekGames { bggid rating shouldPlayScore years months expansion plays lastPlay firstPlay lyPlays daysSincePlayed forTrade } " +
       "}}";
+  }
+
+  onSelectorChosen(event: string) {
+    this.selector = event;
+    super.refresh();
   }
 }
 
