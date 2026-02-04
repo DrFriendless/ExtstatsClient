@@ -1,16 +1,14 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
 import { Subscription } from "rxjs/internal/Subscription";
-import { Observable } from "rxjs/internal/Observable";
 import { RankingTableRow } from "extstats-core";
 import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
-import {environment} from "../environments/environment";
 import {
     ButtonGroupButtonDirective,
     ButtonGroupComponent,
     DocumentationComponent,
     LoaderComponent
 } from "extstats-angular";
+import {ExtstatsApi} from "extstats-api";
 
 @Component({
     selector: 'ranking-table',
@@ -34,7 +32,7 @@ export class RankingTableComponent implements OnDestroy, AfterViewInit {
     public columns: Column<RankingTableRow>[] = [];
     public loading = false;
 
-    constructor(private http: HttpClient) {
+    constructor(private api: ExtstatsApi) {
         this.columns.push(new Column<RankingTableRow>({ name: "Ranking", field: "ranking", tooltip: "Extended Stats Ranking" }));
         this.columns.push(new Column<RankingTableRow>({
           name: "Game", field: "game_name", tooltip: "Game Name",
@@ -51,16 +49,10 @@ export class RankingTableComponent implements OnDestroy, AfterViewInit {
         this.columns.push(new Column<RankingTableRow>({ name: "G-index", field: "gindex", tooltip: "G-Index" }));
     }
 
-    public ngAfterViewInit(): void {
-        const loadData$: Observable<any> = this.http.get(`/api/rankings`);
+    public async ngAfterViewInit(): Promise<void> {
         this.loading = true;
-        this.subscription = loadData$.subscribe({
-            next: (result: RankingTableRow[]) => {
-                this.rows = result;
-                this.loading = false;
-                console.log(this.rows);
-            }
-        });
+        this.rows = await this.api.getRankings();
+        this.loading = false;
     }
 
     public ngOnDestroy() {

@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs/internal/Subscription";
-import { HttpClient } from "@angular/common/http";
 import { WarTableRow } from "extstats-core";
 import {
   ButtonGroupButtonDirective,
@@ -31,7 +30,7 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
   private subscription: Subscription | undefined;
   public loading = false;
 
-  constructor(private http: HttpClient, private api: ExtstatsApi) {
+  constructor(private api: ExtstatsApi) {
     this.columns.push(new Column<WarTableRow>({ name: "Geek", field: "geek", tooltip: "BGG User",
       valueHtml: r => `<a href="/geek.html?geek=${r.geekName}">${r.geekName}</a>` }));
     this.columns.push(new Column<WarTableRow>({ name: "Total Plays", field: "totalPlays", tooltip: "Total plays of all games as recorded by Extended Stats"}));
