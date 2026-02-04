@@ -2,23 +2,26 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs/internal/Subscription";
 import { HttpClient } from "@angular/common/http";
 import { WarTableRow } from "extstats-core";
-import {LoaderComponent} from "extstats-angular";
-import {TabDirective, TabsetComponent} from "ngx-bootstrap/tabs";
+import {
+  ButtonGroupButtonDirective,
+  ButtonGroupComponent,
+  DocumentationComponent,
+  LoaderComponent
+} from "extstats-angular";
 import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
-import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 import {ExtstatsApi} from "extstats-api";
 
 @Component({
   selector: 'war-table',
   imports: [
     LoaderComponent,
-    TabsetComponent,
-    TabDirective,
     DataTableController,
     DataTable,
     DataTableHead,
     DataTableBody,
-    NgbCollapse,
+    ButtonGroupComponent,
+    ButtonGroupButtonDirective,
+    DocumentationComponent,
   ],
   templateUrl: './app.component.html'
 })
@@ -26,7 +29,6 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
   public rows: WarTableRow[] = [];
   public columns: Column<WarTableRow>[] = [];
   private subscription: Subscription | undefined;
-  public isCollapsed = true;
   public loading = false;
 
   constructor(private http: HttpClient, private api: ExtstatsApi) {
@@ -47,7 +49,12 @@ export class WarTableComponent implements OnDestroy, AfterViewInit {
     this.columns.push(new Column<WarTableRow>({ name: "0s", field: "zeros", tooltip: "Number of games this geek owns that they have played 0 times"}));
     this.columns.push(new Column<WarTableRow>({ name: "10s", field: "tens", tooltip: "Number of games this geek owns that they have played 10+ times"}));
     this.columns.push(new Column<WarTableRow>({ name: "H-index", field: "hindex", tooltip: "This geek's H-index"}));
-    this.columns.push(new Column<WarTableRow>({ name: "H<sub>r</sub>-index", field: "hrindex", tooltip: "This geek's rational H-index"}));
+    this.columns.push(new Column<WarTableRow>({
+      name: "Hr-index",
+      nameHtml: "H<sub>r</sub>-index",
+      field: "hrindex",
+      tooltip: "This geek's rational H-index",
+    }));
     this.columns.push(new Column<WarTableRow>({ name: "G-index", field: "gindex", tooltip: "This geek's G-index"}));
   }
 
