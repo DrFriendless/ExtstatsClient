@@ -2,66 +2,14 @@
   --primary-colour: #2c992d;
   --text-colour: white;
   --even-colour: rgba(176, 232, 177, 0.5);
+  --tab-border-colour: var(--primary-colour);
 }
 
-/* Styles for favourites-table */
-.favourites-table, .you-should-play {
-  margin-left: 16px;
-  margin-right: 16px;
-}
-.favourites-table div.extstats-doc button {
-  border: solid 1px #159588;
-}
-.favourites-table div.extstats-doc li.nav-item a.nav-link.active {
-  color: #159588;
-}
-.favourites-table div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}
-.favourites-table div.collapse {
-  margin-top: 1rem;
-}
-
-.table-button {
-  border: solid 2px #fd9727;
-  margin: 4px;
-  height: 32px;
-}
-.table-button.svg-button {
-  padding: 4px;
-  width: 32px;
-}
-.favourites-table div.extstats-doc li.nav-item a.nav-link.active {
-  color: #fd9727;
-}
-.favourites-table div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}
-.favourites-table div.collapse {
-  margin-top: 1rem;
-}
-.chart-button {
-  border: solid 2px #617d8a;
-  margin: 4px;
-  height: 32px;
-}
-div.extstats-doc button {
-  border: 1px solid #fd9727;
-  border-radius: 0;
-  margin: 4px;
-}
 h2 {
   margin-top: 40px;
 }
 .ng5-slider-inner-tooltip {
   font-size: 14px;
-}
-p {
-  text-align: left;
 }
 td.date-column {
   min-width: 100px;
@@ -92,4 +40,9 @@ td.date-column {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+/* Styles for favourites-table */
+.favourites-table, .you-should-play {
+  margin-left: 16px;
+  margin-right: 16px;
 }

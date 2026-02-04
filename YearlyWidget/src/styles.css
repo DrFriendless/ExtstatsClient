@@ -2,6 +2,7 @@
   --primary-colour: #e68a00;
   --text-colour: black;
   --even-colour: rgba(255, 224, 179, 0.5);
+  --tab-border-colour: var(--primary-colour);
 }
 
 .table.extstats-table td,
@@ -13,48 +14,6 @@
 }
 td.name {
   text-align: left;
-}
-/* border colour lightened 60% with 0.5 alpha */
-/* https://www.hexcolortool.com/#fdc02f */
-.table.extstats-table tbody tr:nth-child(even){
-  background-color: var(--even-colour);
-}
-.table.extstats-table tbody tr:nth-child(odd){
-  background-color: white;
-}
-.extstats-page-item.active {
-  background-color: var(--even-colour);
-}
-.extstats-table-controller {
-  background-color: var(--primary-colour);
-  color: var(--text-colour);
-  border: 1px solid var(--primary-colour);
-}
-.extstats-table-controller a.extstats-page-link {
-  color: black;
-}
-.table.extstats-table thead td,
-.table.extstats-table tbody td {
-  border-right-width: 0;
-  border-left-width: 0;
-}
-th {
-  background-color: var(--primary-colour);
-  color: var(--text-colour);
-}
-div.extstats-doc button {
-  border: solid 1px var(--primary-colour);
-}
-div.extstats-doc li.nav-item a.nav-link.active {
-  color: var(--primary-colour);
-}
-div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}
-div.collapse {
-  margin-top: 1rem;
 }
 .pogo-table, .least-loved-table {
   line-height: 1.5em;

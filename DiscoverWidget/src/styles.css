@@ -2,10 +2,6 @@
   --primary-colour: #9926c0;
   --text-colour: white;
   --even-colour: rgba(167, 139, 181, 0.5);
+  --tab-border-colour: var(--primary-colour);
 }
 
-.mpu-table div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}

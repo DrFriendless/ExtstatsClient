@@ -2,6 +2,7 @@
   --primary-colour: #00cc99;
   --text-colour: white;
   --even-colour: rgba(179, 255, 236, 0.5);
+  --tab-border-colour: var(--primary-colour);
 }
 
 table td.class0 {
@@ -48,20 +49,6 @@ table.hotness thead, table.hotness td.total {
   min-width: 100px
 }
 
-.bestdays div.extstats-doc button {
-  border: solid 1px #00cc99;
-}
-.bestdays div.extstats-doc li.nav-item a.nav-link.active {
-  color: #00cc99;
-}
-.bestdays div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}
-.bestdays div.collapse {
-  margin-top: 1rem;
-}
 div.monthly-table {
   margin-bottom: 40px;
 }
@@ -82,11 +69,6 @@ div.monthly-table {
 .slider-box .ng5-slider .ng5-slider-pointer:after {
   top: 6px;
   left: 6px;
-}
-div.extstats-doc button {
-  border: 1px solid #00cc99;
-  border-radius: 0;
-  margin: 4px;
 }
 h2 {
   margin-top: 40px;

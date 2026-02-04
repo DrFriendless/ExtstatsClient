@@ -32,8 +32,10 @@
       </div>
     }
 
-    <extstats-documentation id="bestdaysTableDoc" *ngIf="buttongroup.selected === 'doc'" [src]="'/json/en/doc/bestdays.json'">
-    </extstats-documentation>
+    @if (buttongroup.selected === 'doc') {
+      <extstats-documentation id="bestdaysTableDoc" [src]="'/json/en/doc/bestdays.json'">
+      </extstats-documentation>
+    }
   </div>
 
   <div class="extstats-table-block bestdays">
