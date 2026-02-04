@@ -1,0 +1,16 @@
+<p>This table shows the most unusual games you own, i.e. those owned by fewest users of Boardgamegeek.</p>
+
+<div class="most-unusual-table">
+  @if (loading) {
+    <extstats-loader [mini]="true"></extstats-loader>
+  } @else {
+    <div class="extstats-table-block mpu-table">
+      <es-table-controller [table]="mostUnusualTable"></es-table-controller>
+      <table es-table class="table extstats-table" [data]="rows" #mostUnusualTable="esTable"
+             [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+        <thead es-table-head [columns]="columns"></thead>
+        <tbody es-table-body [columns]="columns"></tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -17,6 +17,7 @@ import {RatingByLifetimeComponent} from "./rating-by-lifetime/rating-by-lifetime
 import {OwnedByPublishedYearComponent} from "./owned-by-published-year/owned-by-published-year.component";
 import {PogoTableComponent} from "./pogo-table/pogo-table.component";
 import {PlaysOfGamesOwnedComponent} from "./plays-of-games-owned/plays-of-games-owned.component";
+import {MostUnusualComponent} from "./most-unusual/most-unusual.component";
 
 export interface GeekGameResult {
   bggid: number;
@@ -61,7 +62,8 @@ interface Result {
     PogoTableComponent,
     PlaysOfGamesOwnedComponent,
     LoaderComponent,
-    SelectorComboComponent
+    SelectorComboComponent,
+    MostUnusualComponent
   ],
   templateUrl: './app.component.html'
 })
