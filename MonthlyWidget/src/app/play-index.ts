@@ -1,5 +1,5 @@
 import { setToArray, ym } from "./library"
-import {CountData, MonthlyData, PlayData, GameData} from "./app.component";
+import {CountData, GameData, MonthlyData, PlayData} from "./inflate";
 
 export type GameID = number;
 export type PlayCount = number;
@@ -62,7 +62,7 @@ export function indexPlays(data: MonthlyData): PlayAndGamesIndex {
   if (!yearlyPlaysPerMonth[lastYear]) yearlyPlaysPerMonth[lastYear] = {};
   yearlyPlaysPerMonth[lastYear][lastYearMonth] = everPlayIndex.snapshotYearPlaysPerGame(lastYear);
   const ownedGames = new Set<number>();
-  const gamesIndex: GameTo<GameData> = {}
+  const gamesIndex: GameTo<GameData> = {};
   data.geekGames.forEach(gg => {
     if (gg.owned) ownedGames.add(gg.game.bggid);
     gamesIndex[gg.game.bggid] = gg.game;

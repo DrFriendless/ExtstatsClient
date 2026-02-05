@@ -2,8 +2,8 @@ import {Component, ElementRef, ViewChild, EventEmitter} from '@angular/core';
 import {ButtonGroupButtonDirective, ButtonGroupComponent, PlaysViewComponent} from "extstats-angular";
 // @ts-ignore
 import embed, {VisualizationSpec} from "vega-embed";
-import {GameData, Result} from "../app.component";
 import {LabelType, NgxSliderModule, Options} from "@angular-slider/ngx-slider";
+import {GameData, inflate, PlayData, Result} from "../inflate";
 
 interface ChartData {
   yq: number;
@@ -27,7 +27,7 @@ interface ChartData {
 })
 export class NewReleasesComponent extends PlaysViewComponent<Result> {
   @ViewChild('target', {static: true}) target: ElementRef | undefined;
-  private result: Result | undefined;
+  private data: PlayData[] = [];
   private gamesIndex: Record<string, GameData> = {}
   GAME_CUTOFF = 1994;
   PLAY_CUTOFF = 2005;
@@ -50,37 +50,36 @@ export class NewReleasesComponent extends PlaysViewComponent<Result> {
   }
 
   protected processData(result: Result): any {
-    if (!result || !result.monthly || !result.monthly.plays) return;
-    this.result = result;
+    if (!result || !result.monthly2 || !result.monthly2.plays) return;
+    const inf = inflate(result.monthly2);
+    this.data = inf.plays;
     this.gamesIndex = {}
-    result.monthly.geekGames.forEach(gg => {
+    inf.geekGames.forEach(gg => {
       this.gamesIndex[gg.game.bggid] = gg.game;
     });
     this.fiddle.next(undefined);
   }
 
   private recalc(): void {
-    const fromQToYearToPlays: Record<number, Record<string, number>> = {}
-    const totalByQuarter: Record<number, number> = {};
+    const fromQToYearToPlays: Record<string, Record<string, number>> = {}
+    const totalByQuarter: Record<string, number> = {};
     const fromQToYearToNames: Record<string, Record<string, string[]>> = {}
-    if (this.result) {
-      for (const play of this.result.monthly.plays) {
-        if (play.year <= this.PLAY_CUTOFF) continue;
-        const game = this.gamesIndex[play.bggid];
-        const gamename = game.name;
-        const q = Math.floor((play.month - 1) / 3);
-        const yq = play.year * 100 + q + 1;
-        const pubYear = Math.max(game.yearPublished, this.GAME_CUTOFF);
-        const y2p = fromQToYearToPlays[yq] || {};
-        const y2g = fromQToYearToNames[yq] || {};
-        y2p[pubYear] = (y2p[pubYear] || 0) + play.quantity;
-        const games = y2g[pubYear] || [];
-        if (games.indexOf(gamename) < 0) games.push(gamename);
-        totalByQuarter[yq] = (totalByQuarter[yq] || 0) + play.quantity;
-        fromQToYearToPlays[yq] = y2p;
-        y2g[pubYear] = games;
-        fromQToYearToNames[yq] = y2g;
-      }
+    for (const play of this.data) {
+      if (play.year <= this.PLAY_CUTOFF) continue;
+      const game = this.gamesIndex[play.bggid];
+      const gamename = game.name;
+      const q = Math.floor((play.month - 1) / 3);
+      const yq = (play.year * 100 + q + 1).toString();
+      const pubYear = Math.max(game.yearPublished, this.GAME_CUTOFF);
+      const y2p = fromQToYearToPlays[yq] || {};
+      const y2g = fromQToYearToNames[yq] || {};
+      y2p[pubYear] = (y2p[pubYear] || 0) + play.quantity;
+      const games = y2g[pubYear] || [];
+      if (games.indexOf(gamename) < 0) games.push(gamename);
+      totalByQuarter[yq] = (totalByQuarter[yq] || 0) + play.quantity;
+      fromQToYearToPlays[yq] = y2p;
+      y2g[pubYear] = games;
+      fromQToYearToNames[yq] = y2g;
     }
     const data: ChartData[] = [];
     for (const yq in fromQToYearToPlays) {

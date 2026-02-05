@@ -86,8 +86,6 @@ export class PlaysByMonthYtdComponent extends PlaysViewComponent<PlayAndGamesInd
       this.rows.sort((r1, r2) => r1.sortOrder - r2.sortOrder)
     }
   }
-
-
 }
 
 interface Row {
