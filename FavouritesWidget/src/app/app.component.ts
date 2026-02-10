@@ -82,11 +82,10 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
   }
 
   ngOnInit() {
-    this.refresh();
     this.dataSubscription = this.data$.subscribe(data => {
       this.data = data.geekgames;
-      console.log(this.data);
     });
+    this.refresh();
   }
 
   ngOnDestroy(): void {

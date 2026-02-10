@@ -1,3 +1,7 @@
+@if (loading) {
+  <extstats-loader/>
+}
+
 <div class="geekWidget">
   @if (data) {
     <a href="/collection.html?geek={{geek}}"><collection-panel [geekData]="data"></collection-panel></a>
@@ -19,9 +23,6 @@
     <a href="/updates.html?geek={{geek}}"><updates-panel [geekData]="data"></updates-panel></a>
   }
 
-  @if (loading) {
-    <extstats-loader/>
-  }
   @if (!data && !loading) {
     <p>
       Geek {{geek}} doesn't seem to be in Extended Stats. Please take a look at <a href="https://pastebin.com/REGME8sF">this list</a>
