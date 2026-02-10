@@ -38,7 +38,7 @@
     }
   </div>
 
-  <div class="extstats-table-block bestdays">
+  <div class="extstats-table-block bestdays extstats-table-wide">
     <es-table-controller [table]="bestdaysTable" [searchColumn]="'playstr'" [placeholder]="'Plays'"></es-table-controller>
     <table es-table class="table extstats-table" [data]="rows" #bestdaysTable="esTable" [rowsOnPage]="20"
            [sortBy]="'score'" [sortOrder]="'desc'">

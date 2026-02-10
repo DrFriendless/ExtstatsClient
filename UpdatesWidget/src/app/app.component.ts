@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { ToProcessElement } from "extstats-core";
-import {LoaderComponent, UserDataService} from "extstats-angular";
+import {LoaderComponent, UserConfigService} from "extstats-angular";
 import { switchMap } from "rxjs/operators";
 import dateFormat from "dateformat";
 import {ExtstatsApi} from "extstats-api";
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   downloaderQueue: Record<string, number> = {};
   loading = false;
 
-  constructor(private api: ExtstatsApi, private userService: UserDataService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
   }
 
   ngOnInit(): void {

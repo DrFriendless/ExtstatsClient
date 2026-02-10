@@ -1,4 +1,14 @@
-<div class="war-table">
+<div class="war-table extstats-page">
+  <P>
+    Let's admit it - we all want to be at the top of the list.
+    You can sort by different columns to see if you can get yourself there.
+    When I compare myself to these guys I'm happy just to make the first page.
+    Jim Carvin suggested the Previously Owned ranking because he thought he could be at the top of it.
+  </P>
+  <p>
+    When I designed this page, cyberkev63 christened it "the Pissing War table", but the name has been softened for gentle readers.
+  </p>
+
     @if (loading) {
       <extstats-loader/>
     }
@@ -14,7 +24,7 @@
     }
   </div>
 
-  <div class="extstats-table-block">
+  <div class="extstats-table-block extstats-table-wide">
     <es-table-controller [table]="warTable" [searchColumn]="'geekName'" [placeholder]="'geek'"></es-table-controller>
     <table es-table class="table extstats-table" [data]="rows" #warTable="esTable" [rowsOnPage]="30" [sortBy]="'geekName'" [sortOrder]="'asc'">
       <thead es-table-head [columns]="columns">Head</thead>

@@ -1,14 +1,14 @@
-<div class="ranking-table">
-  @if (loading) {
-    <extstats-loader/>
-  }
-
+<div class="ranking-table extstats-page">
   <p>
     The Ranking Table displays the rankings of the top 1000 games ordered by the Extended Stats ranking method.
     That method is to take all of ratings of that game by users of the site, and add them all up.
     This can produce surprising results - at the moment, the 19th ranked game on BGG doesn't make the cut.
     The resulting list is a much more "commercially successful" list than the top rankings at BGG.
   </p>
+
+  @if (loading) {
+    <extstats-loader/>
+  }
 
   <div class="extstats-doc">
     <extstats-button-group #buttongroup>
@@ -21,7 +21,7 @@
     }
   </div>
 
-  <div class="extstats-table-block">
+  <div class="extstats-table-block extstats-table-wide">
     <es-table-controller [table]="rankingTable" [searchColumn]="'game_name'" [placeholder]="'game'"></es-table-controller>
     <table es-table class="table extstats-table" [data]="rows" #rankingTable="esTable" [rowsOnPage]="30" [sortBy]="'name'" [sortOrder]="'asc'">
       <thead es-table-head [columns]="columns">Head</thead>

@@ -54,8 +54,7 @@ export interface Result {
     MostPlayedByYearComponent,
     MostPlayedByYearComponent,
     PlaysByYearTableComponent
-  ],
-  styleUrls: ['./app.component.css']
+  ]
 })
 export class PlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
   constructor(api: ExtstatsApi, private userService: UserConfigService, private loginService: LoginService) {

@@ -48,7 +48,7 @@ export class BestDaysComponent extends PlaysViewComponent<Result> implements OnI
   rows: Row[] = [];
   columns: Column<Row>[] = [
     new Column({ field: "rank", name: "Rank", tooltip: "Position in ranking." }),
-    new Column({ field: "date", name: "Date", tooltip: "The date of these plays." }),
+    new Column({ field: "date", name: "Date", tooltip: "The date of these plays.", classname: "date-column" }),
     new Column({ field: "score", name: "Score", tooltip: "The score for this date." }),
     new Column({ field: "playstr", name: "Plays", tooltip: "Games played with quantities." }),
   ];

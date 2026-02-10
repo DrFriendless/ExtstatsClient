@@ -44,10 +44,6 @@ table.hotness {
 table.hotness thead, table.hotness td.total {
   font-weight: bold;
 }
-/* Styles for best days table */
-.bestdays table tbody tr td {
-  min-width: 100px
-}
 
 div.monthly-table {
   margin-bottom: 40px;
@@ -107,19 +103,20 @@ p {
   text-align: left;
 }
 th.wide {
+  width: 200px;
   min-width: 200px;
 }
 .playsbyyear .table.extstats-table tbody tr {
   background-color: white;
 }
-.playsbyyear table.extstats-table td,
-.playsbyyear table.extstats-table tbody,
-.playsbyyear table.extstats-table thead,
-.playsbyyear table.extstats-table.table thead th {
+.playsbyyear .extstats-table td,
+.playsbyyear .extstats-table tbody,
+.playsbyyear .extstats-table thead,
+.playsbyyear .extstats-table.table thead th {
   border-color: black;
 }
-.playsbyyear .table.extstats-table thead td,
-.playsbyyear .table.extstats-table tbody td {
+.playsbyyear .extstats-table thead td,
+.playsbyyear .extstats-table tbody td {
   border-right-width: 1px;
   border-left-width: 1px;
 }

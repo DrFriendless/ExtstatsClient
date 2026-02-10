@@ -5,15 +5,6 @@
 }
 
 /* Styles for favourites by year table */
-
-table.extstats-table {
-  border-collapse: collapse;
-}
-div.extstats-doc li.nav-item a.nav-link {
-  color: #777777;
-  font-size: 14px;
-  border-radius: unset;
-}
 .fby-table {
   margin-left: 16px;
   margin-right: 16px;
@@ -23,3 +14,26 @@ div.extstats-doc li.nav-item a.nav-link {
   line-height: 13px;
 }
 
+.rbyr-table,
+.rbyr-table table {
+  width: 100%;
+}
+.rating1 { background: #ff0000 }
+.rating2 { background: #ff3366 }
+.rating3 { background: #ff6699 }
+.rating4 { background: #ff66cc }
+.rating5 { background: #cc99ff }
+.rating6 { background: #9999ff }
+.rating7 { background: #99ffff }
+.rating8 { background: #66ff99 }
+.rating9 { background: #33cc99 }
+.rating10 { background: #00cc00 }
+.rbyr-table td {
+  border: 1px solid black;
+}
+.rbyr-table table {
+  border-collapse: collapse;
+}
+rating-by-ranking-graph {
+  width: 100%;
+}

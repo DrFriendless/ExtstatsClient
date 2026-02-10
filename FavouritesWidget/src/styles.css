@@ -41,8 +41,8 @@ td.date-column {
   flex-direction: column;
   width: 100%;
 }
-/* Styles for favourites-table */
-.favourites-table, .you-should-play {
+.you-should-play {
   margin-left: 16px;
   margin-right: 16px;
 }
+

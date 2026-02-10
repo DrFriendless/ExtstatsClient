@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-cp ./dist/browser/*.js ../../extstats-home/public/WarTable/
-cp ./dist/browser/*.js.map ../../extstats-home/public/WarTable/
-cp ./src/styles.css ../../extstats-home/public/WarTable/
-echo Files were copied to extstats-home.
+COMPONENT=WarTable
+DEST=../../extstats-home/public/$COMPONENT
+cp ./dist/browser/*.js $DEST
+cp ./dist/browser/*.js.map $DEST
+cp ./src/styles.css $DEST
+echo Files were copied to $DEST

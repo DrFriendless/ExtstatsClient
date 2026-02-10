@@ -1,22 +1,20 @@
-<div id="favourites-table" class="favourites-table">
-  <div class="extstats-doc">
-    <extstats-button-group #buttongroup>
-      <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
-    </extstats-button-group>
+<div class="extstats-doc">
+  <extstats-button-group #buttongroup>
+    <button type="button" class="btn table-button" [extstatsButtonGroup]="buttongroup" selector="doc">Documentation</button>
+  </extstats-button-group>
 
-    @if (buttongroup.selected === 'doc') {
-      <extstats-documentation id="favouritesTableDoc" [src]="'/json/en/doc/favourites.json'">
-      </extstats-documentation>
-    }
-  </div>
+  @if (buttongroup.selected === 'doc') {
+    <extstats-documentation id="favouritesTableDoc" [src]="'/json/en/doc/favourites.json'">
+    </extstats-documentation>
+  }
+</div>
 
-  <div class="extstats-table-block">
-    <es-table-controller [table]="favouritesTable" [searchColumn]="'gameName'" [placeholder]="'game'"></es-table-controller>
-    <table es-table class="table extstats-table" [data]="rows" #favouritesTable="esTable" [rowsOnPage]="30"
-           [sortBy]="'fhm'" [sortOrder]="'desc'">
-      <thead es-table-head [columns]="columns"></thead>
-      <tbody es-table-body [columns]="columns"></tbody>
-    </table>
-  </div>
+<div class="extstats-table-block extstats-table-wide">
+  <es-table-controller [table]="favouritesTable" [searchColumn]="'gameName'" [placeholder]="'game'"></es-table-controller>
+  <table es-table class="table extstats-table" [data]="rows" #favouritesTable="esTable" [rowsOnPage]="30"
+         [sortBy]="'fhm'" [sortOrder]="'desc'">
+    <thead es-table-head [columns]="columns"></thead>
+    <tbody es-table-body [columns]="columns"></tbody>
+  </table>
 </div>
 

@@ -15,7 +15,7 @@
   </div>
 }
 
-<div class="extstats-table-block playsbyyear">
+<div class="extstats-table-block extstats-table-wide playsbyyear">
   <es-table-controller [table]="playsbyyearTable" [searchColumn]="'name'" [placeholder]="'Game'"></es-table-controller>
   <table es-table class="table extstats-table" [data]="rows" #playsbyyearTable="esTable" [rowsOnPage]="100"
          [sortBy]="'score'" [sortOrder]="'desc'">
