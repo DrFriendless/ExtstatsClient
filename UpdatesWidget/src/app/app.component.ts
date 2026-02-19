@@ -5,6 +5,7 @@ import {LoaderComponent, UserConfigService} from "extstats-angular";
 import { switchMap } from "rxjs/operators";
 import dateFormat from "dateformat";
 import {ExtstatsApi} from "extstats-api";
+import {WebSocketService} from "./websocket.service";
 
 @Component({
   selector: 'extstats-updates',
@@ -25,21 +26,30 @@ export class AppComponent implements OnInit {
   downloaderQueue: Record<string, number> = {};
   loading = false;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, private socks: WebSocketService) {
   }
 
   ngOnInit(): void {
     this.geek = this.userService.getAGeek();
-    this.data$ = this.subject
-      .asObservable()
-      .pipe(
-        switchMap(() => this.doQuery(this.geek!).then())
-      ) as Observable<{
-      forGeek: ToProcessElement[];
-      forSystem: Record<string, number>;
-    }>;
-    this.data$.subscribe(vs => this.processData(vs));
-    this.subject.next(undefined);
+    if (this.geek) {
+      this.data$ = this.subject
+        .asObservable()
+        .pipe(
+          switchMap(() => this.doQuery(this.geek!).then())
+        ) as Observable<{
+        forGeek: ToProcessElement[];
+        forSystem: Record<string, number>;
+      }>;
+      this.data$.subscribe(vs => this.processData(vs));
+      this.subject.next(undefined);
+      const chatterId = this.socks.getChatterId();
+      if (chatterId) {
+        this.socks.connect(`wss://socks.drfriendless.com/?geek=${this.geek}&id=${chatterId}`);
+        this.socks.messages$.subscribe({
+          next: (message) => console.log(`M $message`)
+        })
+      }
+    }
   }
 
   private processData(data: {
