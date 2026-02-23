@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     forGeek: ToProcessElement[];
     forSystem: Record<string, number>;
   }> | undefined;
-  private subject = new Subject<any>();
+  private subject = new Subject<boolean>();
   other: ToProcessElement[] = [];
   plays: ToProcessElement[] = [];
   geek: string | undefined = undefined;
@@ -35,22 +35,22 @@ export class AppComponent implements OnInit {
       this.data$ = this.subject
         .asObservable()
         .pipe(
-          switchMap(() => this.doQuery(this.geek!).then())
+          switchMap((quiet: boolean) => this.doQuery(this.geek!, quiet).then())
         ) as Observable<{
         forGeek: ToProcessElement[];
         forSystem: Record<string, number>;
       }>;
       this.data$.subscribe(vs => this.processData(vs));
-      this.subject.next(undefined);
+      this.subject.next(false);
       const chatterId = this.socks.getChatterId();
-      if (chatterId) {
-        this.socks.connect(`wss://socks.drfriendless.com/?geek=${this.geek}&id=${chatterId}&topic=updates`);
+      if (chatterId && this.geek === this.userService.getLoggedInGeek()) {
+        this.socks.connect(`wss://socks.drfriendless.com/?geek=${this.userService.getLoggedInGeek()}&id=${chatterId}&topic=updates`);
         this.socks.messages$.subscribe({
           next: (message) => {
             console.log(JSON.stringify(message));
-            this.onRefreshAll();
+            this.onRefreshAll(true);
           }
-        })
+        });
       }
     }
   }
@@ -106,8 +106,8 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onRefreshAll(): void {
-    this.subject.next(undefined);
+  onRefreshAll(quiet: boolean): void {
+    this.subject.next(quiet);
   }
 
   onRefresh(url: string): void {
@@ -126,11 +126,11 @@ export class AppComponent implements OnInit {
     return await this.api.markForUpdate(url)
   }
 
-  private async doQuery(geek: string): Promise<{
+  private async doQuery(geek: string, quiet: boolean): Promise<{
     forGeek: ToProcessElement[];
     forSystem: Record<string, number>;
   }> {
-    this.loading = true;
+    if (!quiet) this.loading = true;
     const d = await this.api.getUpdates(geek);
     this.loading = false;
     return d;
