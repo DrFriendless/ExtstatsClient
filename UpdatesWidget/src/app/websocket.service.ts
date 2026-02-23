@@ -28,13 +28,12 @@ export class WebSocketService {
         url: url,
         openObserver: {
           next: () => {
-            console.log('WebSocket connected');
+            console.log(`WebSocket connected ${new Date()}`);
           }
         },
         closeObserver: {
           next: () => {
-            console.log("d");
-            console.log('WebSocket disconnected');
+            console.log(`WebSocket disconnected ${new Date()}`);
           }
         }
       })

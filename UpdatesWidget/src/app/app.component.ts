@@ -44,9 +44,12 @@ export class AppComponent implements OnInit {
       this.subject.next(undefined);
       const chatterId = this.socks.getChatterId();
       if (chatterId) {
-        this.socks.connect(`wss://socks.drfriendless.com/?geek=${this.geek}&id=${chatterId}`);
+        this.socks.connect(`wss://socks.drfriendless.com/?geek=${this.geek}&id=${chatterId}&topic=updates`);
         this.socks.messages$.subscribe({
-          next: (message) => console.log(`M $message`)
+          next: (message) => {
+            console.log(JSON.stringify(message));
+            this.onRefreshAll();
+          }
         })
       }
     }
