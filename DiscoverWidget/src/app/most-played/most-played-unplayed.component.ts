@@ -70,7 +70,6 @@ export class MostPlayedUnplayedComponent implements AfterViewInit {
 
   protected processData(data: Data): any {
     this.rows = data.mostplayedunplayed;
-    console.log(data);
   }
 
   private async refresh() {

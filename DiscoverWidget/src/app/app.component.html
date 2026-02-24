@@ -1,6 +1,31 @@
 <div class="discover-widget extstats-page">
   <div class="features-header">
+    <p>This page displays various features which may get you playing new games.</p>
+
+    <p>This combo lets you modify the selector, i.e. the set of games that the page considers.
+      Given the page's focus, not all options will produce useful results.
+      The standard option is shown in bold in case you want to return to sanity.
+    </p>
+    <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
   </div>
+
+  @if (loading) {
+    <extstats-loader></extstats-loader>
+  }
+
+  <h2 id="buylist">Your Buy List</h2>
+
+  <extstats-buylist [data]="data$"/>
+
+  <h2 id="witlist">Your Want In Trade List</h2>
+
+  <extstats-wantintrade [data]="data$"/>
+
+  <h2 id="wtplist">Your Want To Play List</h2>
+
+  <extstats-wanttoplay [data]="data$"/>
+
   <h2 id="mpu">Most Played Games You Haven't Played</h2>
   <most-played-unplayed></most-played-unplayed>
 </div>
+
