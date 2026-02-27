@@ -42,5 +42,12 @@
   }
 </div>
 
+@if (loggedIn) {
+  <!-- only for logged-in users -->
+  <h2>Utility</h2>
+
+  <geeklist-util/>
+}
+
 <h2>News</h2>
 <extstats-news></extstats-news>

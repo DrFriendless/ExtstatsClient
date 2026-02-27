@@ -1,0 +1,29 @@
+<p>
+  This utility is designed to help you find useful stuff in trade geeklists.
+  Enter the geeklist number or URL and Extended Stats will go find that geeklist and point out entries on it that are relevant to you.
+  There are two hyperlinks in each line - the game name links to the BGG entry for the game, the remainder links to the entry on the geeklist.
+</p>
+
+<label>Geeklist ID:</label>
+<input [(ngModel)]="geeklistId" style="margin-left: 12px; margin-right: 12px" placeholder="Geeklist ID or URL">
+<button type="button" class="extstats-button checkbutton" (click)="check()">Check</button>
+
+@if (loading) {
+  <extstats-loader [mini]="true"/>
+}
+
+@if (checkResult) {
+  <p></p>
+  <p>Checking completed for <a href="https://www.boardgamegeek.com/geeklist/{{checkResult.geeklistId}}">geeklist {{checkResult.geeklistId}}</a> for {{checkResult.geek}}</p>
+  <ul>
+    @for (item of checkResult.items; track item.id) {
+      <li><span class="item" [ngClass]="calcClass(item)"><a href="https://boardgamegeek.com/boardgame/{{item.bggid}}">{{item.name}}</a> -
+      <a href="https://boardgamegeek.com/geeklist/{{checkResult.geeklistId}}?itemid={{item.id}}">{{calcDetails(item)}}</a>&nbsp;
+        @if (item.rating > 0) {
+          <span class="rating">{{item.rating}}</span>
+        }
+      </span>
+      </li>
+    }
+  </ul>
+}

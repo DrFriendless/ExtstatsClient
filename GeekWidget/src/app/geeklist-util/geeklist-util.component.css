@@ -1,0 +1,49 @@
+.item {
+  font-weight: bold;
+  font-family: Fredoka, sans-serif;
+}
+.item a {
+  color: unset;
+  text-decoration: none;
+}
+.item a:hover {
+  text-decoration: underline;
+}
+.item.uninterested {
+  color: darkslategray;
+  font-weight: normal;
+}
+.owned {
+  color: darkblue;
+}
+.prevOwned {
+  color: darkcyan;
+}
+.unknown {
+  color: black;
+}
+.trade {
+  color: darkgreen;
+  background: yellow;
+}
+.buy {
+  color: forestgreen;
+  background: yellow;
+}
+.play {
+  color: deeppink;
+  background: yellow;
+}
+span.rating {
+  color: red;
+  font-weight: bold;
+}
+.item.yours {
+  color: red;
+  font-weight: normal;
+}
+.checkbutton {
+  background: #2424e5;
+  border: none;
+  color: white;
+}

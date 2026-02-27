@@ -12,6 +12,7 @@ import {MultiplaysPanelComponent} from "./multiplays-panel/multiplays-panel.comp
 import {UpdatesPanelComponent} from "./updates-panel/updates-panel.component";
 import {NewsComponent} from "./news/news.component";
 import {DiscoverPanelComponent} from "./discover-panel/discover-panel.component";
+import {GeeklistUtilComponent} from "./geeklist-util/geeklist-util.component";
 
 @Component({
   selector: 'extstats-geek',
@@ -27,7 +28,8 @@ import {DiscoverPanelComponent} from "./discover-panel/discover-panel.component"
     UpdatesPanelComponent,
     LoaderComponent,
     GeekComboComponent,
-    NewsComponent
+    NewsComponent,
+    GeeklistUtilComponent
   ],
   templateUrl: './app.component.html'
 })
@@ -36,6 +38,7 @@ export class GeekWidget implements AfterViewInit {
   public geek: string | undefined;
   public foundGeek: string | undefined;
   public loading = true;
+  public loggedIn = false;
 
   public constructor(private api: ExtstatsApi, private userService: UserConfigService) {
   }
@@ -47,6 +50,7 @@ export class GeekWidget implements AfterViewInit {
       this.data = await this.api.getGeekSummary(this.geek);
       this.loading = false;
     }
+    this.loggedIn = !!this.userService.getLoggedInGeek();
   }
 
   public choose(geek: string) {
