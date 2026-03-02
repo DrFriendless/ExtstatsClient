@@ -1,0 +1,19 @@
+<p>
+  Your Shelf of Shame is game you've bought but not played. Shame on you!
+  Rather than discovering new games, why not discover some you're already got?
+</p>
+
+<div class="shame-shelf-table">
+  @if (loading) {
+    <extstats-loader [mini]="true"></extstats-loader>
+  } @else {
+    <div class="extstats-table-block shame-table">
+      <es-table-controller [table]="shameShelfTable"></es-table-controller>
+      <table es-table class="table extstats-table" [data]="rows" #shameShelfTable="esTable"
+             [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+        <thead es-table-head [columns]="columns"></thead>
+        <tbody es-table-body [columns]="columns"></tbody>
+      </table>
+    </div>
+  }
+</div>

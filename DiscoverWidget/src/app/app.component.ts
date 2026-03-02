@@ -7,6 +7,7 @@ import { mergeMap, tap, share, map } from 'rxjs/operators';
 import {BuyListComponent} from "./buy-list/buylist.component";
 import {WanttoplayComponent} from "./want-to-play-list/wanttoplay.component";
 import {WantintradeComponent} from "./want-in-trade-list/wantintrade.component";
+import {ShameShelfComponent} from "./shame-self/shame-shelf.component";
 
 
 export interface DataGame {
@@ -45,7 +46,8 @@ export interface Data {
     SelectorComboComponent,
     BuyListComponent,
     WanttoplayComponent,
-    WantintradeComponent
+    WantintradeComponent,
+    ShameShelfComponent
   ],
   templateUrl: './app.component.html'
 })
