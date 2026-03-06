@@ -8,6 +8,7 @@ import {BuyListComponent} from "./buy-list/buylist.component";
 import {WanttoplayComponent} from "./want-to-play-list/wanttoplay.component";
 import {WantintradeComponent} from "./want-in-trade-list/wantintrade.component";
 import {ShameShelfComponent} from "./shame-self/shame-shelf.component";
+import {RecommendationsComponent} from "./recommendations/recommendations.component";
 
 
 export interface DataGame {
@@ -47,7 +48,8 @@ export interface Data {
     BuyListComponent,
     WanttoplayComponent,
     WantintradeComponent,
-    ShameShelfComponent
+    ShameShelfComponent,
+    RecommendationsComponent
   ],
   templateUrl: './app.component.html'
 })

@@ -1,0 +1,18 @@
+<p>
+  These recommendations are generated using a matrix factorisation technique which Simon Funk used to design the Netflix recommendation system.
+</p>
+
+<div class="recommendations-table">
+  @if (loading) {
+    <extstats-loader [mini]="true"></extstats-loader>
+  } @else {
+    <div class="extstats-table-block funky-table">
+      <es-table-controller [table]="recommendationsTable"></es-table-controller>
+      <table es-table class="table extstats-table" [data]="rows" #recommendationsTable="esTable"
+             [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+        <thead es-table-head [columns]="columns"></thead>
+        <tbody es-table-body [columns]="columns"></tbody>
+      </table>
+    </div>
+  }
+</div>
