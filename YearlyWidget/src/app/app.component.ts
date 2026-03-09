@@ -5,6 +5,7 @@ import {YearlyBestDaysComponent} from "./yearly-best-days/yearly-best-days.compo
 import {NickelAndDimeComponent} from "./nickel-and-dime/nickel-and-dime.component";
 import {MikeHulsebusComponent} from "./mike-hulsebus/mike-hulsebus.component";
 import {ExtstatsApi} from "extstats-api";
+import {YearlyHotnessComponent} from "./hotness/hotness.component";
 
 export interface GameId {
   bggid: number;
@@ -42,7 +43,8 @@ export interface Result {
     LoaderComponent,
     YearlyBestDaysComponent,
     NickelAndDimeComponent,
-    MikeHulsebusComponent
+    MikeHulsebusComponent,
+    YearlyHotnessComponent
   ],
   styleUrls: ['./app.component.scss']
 })

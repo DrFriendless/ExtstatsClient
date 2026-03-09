@@ -1,0 +1,47 @@
+
+@if (year && year < 2000) {
+<p>
+  Nothing was hot in {{year}}.
+  Time had not yet started.
+  BGG was but a glimmer in Aldie's eye.
+  There are not adequate data to say anything useful.
+</p>
+} @else if (year) {
+  @if (loading) {
+    <extstats-loader [mini]="true"></extstats-loader>
+  }
+
+  <p>What were people playing in {{year}}? This table shows you the most played games (by number of players and by number of games)
+    as recorded by users of Extended Stats in that year.
+  </p>
+
+  @if (data) {
+    <div class="hotness-table">
+      <div class="extstats-table-block mpu-table">
+        <es-table-controller [table]="mostPlayedTable"></es-table-controller>
+        <table es-table class="table extstats-table" [data]="data.mostPlayed" #mostPlayedTable="esTable"
+               [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+          <thead es-table-head [columns]="columns"></thead>
+          <tbody es-table-body [columns]="columns"></tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <p>What new games were the hotness in {{year}}?
+    To count for this table the game needs to have been published in {{year}} or the year before.
+  </p>
+
+  @if (data) {
+    <div class="most-played-table">
+      <div class="extstats-table-block mpu-table">
+        <es-table-controller [table]="mostPlayedNewTable"></es-table-controller>
+        <table es-table class="table extstats-table" [data]="data.mostPlayedNew" #mostPlayedNewTable="esTable"
+               [rowsOnPage]="30" [sortBy]="'year'" [sortOrder]="'asc'">
+          <thead es-table-head [columns]="columns"></thead>
+          <tbody es-table-body [columns]="columns"></tbody>
+        </table>
+      </div>
+    </div>
+  }
+}
