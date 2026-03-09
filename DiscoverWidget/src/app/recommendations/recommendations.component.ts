@@ -39,10 +39,10 @@ export class RecommendationsComponent implements AfterViewInit {
       valueHtml: (r: ProcessedRecRow) => (!r.bggRanking) ? "" : r.bggRanking.toString()
     },
     { field: "score", name: "X-Factor Score", tooltip: "Match as assessed by the recommendation algorithm",
-      valueHtml: (r: ProcessedRecRow) => (!r.score) ? "" : ((Math.floor(r.score * 10))/10).toString()
+      valueHtml: (r: ProcessedRecRow) => (!r.score) ? "" : ((Math.floor(r.score * 100))/100).toString()
     },
-    { field: "score2", name: "Score 2", tooltip: "Match as assessed by the recommendation algorithm with only half of the game's bias",
-      valueHtml: (r: ProcessedRecRow) => (!r.score2) ? "" : ((Math.floor(r.score2 * 10))/10).toString()
+    { field: "score2", name: "Score 2", tooltip: "Match as assessed by the recommendation algorithm with only 0.2 of the game's bias",
+      valueHtml: (r: ProcessedRecRow) => (!r.score2) ? "" : ((Math.floor(r.score2 * 100))/100).toString()
     },
     { field: "score0", name: "Score 0", tooltip: "Match as assessed by the recommendation algorithm with 0 game bias",
       valueHtml: (r: ProcessedRecRow) => (!r.score0) ? "" : ((Math.floor(r.score0 * 100))/100).toString()
