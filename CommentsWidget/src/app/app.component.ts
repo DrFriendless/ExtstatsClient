@@ -1,10 +1,9 @@
 import {AfterViewInit, Component, ElementRef} from '@angular/core';
-import {ExtstatsApi} from "extstats-api";
-import {UserDataService} from "extstats-angular";
+import {BlogComment, ExtstatsApi} from "extstats-api";
+import {UserConfigService} from "extstats-angular";
 import {CommentListComponent} from "./comment-list/comment-list.component";
 import {CommentEditorComponent} from "./comment-editor/comment-editor.component";
 import {NewComment} from "./new-comment";
-import {BlogComment} from "extstats-core/blog-interfaces";
 
 export interface Comment {
   id: number;
@@ -26,6 +25,7 @@ export interface Comment {
 })
 export class CommentsWidget implements AfterViewInit {
   url: string = "";
+  post_title = "";
   readonly = false;
   loggedIn: boolean;
   comments: Comment[] = [];
@@ -34,10 +34,11 @@ export class CommentsWidget implements AfterViewInit {
   newComment: NewComment | undefined = undefined;
 
   constructor(elementRef: ElementRef,
-              private api: ExtstatsApi, private userService: UserDataService) {
+              private api: ExtstatsApi, private userService: UserConfigService) {
     this.loggedIn = userService.isLoggedIn();
     // maybe there is another way to do this, but @Input and @Attribute simply don't work.
     this.url = elementRef.nativeElement.attributes.url.value;
+    this.post_title = elementRef.nativeElement.attributes.title.value;
     this.readonly = elementRef.nativeElement.attributes.readonly.value === 'true';
     if (this.loggedIn && !this.readonly) this.newComment = new NewComment(this);
   }
@@ -94,7 +95,7 @@ export class CommentsWidget implements AfterViewInit {
       return;
     }
     if (id === undefined) {
-      const blah = await this.api.saveComment(this.url, this.newComment.content, replyTo);
+      const blah = await this.api.saveComment(this.url, this.newComment.content, replyTo, this.post_title);
       this.newComment.reset();
       this.indexComments(blah.posts);
     } else {
