@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { ToProcessElement } from "extstats-core";
 import {LoaderComponent, UserConfigService} from "extstats-angular";
 import { switchMap } from "rxjs/operators";
 import dateFormat from "dateformat";
-import {ExtstatsApi} from "extstats-api";
+import {ExtstatsApi, ToProcessSummary} from "extstats-api";
 import {WebSocketService} from "./websocket.service";
 
 @Component({
@@ -16,12 +15,12 @@ import {WebSocketService} from "./websocket.service";
 })
 export class AppComponent implements OnInit {
   private data$: Observable<{
-    forGeek: ToProcessElement[];
+    forGeek: ToProcessSummary[];
     forSystem: Record<string, number>;
   }> | undefined;
   private subject = new Subject<boolean>();
-  other: ToProcessElement[] = [];
-  plays: ToProcessElement[] = [];
+  other: ToProcessSummary[] = [];
+  plays: ToProcessSummary[] = [];
   geek: string | undefined = undefined;
   downloaderQueue: Record<string, number> = {};
   loading = false;
@@ -37,7 +36,7 @@ export class AppComponent implements OnInit {
         .pipe(
           switchMap((quiet: boolean) => this.doQuery(this.geek!, quiet).then())
         ) as Observable<{
-        forGeek: ToProcessElement[];
+        forGeek: ToProcessSummary[];
         forSystem: Record<string, number>;
       }>;
       this.data$.subscribe(vs => this.processData(vs));
@@ -56,7 +55,7 @@ export class AppComponent implements OnInit {
   }
 
   private processData(data: {
-    forGeek: ToProcessElement[];
+    forGeek: ToProcessSummary[];
     forSystem: Record<string, number>;
   }) {
     this.other = [];
@@ -74,7 +73,7 @@ export class AppComponent implements OnInit {
     this.downloaderQueue = data.forSystem;
   }
 
-  private patch(tpe: ToProcessElement): void {
+  private patch(tpe: ToProcessSummary): void {
     for (const o of this.other) {
       if (o.url === tpe.url) {
         o.lastUpdate = transform(tpe.lastUpdate);
@@ -122,12 +121,12 @@ export class AppComponent implements OnInit {
     return await this.api.updateOld(geek);
   }
 
-  private async doRefresh(url: string): Promise<ToProcessElement> {
+  private async doRefresh(url: string): Promise<ToProcessSummary> {
     return await this.api.markForUpdate(url)
   }
 
   private async doQuery(geek: string, quiet: boolean): Promise<{
-    forGeek: ToProcessElement[];
+    forGeek: ToProcessSummary[];
     forSystem: Record<string, number>;
   }> {
     if (!quiet) this.loading = true;
@@ -139,7 +138,7 @@ export class AppComponent implements OnInit {
   protected readonly Object = Object;
 }
 
-function byDateDescending(t1: ToProcessElement, t2: ToProcessElement): number {
+function byDateDescending(t1: ToProcessSummary, t2: ToProcessSummary): number {
   let c = t1.year - t2.year;
   if (c === 0) c = t1.month - t2.month;
   return -c;
