@@ -1,4 +1,7 @@
-<div class="comment-editor" [ngClass]="{ 'me': comment && comment.me }">
+<div class="comment-editor"
+     [ngClass]="{ 'me': comment && comment.me }"
+     [attr.role]="comment && !comment.deleted && 'comment'"
+     [attr.id]="comment && !comment.deleted && comment.id">
   @if (!!comment) {
     @if (comment.deleted) {
       <p class="attribution">
@@ -13,7 +16,9 @@
       </p>
     }
   }
-  <textarea #ta class="content" [ngClass]="{ 'editing': editing, 'deleted': comment?.deleted }" [readonly]="!editing"
+  <textarea #ta class="content"
+            [ngClass]="{ 'editing': editing, 'deleted': comment?.deleted }"
+            [readonly]="!editing"
             [attr.placeholder]="comment?.deleted ? '' : 'Enter your text'">{{text}}</textarea>
 
   @if (comment && comment.deleted) {

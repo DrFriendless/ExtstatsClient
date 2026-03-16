@@ -23,6 +23,9 @@ textarea.content.editing {
   resize: vertical;
   border: 1px solid black;
 }
+textarea.content:not(.editing) {
+  field-sizing: content;
+}
 textarea.content.deleted {
   display: none;
 }
@@ -38,6 +41,7 @@ textarea.content.deleted {
 .comment-editor {
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.5rem;
 }
 p.attribution {
   font-style: italic;
