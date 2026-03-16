@@ -1,0 +1,8 @@
+<div class="recent-comments-section">
+<h4>Recent Comments</h4>
+@for (c of comments; track c.id) {
+  <p>
+    <span>{{c.date | date:'d/M/yy, h:mma' }}:</span>&nbsp;
+    <b>{{c.poster}}</b> on <i><a href="{{c.post_url}}">{{c.post_title}}</a></i></p>
+}
+</div>
