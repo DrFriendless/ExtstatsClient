@@ -35,7 +35,7 @@ export class LeastLovedComponent extends DataViewComponent<Data> {
     new Column({ field: "daysSince", name: "Days Since Last Play", tooltip: "Days since you last played this game.", classname: "col-days-since" }),
     new Column({ field: "plays", name: "Plays", tooltip: "Times you have ever played this game.", classname: "col-plays" }),
     new Column( { field: "forTrade", name: "For Trade", classname: "col-boolean",
-      valueHtml: (row) => (row.forTrade) ? "yes" : "&nbsp;"
+      valueHtml: (r: LeastLovedRow) => r.forTrade ? "✓" : ""
     })
   ];
 
