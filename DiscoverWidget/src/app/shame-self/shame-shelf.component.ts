@@ -62,17 +62,17 @@ export class ShameShelfComponent implements AfterViewInit {
       name: "Game",
       tooltip: "The game of shame",
       valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
-      classname: "wide"
+      classname: "col-game-name"
     },
-    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek",
+    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
       valueHtml: (r: Row) => (!r.bggRating) ? "" : ((Math.floor(r.bggRating * 10))/10).toString()
     },
-    { field: "weight", name: "BGG Weight", tooltip: "Weight of this game as assessed by BGG",
+    { field: "weight", name: "BGG Weight", tooltip: "Weight of this game as assessed by BGG", classname: "col-number",
       valueHtml: (r: Row) => (!r.weight) ? "" : ((Math.floor(r.weight * 10))/10).toString()
     },
-    { field: "subdomain", name: "Subdomain", tooltip: "BGG Subdomain" },
+    { field: "subdomain", name: "Subdomain", tooltip: "BGG Subdomain", classname: "col-subdomain" },
     {
-      field: "wantToPlay", name: "WTP", tooltip: "Want to play",
+      field: "wantToPlay", name: "Want to Play", tooltip: "Want to play", classname: "col-boolean",
       valueHtml: (r: Row) => r.wantToPlay ? "✓" : ""
     }
   ];

@@ -53,45 +53,45 @@ export class MostPlayedUnplayedComponent implements AfterViewInit {
       name: "Game",
       tooltip: "The game everyone else is playing",
       valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.game.bggid}">${r.game.name}</a>`,
-      classname: "wide"
+      classname: "col-game-name"
      },
-    { field: "yearPublished", name: "Published", tooltip: "Year this game was published",
+    { field: "yearPublished", name: "Published", tooltip: "Year this game was published", classname: "col-year",
       valueHtml: (r: Row) => r.game.yearPublished.toString()
     },
-    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek",
+    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek", classname: "col-ranking",
       valueHtml: (r: Row) => r.game.bggRanking.toString()
     },
-    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek",
+    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
       valueHtml: (r: Row) => r.game.bggRating.toString()
     },
-    { field: "weight", name: "BGG Weight", tooltip: "Weight of this game as assessed by BGG",
+    { field: "weight", name: "BGG Weight", tooltip: "Weight of this game as assessed by BGG", classname: "col-number",
       valueHtml: (r: Row) => r.game.weight.toString()
     },
-    { field: "minPlayers", name: "Players", tooltip: "Number of players this game takes",
+    { field: "minPlayers", name: "Players", tooltip: "Number of players this game takes", classname: "col-number",
       valueHtml: (r: Row) => this.playersString(r.game.minPlayers, r.game.maxPlayers)
     },
     {
-      field: "rating", name: "Rating", tooltip: "Your rating for this game",
+      field: "rating", name: "Rating", tooltip: "Your rating for this game", classname: "col-rating",
       valueHtml: (r: Row) => r.rating > 0 ? r.rating.toString() : ""
     },
     {
-      field: "wantToBuy", name: "WTB", tooltip: "Want to buy",
+      field: "wantToBuy", name: "WTB", tooltip: "Want to buy", classname: "col-boolean",
       valueHtml: (r: Row) => r.wantToBuy ? "✓" : ""
     },
     {
-      field: "wantToPlay", name: "WTP", tooltip: "Want to play",
+      field: "wantToPlay", name: "WTP", tooltip: "Want to play", classname: "col-boolean",
       valueHtml: (r: Row) => r.wantToPlay ? "✓" : ""
     },
     {
-      field: "wantInTrade", name: "WIT", tooltip: "Want in trade",
+      field: "wantInTrade", name: "WIT", tooltip: "Want in trade", classname: "col-boolean",
       valueHtml: (r: Row) => r.wantInTrade ? "✓" : ""
     },
     {
-      field: "preordered", name: "Preorder", tooltip: "Whether yuou have this game preordered",
+      field: "preordered", name: "Preorder", tooltip: "Whether yuou have this game preordered", classname: "col-boolean",
       valueHtml: (r: Row) => r.preordered ? "✓" : ""
     },
     {
-      field: "wish", name: "Wish", tooltip: "Your wishlist rating for this game",
+      field: "wish", name: "Wish", tooltip: "Your wishlist rating for this game", classname: "col-number",
       valueHtml: (r: Row) => r.wish > 0 ? r.wish.toString() : ""
     }
   ];

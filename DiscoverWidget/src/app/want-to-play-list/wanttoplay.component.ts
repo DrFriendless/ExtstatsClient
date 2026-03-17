@@ -38,13 +38,13 @@ export class WanttoplayComponent implements OnDestroy, AfterViewInit {
       name: "Game",
       tooltip: "The game you want to play",
       valueHtml: (r: BuyListRow) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
-      classname: "wide"
+      classname: "col-game-name"
     },
-    { field: "rating", name: "Rating", tooltip: "Your rating for this game" },
-    { field: "yearPublished", name: "Year Published", tooltip: "Year this game was first published" },
-    { field: "playerCount", name: "Players", tooltip: "How many plahyers can play this game" },
-    { field: "subdomain", name: "Subdomain", tooltip: "BGG subdomain for this game" },
-    { field: "weight", name: "Weight", tooltip: "BGG weight for this game" },
+    { field: "rating", name: "Rating", tooltip: "Your rating for this game", classname: "col-rating" },
+    { field: "yearPublished", name: "Year Published", tooltip: "Year this game was first published", classname: "col-year" },
+    { field: "playerCount", name: "Players", tooltip: "How many plahyers can play this game", classname: "col-number" },
+    { field: "subdomain", name: "Subdomain", tooltip: "BGG subdomain for this game", classname: "col-subdomain" },
+    { field: "weight", name: "Weight", tooltip: "BGG weight for this game", classname: "col-number" },
 
   ];
   columns = this.params.map(c => new Column<BuyListRow>(c));

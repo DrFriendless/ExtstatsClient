@@ -30,21 +30,23 @@ export class RecommendationsComponent implements AfterViewInit {
       name: "Game",
       tooltip: "The recommended game",
       valueHtml: (r: ProcessedRecRow) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
-      classname: "wide"
+      classname: "col-game-name"
     },
-    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek",
+    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
       valueHtml: (r: ProcessedRecRow) => (!r.bggRating) ? "" : ((Math.floor(r.bggRating * 10))/10).toString()
     },
-    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek",
+    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek", classname: "col-ranking",
       valueHtml: (r: ProcessedRecRow) => (!r.bggRanking) ? "" : r.bggRanking.toString()
     },
-    { field: "score", name: "X-Factor Score", tooltip: "Match as assessed by the recommendation algorithm",
+    { field: "score", name: "X-Factor Score", tooltip: "Match as assessed by the recommendation algorithm", classname: "col-number",
       valueHtml: (r: ProcessedRecRow) => (!r.score) ? "" : ((Math.floor(r.score * 100))/100).toString()
     },
     { field: "score2", name: "Score 2", tooltip: "Match as assessed by the recommendation algorithm with only 0.2 of the game's bias",
+      classname: "col-number",
       valueHtml: (r: ProcessedRecRow) => (!r.score2) ? "" : ((Math.floor(r.score2 * 100))/100).toString()
     },
     { field: "score0", name: "Score 0", tooltip: "Match as assessed by the recommendation algorithm with 0 game bias",
+      classname: "col-number",
       valueHtml: (r: ProcessedRecRow) => (!r.score0) ? "" : ((Math.floor(r.score0 * 100))/100).toString()
     }
   ];
