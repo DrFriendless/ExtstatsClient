@@ -1,5 +1,5 @@
-import { PlaysWithDate } from 'extstats-core';
 import { ymd } from './library';
+import {PlaysWithDate} from "extstats-api";
 
 type NickelDime = { nickel: number[], dime: number[], quarter: number[], dollar: number[] };
 

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { PlaysWithDate } from 'extstats-core';
+import { PlaysWithDate } from 'extstats-api';
 
 export function getParamValueQueryString(paramName: string): string | undefined {
   const url = window.location.href;

@@ -101,7 +101,7 @@ export class PlaysByYearTableComponent extends PlaysViewComponent<Result> {
         tooltip: `Plays in ${ys}`,
         valueHtml: (r: Row) => (r.plays[ys] || 0).toString(),
         valueTooltip: (r: Row) => `${(r.plays[ys] || 0).toString()} plays in ${ys}`,
-        classname: (r: Row) => {
+        rowClassname: (r: Row) => {
           const c = r.plays[ys] || 0;
           if (c === 0) return "class0";
           if (c <= 2) return "class1";
