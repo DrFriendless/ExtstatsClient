@@ -27,14 +27,14 @@ interface LeastLovedRow {
 })
 export class LeastLovedComponent extends DataViewComponent<Data> {
   public columns: Column<LeastLovedRow>[] = [
-    new Column({ field: "gameName", name: "Game",
+    new Column({ field: "gameName", name: "Game", classname: "col-game-name",
       valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.game}">${row.gameName}</a>`
     }),
-    new Column({ field: "rating", name: "Rating", tooltip: "Your rating for this game." }),
-    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game." }),
-    new Column({ field: "daysSince", name: "Days Since Last Play", tooltip: "Days since you last played this game." }),
-    new Column({ field: "plays", name: "Plays", tooltip: "Times you have ever played this game." }),
-    new Column( { field: "forTrade", name: "For Trade",
+    new Column({ field: "rating", name: "Your Rating", tooltip: "Your rating for this game.", classname: "col-rating" }),
+    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game.", classname: "col-date" }),
+    new Column({ field: "daysSince", name: "Days Since Last Play", tooltip: "Days since you last played this game.", classname: "col-days-since" }),
+    new Column({ field: "plays", name: "Plays", tooltip: "Times you have ever played this game.", classname: "col-plays" }),
+    new Column( { field: "forTrade", name: "For Trade", classname: "col-boolean",
       valueHtml: (row) => (row.forTrade) ? "yes" : "&nbsp;"
     })
   ];

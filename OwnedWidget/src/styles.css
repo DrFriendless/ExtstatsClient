@@ -5,14 +5,9 @@
 }
 
 /* Styles for pogo-table */
-.table.extstats-table td,
 .table.extstats-table tbody,
-.table.extstats-table thead,
-.table.extstats-table.table thead th {
+.table.extstats-table thead {
   max-width: 450px;
-}
-td.name {
-  text-align: left;
 }
 div.extstats-doc button {
   border: solid 1px var(--primary-colour);
@@ -30,9 +25,10 @@ div.collapse {
 }
 .pogo-table, .least-loved-table {
   line-height: 1.5em;
-  text-align: center;
-}
-.pogo-table td.date {
-  width: 110px;
 }
 
+th.pily, td.pily {
+  width: 80px;
+  max-width: 80px;
+  text-align: center;
+}

@@ -46,12 +46,12 @@ export class MostUnusualComponent implements AfterViewInit {
       name: "Game",
       tooltip: "The unusual game",
       valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
-      classname: "wide"
+      classname: "col-game-name"
      },
-    { field: "yearPublished", name: "Published", tooltip: "Year this game was published" },
-    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek" },
-    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek" },
-    { field: "usersOwned", name: "Users Owning", tooltip: "Number of BGG users owning" }
+    { field: "yearPublished", name: "Published", tooltip: "Year this game was published", classname: "col-year" },
+    { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek", classname: "col-ranking" },
+    { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating" },
+    { field: "usersOwned", name: "Users Owning", tooltip: "Number of BGG users owning", classname: "col-number" }
   ];
   columns = this.params.map(c => new Column<Row>(c));
   rows: Row[] = [];
