@@ -1,10 +1,12 @@
 <table class="table extstats-table yearly-best-days">
-  <thead><th>Date</th><th>Score</th><th>Plays</th></thead>
+  <thead>
+  <tr><th class="col-long-date">Date</th><th class="col-number">Score</th><th class="plays">Plays</th></tr>
+  </thead>
   <tbody>
     @for (row of rows; track row) {
       <tr>
-        <td class="date">{{row.ymd.toDateString()}}</td>
-        <td class="score">{{row.score.toFixed(0)}}</td>
+        <td class="col-long-date">{{row.ymd.toDateString()}}</td>
+        <td class="col-number">{{row.score.toFixed(0)}}</td>
         <td class="plays">
           @for (desc of row.playDescs; track desc.bggid) {
             @if (!$first) {

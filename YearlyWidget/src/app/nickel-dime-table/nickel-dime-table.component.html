@@ -1,11 +1,11 @@
 <h3 class="extstats-table-title">{{title}}</h3>
 <table class="table extstats-table nickel-dime-table">
-  <thead><th>Plays</th><th>Game</th></thead>
+  <thead><tr><th class="col-number">Plays</th><th class="col-game-name">Game</th></tr></thead>
   <tbody>
     @for (g of data; track g.url) {
       <tr>
-        <td class="plays">{{g.plays}}</td>
-        <td class="name"><a href="{{g.url}}">{{g.name}}</a></td>
+        <td class="col-number">{{g.plays}}</td>
+        <td class="col-game-name"><a href="{{g.url}}">{{g.name}}</a></td>
       </tr>
     }
   </tbody>
