@@ -47,10 +47,10 @@ function renderPlays(plays: PlayData[], gi: { [bggid: string]: GameData }): stri
 export class BestDaysComponent extends PlaysViewComponent<Result> implements OnInit {
   rows: Row[] = [];
   columns: Column<Row>[] = [
-    new Column({ field: "rank", name: "Rank", tooltip: "Position in ranking." }),
-    new Column({ field: "date", name: "Date", tooltip: "The date of these plays.", classname: "date-column" }),
-    new Column({ field: "score", name: "Score", tooltip: "The score for this date." }),
-    new Column({ field: "playstr", name: "Plays", tooltip: "Games played with quantities." }),
+    new Column({ field: "rank", name: "Rank", tooltip: "Position in ranking." , classname: "col-ranking"}),
+    new Column({ field: "date", name: "Date", tooltip: "The date of these plays.", classname: "col-date" }),
+    new Column({ field: "score", name: "Score", tooltip: "The score for this date.", classname: "col-number" }),
+    new Column({ field: "playstr", name: "Plays", tooltip: "Games played with quantities.", classname: "col-800l" })
   ];
   mediumRating = 5.0;
   bias = 1.75;
