@@ -33,21 +33,23 @@ import { makeKeySingle } from "../library"
 export class PlaysByMonthEverComponent extends PlaysViewComponent<PlayAndGamesIndex> {
   public rows: PlaysByMonthEverRow[] = []
   public columns: Column<PlaysByMonthEverRow>[] = [
-    new Column({ field: "monthName", name: "Month", tooltip: "The month this row is for.", classname: "month-column" }),
-    new Column({ field: "plays", name: "Plays", tooltip: "How many games you played in this month." }),
-    new Column({ field: "new", name: "New Games", tooltip: "Games played for the first time ever.",
+    new Column({ field: "monthName", name: "Month", tooltip: "The month this row is for.", classname: "col-date" }),
+    new Column({ field: "plays", name: "Plays", tooltip: "How many games you played in this month.", classname: "col-number" }),
+    new Column({ field: "new", name: "New Games", tooltip: "Games played for the first time ever.", classname: "col-number",
       valueTooltip: (r: PlaysByMonthEverRow) => r.newGameNames.join(", ") }),
-    new Column({ field: "nickel", name: "New Nickels", tooltip: "Games played 5 times due to plays in this month.",
+    new Column({ field: "nickel", name: "New Nickels", tooltip: "Games played 5 times due to plays in this month.", classname: "col-number",
       valueTooltip: (r: PlaysByMonthEverRow) => r.nickelNames.join(", ") }),
-    new Column({ field: "dime", name: "New Dimes", tooltip: "Games played 10 times due to plays in this month.",
+    new Column({ field: "dime", name: "New Dimes", tooltip: "Games played 10 times due to plays in this month.", classname: "col-number",
       valueTooltip: (r: PlaysByMonthEverRow) => r.dimeNames.join(", ") }),
-    new Column({ field: "quarter", name: "New Quarters", tooltip: "Games played 25 times due to plays in this month.",
+    new Column({ field: "quarter", name: "New Quarters", tooltip: "Games played 25 times due to plays in this month.", classname: "col-number",
       valueTooltip: (r: PlaysByMonthEverRow) => r.quarterNames.join(", ") }),
-    new Column({ field: "dollar", name: "New Dollars", tooltip: "Games played 100 times due to plays in this month.",
+    new Column({ field: "dollar", name: "New Dollars", tooltip: "Games played 100 times due to plays in this month.", classname: "col-number",
       valueTooltip: (r: PlaysByMonthEverRow) => r.dollarNames.join(", ") }),
-    new Column({ field: "hoursPlayed", name: "Hours Played", tooltip: "Approximate time it took you to play these games." }),
-    new Column({ field: "hindex", name: "H-Index", tooltip: "You had played this many games this many times each at the end of this month." }),
-    new Column({ field: "percent", name: "Percent Played",
+    new Column({ field: "hoursPlayed", name: "Hours Played", classname: "col-number",
+      tooltip: "Approximate time it took you to play these games." }),
+    new Column({ field: "hindex", name: "H-Index", classname: "col-number",
+      tooltip: "You had played this many games this many times each at the end of this month." }),
+    new Column({ field: "percent", name: "Percent Played", classname: "col-number",
       tooltip: "The percentage of your (presently) owned games that you had played by the end of the month."})
   ];
 

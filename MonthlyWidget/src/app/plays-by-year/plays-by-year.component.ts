@@ -17,19 +17,19 @@ import {PlaysViewComponent} from "extstats-angular";
 export class PlaysByYearComponent extends PlaysViewComponent<PlayAndGamesIndex> {
   public rows: PlaysByYearRow[] = [];
   public columns: Column<PlaysByYearRow>[] = [
-    new Column({ field: "year", name: "Year" }),
-    new Column({ field: "plays", name: "Plays", tooltip: "Number of plays this year" }),
-    new Column({ field: "distinct", name: "Distinct", tooltip: "Number of different games played" }),
-    new Column({ field: "dates", name: "Dates", tooltip: "Dates played on" }),
-    new Column({ field: "new", name: "New Games", tooltip: "Number of new (ever) games played",
+    new Column({ field: "year", name: "Year", classname: "col-year" }),
+    new Column({ field: "plays", name: "Plays", tooltip: "Number of plays this year", classname: "col-number" }),
+    new Column({ field: "distinct", name: "Distinct", tooltip: "Number of different games played", classname: "col-number" }),
+    new Column({ field: "dates", name: "Dates", tooltip: "Dates played on", classname: "col-number" }),
+    new Column({ field: "new", name: "New Games", tooltip: "Number of new (ever) games played", classname: "col-number",
       valueTooltip: (r: PlaysByYearRow) => r.newTooltip }),
-    new Column({ field: "nickel", name: "Nickel", tooltip: "Number of games played 5 times or more (ever)",
+    new Column({ field: "nickel", name: "Nickel", tooltip: "Number of games played 5 times or more (ever)", classname: "col-number",
       valueTooltip: (r: PlaysByYearRow) => r.nickelTooltip }),
-    new Column({ field: "dime", name: "Dime", tooltip: "Number of games played 10 times or more (ever)",
+    new Column({ field: "dime", name: "Dime", tooltip: "Number of games played 10 times or more (ever)", classname: "col-number",
       valueTooltip: (r: PlaysByYearRow) => r.dimeTooltip }),
-    new Column({ field: "quarter", name: "Quarter", tooltip: "Number of games played 25 times or more (ever)",
+    new Column({ field: "quarter", name: "Quarter", tooltip: "Number of games played 25 times or more (ever)", classname: "col-number",
       valueTooltip: (r: PlaysByYearRow) => r.quarterTooltip }),
-    new Column({ field: "dollar", name: "Dollar", tooltip: "Number of games played 100 times or more (ever)",
+    new Column({ field: "dollar", name: "Dollar", tooltip: "Number of games played 100 times or more (ever)", classname: "col-number",
       valueTooltip: (r: PlaysByYearRow) => r.dollarTooltip })
   ];
 
