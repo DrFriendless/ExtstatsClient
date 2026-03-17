@@ -11,9 +11,6 @@ h2 {
 .ng5-slider-inner-tooltip {
   font-size: 14px;
 }
-td.date-column {
-  min-width: 100px;
-}
 .slider-box {
   flex: 1;
   margin: 12px 8px 0;

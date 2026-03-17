@@ -27,6 +27,7 @@ export interface GeekGameResult {
   expansion: boolean;
   firstPlay: number;
   lastPlay: number;
+  wantToPlay: boolean;
 }
 export interface GameResult {
   bggid: number;
@@ -100,7 +101,7 @@ export class FavouritesComponent extends GraphQuerySourceComponent<Result> imple
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRanking bggRating yearPublished subdomain weight } " +
-      " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay daysSincePlayed } " +
+      " geekGames { bggid rating shouldPlayScore plays years months expansion lyPlays lyMonths firstPlay lastPlay daysSincePlayed wantToPlay } " +
       "}}";
   }
 }

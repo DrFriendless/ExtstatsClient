@@ -1,5 +1,5 @@
 import { Component } from "@angular/core"
-import {GameData, makeIndex} from "extstats-core"
+import {makeIndex} from "extstats-core"
 import {
   ButtonGroupButtonDirective,
   ButtonGroupComponent,
@@ -9,6 +9,7 @@ import {
 import {Column, ColumnParams, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable"
 import { Data, GeekGameResult, Result } from "../app.component"
 import {daysBetween, intToDate, toDateString} from "../library";
+import {GameData} from "extstats-api";
 
 interface Row {
   bggid: number;
@@ -43,21 +44,21 @@ interface Row {
 })
 export class FavouritesTableComponent extends DataViewComponent<Result> {
   private params: ColumnParams<Row>[] = [
-    {field: "gameName", name: "Game",
+    {field: "gameName", name: "Game", classname: "col-game-name",
       valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.bggid}">${row.gameName}</a>`},
-    {field: "rating", name: "Rating", tooltip: "Your rating for this game."},
-    {field: "plays", name: "Plays", tooltip: "The number of times you have played this game."},
-    {field: "bggRanking", name: "BGG Ranking", tooltip: "This game's ranking on BoardGameGeek."},
-    {field: "bggRating", name: "BGG Rating", tooltip: "This game's rating on BoardGameGeek."},
-    {field: "firstPlayed", name: "First Play", tooltip: "First date you played this game."},
-    {field: "lastPlayed", name: "Last Play", tooltip: "Last date you played this game."},
-    {field: "monthsPlayed", name: "Months Played", tooltip: "Number of months in which you have played this game."},
-    {field: "hoursPlayed", name: "Hours Played", tooltip: "Hours for which you have played this game."},
-    {field: "fhm", name: "Friendless", tooltip: "Friendless Happiness Metric"},
-    {field: "hhm", name: "Huber", tooltip: "Huber Happiness Metric"},
-    {field: "huberHeat", name: "Huber Heat", tooltip: "Huber Heat"},
-    {field: "ruhm", name: "R!UHM", tooltip: "Randy Cox Not Unhappiness Metric"},
-    {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published."}
+    {field: "rating", name: "Rating", tooltip: "Your rating for this game.", classname: "col-rating" },
+    {field: "plays", name: "Plays", tooltip: "The number of times you have played this game.", classname: "col-number" },
+    {field: "bggRanking", name: "BGG Ranking", tooltip: "This game's ranking on BoardGameGeek.", classname: "col-ranking" },
+    {field: "bggRating", name: "BGG Rating", tooltip: "This game's rating on BoardGameGeek.", classname: "col-rating" },
+    {field: "firstPlayed", name: "First Play", tooltip: "First date you played this game.", classname: "col-date" },
+    {field: "lastPlayed", name: "Last Play", tooltip: "Last date you played this game.", classname: "col-date" },
+    {field: "monthsPlayed", name: "Months Played", tooltip: "Number of months in which you have played this game.", classname: "col-number" },
+    {field: "hoursPlayed", name: "Hours Played", tooltip: "Hours for which you have played this game.", classname: "col-number" },
+    {field: "fhm", name: "Friendless", tooltip: "Friendless Happiness Metric", classname: "col-number" },
+    {field: "hhm", name: "Huber", tooltip: "Huber Happiness Metric", classname: "col-number" },
+    {field: "huberHeat", name: "Huber Heat", tooltip: "Huber Heat", classname: "col-number" },
+    {field: "ruhm", name: "R!UHM", tooltip: "Randy Cox Not Unhappiness Metric", classname: "col-number" },
+    {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published.", classname: "col-year" }
   ];
   columns = this.params.map(c => new Column<Row>(c));
   rows: Row[] = []

@@ -17,13 +17,15 @@ import {makeIndex} from "extstats-core";
 export class YouShouldPlayComponent extends DataViewComponent<Result> {
 
   columns: Column<Row>[] = [
-    new Column({ field: "gameName", name: "Game",
+    new Column({ field: "gameName", name: "Game", classname: "col-game-name",
       valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.game}">${row.gameName}</a>`
     }),
-    new Column({ field: "rating", name: "Rating", tooltip: "Your rating for this game." }),
-    new Column({ field: "plays", name: "Plays", tooltip: "The number of times you have played this game." }),
-    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game." }),
-    new Column({ field: "daysSincePlayed", name: "Days Since Last Play", tooltip: "Days since you last played this game." })
+    new Column({ field: "rating", name: "Rating", tooltip: "Your rating for this game.", classname: "col-rating"  }),
+    new Column({ field: "plays", name: "Plays", tooltip: "The number of times you have played this game.", classname: "col-number"  }),
+    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game.", classname: "col-date" }),
+    new Column({ field: "daysSincePlayed", name: "Days Since Last Play", tooltip: "Days since you last played this game.", classname: "col-number" }),
+    new Column({ field: "wantToPlay", name: "Want to Play", "tooltip": "Whether you have this game marked as want to play on BGG",
+    classname: "col-boolean", valueHtml: (r: Row) => r.wantToPlay ? "✓" : "" })
   ];
   rows: Row[] = [];
   data: Data | undefined;
@@ -43,7 +45,8 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
           plays: gg.plays,
           lastPlayed: toDateString(gg.lastPlay),
           shouldPlayScore: gg.shouldPlayScore,
-          daysSincePlayed: gg.daysSincePlayed
+          daysSincePlayed: gg.daysSincePlayed,
+          wantToPlay: gg.wantToPlay
         };
         rows.push(row);
       }
@@ -63,5 +66,6 @@ interface Row {
   lastPlayed: string;
   shouldPlayScore: number;
   daysSincePlayed: number;
+  wantToPlay: boolean;
 }
 
