@@ -9,6 +9,7 @@ import {
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
 import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {makeIndex} from "extstats-core";
 
 interface Row {
   bggid: number;
@@ -18,7 +19,6 @@ interface Row {
   playTime: number;
   subdomain: string;
   wantToPlay: boolean;
-  shouldPlayScore: number;
 }
 
 interface RawData {
@@ -34,7 +34,6 @@ interface RawData {
     geekGames: {
       bggid: number;
       wantToPlay: boolean;
-      shouldPlayScore: number;
     }[]
   }
 }
@@ -89,9 +88,11 @@ export class ShameShelfComponent implements AfterViewInit {
   }
 
   protected processData(raw: RawData): void {
+    const index: Record<string, { bggid: number; wantToPlay: boolean }> = makeIndex(raw.geekgames.geekGames);
     this.rows = raw.geekgames.games.map(rr => {
       return {
-      ...rr
+        ...rr,
+        ...(index[rr.bggid.toString()] || {})
       } as Row
     });
     this.rows.sort((g1, g2) => g2.bggRating - g1.bggRating);
@@ -109,15 +110,7 @@ export class ShameShelfComponent implements AfterViewInit {
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRating subdomain weight } " +
-      " geekGames { bggid shouldPlayScore wantToPlay } " +
+      " geekGames { bggid wantToPlay } " +
       "}}";
-  }
-
-  private playersString(min: number, max: number): string {
-    if (min === max) {
-      return min.toString();
-    } else {
-      return `${min}-${max}`;
-    }
   }
 }
