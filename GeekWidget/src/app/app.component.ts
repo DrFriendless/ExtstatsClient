@@ -9,10 +9,10 @@ import {PlaysPanelComponent} from "./plays-panel/plays-panel.component";
 import {MonthlyPanelComponent} from "./monthly-panel/monthly-panel.component";
 import {YearlyPanelComponent} from "./yearly-panel/yearly-panel.component";
 import {MultiplaysPanelComponent} from "./multiplays-panel/multiplays-panel.component";
-import {UpdatesPanelComponent} from "./updates-panel/updates-panel.component";
 import {NewsComponent} from "./news/news.component";
 import {DiscoverPanelComponent} from "./discover-panel/discover-panel.component";
 import {GeeklistUtilComponent} from "./geeklist-util/geeklist-util.component";
+import {DesignersPanelComponent} from "./designers-panel/designers-panel.component";
 
 @Component({
   selector: 'extstats-geek',
@@ -25,11 +25,11 @@ import {GeeklistUtilComponent} from "./geeklist-util/geeklist-util.component";
     YearlyPanelComponent,
     DiscoverPanelComponent,
     MultiplaysPanelComponent,
-    UpdatesPanelComponent,
     LoaderComponent,
     GeekComboComponent,
     NewsComponent,
-    GeeklistUtilComponent
+    GeeklistUtilComponent,
+    DesignersPanelComponent
   ],
   templateUrl: './app.component.html'
 })
