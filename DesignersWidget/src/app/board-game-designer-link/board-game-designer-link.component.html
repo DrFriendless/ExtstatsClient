@@ -1,0 +1,9 @@
+@if (designer) {
+  @if (designer.name && designer.bggid) {
+    <a href="https://boardgamegeek.com/boardgamedesigner/{{designer.bggid}}" target="_blank">{{designer.name}}</a>
+  } @else {
+    <span>incomplete data</span>
+  }
+} @else {
+  <span>unknown game</span>
+}

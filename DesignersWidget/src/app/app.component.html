@@ -1,0 +1,91 @@
+<p>This page examines your played and rated games and determines which 100 designers are most important to you.
+  The list of games for the designer is all of their games in Extended Stats.
+</p>
+<p>Expansions are not included because there tend to be many of them, which clogs up the page.</p>
+
+@if (loading) {
+  <extstats-loader></extstats-loader>
+}
+
+<div class="designers-widget extstats-page">
+  <table class="designers-table">
+    <thead>
+    <th>Designer</th>
+    <th>Games</th>
+    </thead>
+    <tbody>
+      @if (data) {
+        @for (designer of data; track designer.bggid) {
+          @let expanded = isExpanded(designer);
+          @let count = (designer.games && designer.games.length) || 0;
+          <tr class="designer" [ngClass]="{ 'expanded': expanded }">
+            <td class="col-designer">
+              <designer [designer]="designer"/>
+            </td>
+            @if (expanded) {
+              <td class="col-games">
+                <table class="designers-inner">
+                  <thead>
+                  <td (click)="expand(designer)" class="designer-expand hide"><span class="hint">click to hide</span></td>
+                  <th title="Tick if you own this game, cross if you previously owned it">Owned</th>
+                  <th title="Your plays of this game">Plays</th>
+                  <th title="Your rating for this game">Rating</th>
+                  <th class="col-bool" title="want to buy">WTB</th>
+                  <th class="col-bool" title="want to play">WTP</th>
+                  <th class="col-bool" title="want in trade">WiT</th>
+                  <th>BGG Rating</th>
+                  </thead>
+                  <tbody>
+                    @for (game of designer.games; track game.bggid) {
+                      <tr class="designer-games">
+                        <td class="designer-game">
+                          <boardgame [game]="game"/>
+                        </td>
+                        <td class="col-bool">
+                          @if (game.owned) {
+                            ✓
+                          } @else if (game.prevOwned) {
+                            X
+                          } @else {
+                            &nbsp;
+                          }
+                        </td>
+                        <td class="col-num">
+                          @if (game.plays > 0) {
+                            {{game.plays}}
+                          }
+                        </td>
+                        <td class="col-num">
+                          @if (game.rating > 0) {
+                            {{game.rating}}
+                          }
+                        </td>
+                        <td class="col-bool">
+                          {{(game.wtb && "✓") || ""}}
+                        </td>
+                        <td class="col-bool">
+                          {{(game.wtp && "✓") || ""}}
+                        </td>
+                        <td class="col-bool">
+                          {{(game.wit && "✓") || ""}}
+                        </td>
+                        <td class="col-num">
+                          @if (game.bggRating > 0) {
+                            {{game.bggRating}}
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </td>
+            } @else {
+              <td class="col-games designer-expand" (click)="expand(designer)"><span class="hint">click to show {{count}} games</span></td>
+            }
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+
