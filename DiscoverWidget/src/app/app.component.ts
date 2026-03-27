@@ -62,6 +62,7 @@ export class DiscoverWidget implements AfterViewInit {
   loading: boolean = false;
 
   constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+    this.userService.checkDataIsLoaded().then();
     this.data$ = this.queries.asObservable()
       .pipe(
         tap(() => this.loading = true),

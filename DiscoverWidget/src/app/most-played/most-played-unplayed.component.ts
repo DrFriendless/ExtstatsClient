@@ -1,16 +1,16 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {
   Column,
   ColumnParams,
   DataTable,
   DataTableBody,
   DataTableController,
-  DataTableHead,
+  DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
 
-interface Row {
+interface RawRow {
   game : {
     bggid: number;
     yearPublished: number;
@@ -29,8 +29,25 @@ interface Row {
   wish: number;
 }
 
-interface Data {
-  mostplayedunplayed: Row[]
+interface Row {
+  bggid: number;
+  yearPublished: number;
+  name: string;
+  bggRating: number;
+  weight: number;
+  bggRanking: number;
+  minPlayers: number;
+  maxPlayers: number;
+  rating: number;
+  wantToBuy: boolean;
+  wantToPlay: boolean;
+  wantInTrade: boolean;
+  preordered: boolean;
+  wish: number;
+}
+
+interface RawData {
+  mostplayedunplayed: RawRow[]
 }
 
 @Component({
@@ -42,33 +59,35 @@ interface Data {
     DataTable,
     DataTableBody,
     DataTableHead,
-    LoaderComponent
+    LoaderComponent,
+    BoardGameLinkComponent
   ],
   templateUrl: './most-played-unplayed.component.html'
 })
 export class MostPlayedUnplayedComponent implements AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<Row>>;
   private params: ColumnParams<Row>[] = [
     {
       field: "name",
       name: "Game",
       tooltip: "The game everyone else is playing",
-      valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.game.bggid}">${r.game.name}</a>`,
+      template: this.boardgame,
       classname: "col-game-name"
-     },
+    },
     { field: "yearPublished", name: "Published", tooltip: "Year this game was published", classname: "col-year",
-      valueHtml: (r: Row) => r.game.yearPublished.toString()
+      valueHtml: (r: Row) => r.yearPublished.toString()
     },
     { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek", classname: "col-ranking",
-      valueHtml: (r: Row) => r.game.bggRanking.toString()
+      valueHtml: (r: Row) => r.bggRanking.toString()
     },
     { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
-      valueHtml: (r: Row) => r.game.bggRating.toString()
+      valueHtml: (r: Row) => r.bggRating.toString()
     },
     { field: "weight", name: "BGG Weight", tooltip: "Weight of this game as assessed by BGG", classname: "col-number",
-      valueHtml: (r: Row) => r.game.weight.toString()
+      valueHtml: (r: Row) => r.weight.toString()
     },
     { field: "minPlayers", name: "Players", tooltip: "Number of players this game takes", classname: "col-number",
-      valueHtml: (r: Row) => this.playersString(r.game.minPlayers, r.game.maxPlayers)
+      valueHtml: (r: Row) => this.playersString(r.minPlayers, r.maxPlayers)
     },
     {
       field: "rating", name: "Rating", tooltip: "Your rating for this game", classname: "col-rating",
@@ -95,29 +114,32 @@ export class MostPlayedUnplayedComponent implements AfterViewInit {
       valueHtml: (r: Row) => r.wish > 0 ? r.wish.toString() : ""
     }
   ];
-  columns = this.params.map(c => new Column<Row>(c));
+  columns: Column<Row>[] = [];
   rows: Row[] = [];
   geek: string | undefined;
   loading = false;
-  data: Data | undefined;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, public tagService: UserTagService) {
   }
 
   async ngAfterViewInit(): Promise<void> {
     await this.refresh();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<Row>(c));
   }
 
-  protected processData(data: Data): any {
-    this.rows = data.mostplayedunplayed;
+  protected processData(data: RawData): any {
+    this.rows = data.mostplayedunplayed.map(d => {
+      return {...d, ...d.game}
+    });
   }
 
   private async refresh() {
     this.geek = this.userService.getAGeek();
     if (this.geek) {
       this.loading = true;
-      this.data = await this.api.retrieve(`{mostplayedunplayed(geek: "${this.geek}", count: 50) { rating wantToBuy wantToPlay wantInTrade preordered wish game { bggid name minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as Data;
-      this.processData(this.data);
+      const data = await this.api.retrieve(`{mostplayedunplayed(geek: "${this.geek}", count: 50) { rating wantToBuy wantToPlay wantInTrade preordered wish game { bggid name minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as RawData;
+      this.processData(data);
       this.loading = false;
     }
   }

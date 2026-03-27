@@ -1,14 +1,14 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {
   Column,
   ColumnParams,
   DataTable,
   DataTableBody,
   DataTableController,
-  DataTableHead,
+  DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi, ProcessedRecRow} from "extstats-api";
-import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
 
 @Component({
   selector: 'extstats-recommendations',
@@ -19,17 +19,19 @@ import {LoaderComponent, UserConfigService} from "extstats-angular";
     DataTable,
     DataTableBody,
     DataTableHead,
-    LoaderComponent
+    LoaderComponent,
+    BoardGameLinkComponent
   ],
   templateUrl: './recommendations.component.html'
 })
 export class RecommendationsComponent implements AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<ProcessedRecRow>>;
   private params: ColumnParams<ProcessedRecRow>[] = [
     {
       field: "name",
       name: "Game",
       tooltip: "The recommended game",
-      valueHtml: (r: ProcessedRecRow) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
+      template: this.boardgame,
       classname: "col-game-name"
     },
     { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
@@ -50,16 +52,18 @@ export class RecommendationsComponent implements AfterViewInit {
       valueHtml: (r: ProcessedRecRow) => (!r.score0) ? "" : ((Math.floor(r.score0 * 100))/100).toString()
     }
   ];
-  columns = this.params.map(c => new Column<ProcessedRecRow>(c));
+  columns: Column<ProcessedRecRow>[] = [];
   rows: ProcessedRecRow[] = [];
   geek: string | undefined;
   loading = false;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, public tagService: UserTagService) {
   }
 
   async ngAfterViewInit(): Promise<void> {
     await this.refresh();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<ProcessedRecRow>(c));
   }
 
   protected processData(raw: ProcessedRecRow[]): void {

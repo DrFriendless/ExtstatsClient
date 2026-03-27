@@ -1,14 +1,14 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {
   Column,
   ColumnParams,
   DataTable,
   DataTableBody,
   DataTableController,
-  DataTableHead,
+  DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
 import {makeIndex} from "extstats-core";
 
 interface Row {
@@ -47,11 +47,13 @@ interface RawData {
     DataTable,
     DataTableBody,
     DataTableHead,
-    LoaderComponent
+    LoaderComponent,
+    BoardGameLinkComponent
   ],
   templateUrl: './shame-shelf.component.html'
 })
 export class ShameShelfComponent implements AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<Row>>;
   private static DEFAULT_SELECTOR = "minus(owned(ME),played(ME),expansions(),books())";
   private readonly selector = ShameShelfComponent.DEFAULT_SELECTOR;
 
@@ -60,7 +62,7 @@ export class ShameShelfComponent implements AfterViewInit {
       field: "name",
       name: "Game",
       tooltip: "The game of shame",
-      valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
+      template: this.boardgame,
       classname: "col-game-name"
     },
     { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
@@ -80,11 +82,13 @@ export class ShameShelfComponent implements AfterViewInit {
   geek: string | undefined;
   loading = false;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, public tagService: UserTagService) {
   }
 
   async ngAfterViewInit(): Promise<void> {
     await this.refresh();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<Row>(c));
   }
 
   protected processData(raw: RawData): void {

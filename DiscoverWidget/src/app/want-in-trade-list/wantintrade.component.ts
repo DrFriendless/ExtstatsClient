@@ -1,7 +1,16 @@
 import {Observable, Subscription} from "rxjs";
-import {Input, OnDestroy, AfterViewInit, Component} from '@angular/core';
-import {Column, ColumnParams, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
+import {Input, OnDestroy, AfterViewInit, Component, ViewChild, TemplateRef} from '@angular/core';
+import {
+  Column,
+  ColumnParams,
+  DataTable,
+  DataTableBody,
+  DataTableController,
+  DataTableHead,
+  RowContext
+} from "extstats-datatable";
 import {Data} from "../app.component";
+import {BoardGameLinkComponent, UserTagService} from "extstats-angular";
 
 interface BuyListRow {
   bggid: number;
@@ -25,11 +34,13 @@ interface BuyListRow {
     DataTable,
     DataTableBody,
     DataTableController,
-    DataTableHead
+    DataTableHead,
+    BoardGameLinkComponent
   ],
   templateUrl: './wantintrade.component.html'
 })
 export class WantintradeComponent implements OnDestroy, AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<BuyListRow>>;
   @Input('data') data$!: Observable<Data>;
   private dataSubscription: Subscription | undefined;
   private params: ColumnParams<BuyListRow>[] = [
@@ -37,7 +48,7 @@ export class WantintradeComponent implements OnDestroy, AfterViewInit {
       field: "name",
       name: "Game",
       tooltip: "The game you want in trade",
-      valueHtml: (r: BuyListRow) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
+      template: this.boardgame,
       classname: "col-game-name"
     },
     { field: "rating", name: "Rating", tooltip: "Your rating for this game", classname: "col-rating" },
@@ -47,8 +58,11 @@ export class WantintradeComponent implements OnDestroy, AfterViewInit {
     { field: "weight", name: "Weight", tooltip: "BGG weight for this game", classname: "col-number" },
 
   ];
-  columns = this.params.map(c => new Column<BuyListRow>(c));
+  columns: Column<BuyListRow>[] = [];
   rows: BuyListRow[] = [];
+
+  constructor(public tagService: UserTagService) {
+  }
 
   public ngOnDestroy() {
     if (this.dataSubscription) this.dataSubscription.unsubscribe();
@@ -56,6 +70,8 @@ export class WantintradeComponent implements OnDestroy, AfterViewInit {
 
   public ngAfterViewInit() {
     this.dataSubscription = this.data$.subscribe(collection => this.processData(collection));
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<BuyListRow>(c));
   }
 
   protected processData(data: Data): void {
