@@ -1,9 +1,13 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {DesignerResult, ExtstatsApi} from "extstats-api";
-import {LoaderComponent, SelectorComboComponent, UserConfigService} from "extstats-angular";
-import {BoardGameLinkComponent} from "./board-game-link/board-game-link.component";
+import {
+  BoardGameDesignerLinkComponent,
+  BoardGameLinkComponent,
+  LoaderComponent,
+  SelectorComboComponent,
+  UserConfigService
+} from "extstats-angular";
 import {NgClass} from "@angular/common";
-import {BoardGameDesignerLinkComponent} from "./board-game-designer-link/board-game-designer-link.component";
 
 @Component({
   selector: 'designers-widget',
@@ -21,7 +25,8 @@ export class DesignersWidget implements AfterViewInit {
   data: DesignerResult[] = [];
   expanded: Set<number> = new Set<number>();
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, public userService: UserConfigService) {
+    this.userService.get("bob", 1);
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -55,17 +60,5 @@ export class DesignersWidget implements AfterViewInit {
 
   isExpanded(designer: DesignerResult): boolean {
     return this.expanded.has(designer.bggid);
-  }
-
-  rowspan(designer: DesignerResult): number {
-    if (this.isExpanded(designer)) {
-      if (designer.games) {
-        return 1 + designer.games.length;
-      } else {
-        return 1;
-      }
-    } else {
-      return 1;
-    }
   }
 }

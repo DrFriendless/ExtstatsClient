@@ -1,9 +1,0 @@
-@if (game) {
-  @if (game.name && game.bggid) {
-    <a href="https://boardgamegeek.com/boardgame/{{game.bggid}}" target="_blank">{{game.name}}</a>
-  } @else {
-    <span>incomplete data</span>
-  }
-} @else {
-  <span>unknown game</span>
-}

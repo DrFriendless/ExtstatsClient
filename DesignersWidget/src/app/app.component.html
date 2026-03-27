@@ -15,6 +15,7 @@
     </thead>
     <tbody>
       @if (data) {
+        @let allTags = userService.getAllTags();
         @for (designer of data; track designer.bggid) {
           @let expanded = isExpanded(designer);
           @let count = (designer.games && designer.games.length) || 0;
@@ -39,7 +40,7 @@
                     @for (game of designer.games; track game.bggid) {
                       <tr class="designer-games">
                         <td class="designer-game">
-                          <boardgame [game]="game"/>
+                          <boardgame [game]="game" [allTags]="allTags" [tagsForGame]="userService.getTagsForGame(game.bggid)"/>
                         </td>
                         <td class="col-bool">
                           @if (game.owned) {
