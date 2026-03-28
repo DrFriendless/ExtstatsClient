@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import {AuthResult, ExtstatsApi} from "extstats-api";
 import {FormsModule} from "@angular/forms";
 import {NgClass} from "@angular/common";
-import {CookieService, UserDataService} from "extstats-angular";
+import {CookieService, UserConfigService} from "extstats-angular";
 
 type LoginState = "START" | "LOGIN_BUTTON" | "LOGOUT_BUTTON" | "LOGIN_FORM" | "SIGNUP_FORM" |
   "PASSWORD_FORM" | "NOT_CONFIRMED" | "NEED_TO_SIGN_UP" | "SHOW_SIGNUP_CODE" | "ALREADY_SIGNED_UP" |
@@ -34,9 +34,8 @@ export class LoginComponent implements AfterViewInit {
   constructor(private elementRef: ElementRef,
               private api: ExtstatsApi,
               private cookieService: CookieService,
-              private userService: UserDataService) {
-    console.log(elementRef);
-    this.showAccounts = elementRef.nativeElement.attributes.showAccounts && (elementRef.nativeElement.attributes.showAccounts.value !== "false");
+              private userService: UserConfigService) {
+    this.showAccounts = !elementRef.nativeElement.attributes.showAccounts || (elementRef.nativeElement.attributes.showAccounts.value !== "false");
   }
 
   showLogoutForm() {
@@ -46,7 +45,7 @@ export class LoginComponent implements AfterViewInit {
   logout() {
     this.api.logout().then(async () => {
       await this.close();
-      window.postMessage("logout");
+      window.location.reload();
     });
   }
 
@@ -103,7 +102,7 @@ export class LoginComponent implements AfterViewInit {
           this.disabled = false;
           await this.close();
           await this.userService.setAndSave("user.username", this.cookieService.getCookie("extstatsid"));
-          window.postMessage("login");
+          window.location.reload();
         } else if (result.type === "failure") {
           this.state = result.state as LoginState;
         }
@@ -194,7 +193,7 @@ export class LoginComponent implements AfterViewInit {
     const cookie = this.cookieService.getCookie(this.COOKIE_NAME);
     this.state = (!!cookie) ? "LOGOUT_BUTTON" : "LOGIN_BUTTON";
     if (cookie) {
-      const usernames: string[] = await this.userService.get("user.usernames", []);
+      const usernames: string[] = (await this.userService.get("user.usernames", [])) || [];
       if (usernames.length === 0) usernames.push(cookie);
       this.accounts = usernames;
       let g = this.getGeek();
