@@ -1,0 +1,7 @@
+<span class="tag" [ngClass]="{ 'present': present }" (click)="onClick()">
+  {{value}}
+  @if (removable) {
+    &nbsp;
+    <a class="remove" (click)="onRemove()">&Cross;</a>
+  }
+</span>

@@ -1,0 +1,25 @@
+h3.group-button {
+  font-size: larger;
+  font-weight: bold;
+  padding: 6px;
+  margin-top: 12px;
+  background: seagreen;
+  color: white;
+  box-shadow: 2px 2px 1px #ccc;
+}
+h3:hover {
+  box-shadow: 4px 4px 2px #ccc;
+}
+div.tagrow {
+  margin-bottom: 8px;
+}
+div.add-group {
+  margin-top: 20px;
+}
+.tagalogue-widget {
+  --background-colour: seagreen;
+  --foreground-colour: white;
+}
+.tag-table tr:nth-child(2n+1) {
+  border-bottom: 1px seagreen solid;
+}

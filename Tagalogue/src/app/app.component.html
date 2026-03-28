@@ -1,0 +1,96 @@
+
+
+@if (loading) {
+  <extstats-loader/>
+}
+
+<div class="tagalogue-widget extstats-page">
+  <div class="features-header">
+    <p>The Tagalogue (with apologies to the people of the Philippines) is the core page for managing which tags you have attached to which games.
+      This is where you get to make new tags and delete unused tags.
+      Once tags are defined you can add them here, or by using a minitag, which is a tiny tag which appears at the end of board game links
+      on pages which support it.
+      To see minitags you must be logged in and you must have at least one tag defined.
+      You can then click on the minitag to quickly add and remove tags from that game.
+    </p>
+    <p>
+      The Tagalogue is not the place for seeing a nice list of all games with a particular tag.
+      That functionality, along with better support for selectors, will come in a future page called the Catalist.
+    </p>
+    @if (loggedIn) {
+      <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
+    }
+  </div>
+
+  @if (loggedIn) {
+    <h2>Your Tag Groups</h2>
+    @for (tagGroup of tagGroups; track tagGroup.name) {
+      @let deletable = tagGroup.tags.length === 0;
+      <h3 class="group-button" (click)="selectTagGroup(tagGroup.name)">{{tagGroup.name}}
+        @if (deletable) {
+          &nbsp;<span class="kill-group" (click)="killGroup(tagGroup.name)">&Cross;</span>
+        }
+      </h3>
+      <div class="tagrow">
+        @for (tag of tagGroup.tags; track tag) {
+          @let used = usedTags.has(tag);
+          @let in2 = inTwoGroups.has(tag);
+          <tagchip [value]="tag" [present]="used" [removable]="!used || in2"
+                   (remove)="onTagGroupTagRemove(tagGroup.name, tag)"/>
+        }
+      </div>
+    }
+
+    <div class="add-group">
+      Add a new tag group:
+      <input [(ngModel)]="newname" type="text">
+      <button class="extstats-button" (click)="newTagGroup()">Add</button>
+    </div>
+
+    @if (currentGroup) {
+      <h2>Edit Tag Group '{{currentGroup.name}}'</h2>
+      <div class="tagrow">
+        @for (tag of currentGroup.tags; track tag) {
+          @let used = usedTags.has(tag);
+          @let in2 = inTwoGroups.has(tag);
+          <tagchip [value]="tag" [present]="used" [removable]="!used || in2"
+                   (remove)="onTagGroupTagRemove(currentGroup.name, tag)"/>
+        }
+      </div>
+
+      <div>
+        Add a new tag:
+        <input [(ngModel)]="newtag" type="text">
+        <button class="extstats-button" (click)="newTag(currentGroup.name)">Add</button>
+      </div>
+    }
+
+    <h2>Tags on Games</h2>
+    @if (currentGroup) {
+      <P>Showing tags from group '{{currentGroup.name}}'.</P>
+    } @else {
+      <p>Select a tag group to show tags.</p>
+    }
+    <table>
+      <thead></thead>
+      <tbody class="tag-table">
+        @for (row of rows; track row.bggid) {
+          @let tags = tagsByGame[row.bggid.toString()] || [];
+          <tr>
+            <td class="col-game-name">{{row.name}}</td>
+            <td>
+              @let allTags = currentGroup?.tags || [];
+              @for (tag of allTags; track tag) {
+                @let present = tags.indexOf(tag) >= 0;
+                <tagchip [value]="tag" [present]="present" [removable]="false" (click)="onClick(tag, row.bggid.toString(), present)"/>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>To use the Tagalogue you must be logged in to the site so that we can store your tags in your personal data.</p>
+  }
+</div>
+
