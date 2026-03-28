@@ -1,14 +1,8 @@
 .update-button {
+  --foreground-colour: white;
+  --background-colour: #248BE5;
+  --disabled-colour: #6d82ee;
   margin-left: 20px;
-  cursor: pointer;
-  background: #248be5;
-  color: white;
-  border: 0;
-  width: 90px;
-  height: 28px;
-}
-.update-button:hover {
-  background: #115692;
 }
 .url-column {
   width: 300px;

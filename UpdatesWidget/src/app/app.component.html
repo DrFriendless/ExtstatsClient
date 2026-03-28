@@ -22,7 +22,7 @@
 
 <p>
   Refresh This List:&nbsp;
-  <button class="update-button" type="button" (click)="onRefreshAll(false)">Refresh</button>
+  <button class="update-button extstats-button" type="button" (click)="onRefreshAll(false)">Refresh</button>
 </p>
 
 <h2>Miscellaneous</h2>
@@ -43,7 +43,7 @@
         }
         <td class="date-column">{{file.lastUpdate}}</td>
         <td class="date-column">{{file.nextUpdate}}</td>
-        <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
+        <td><button class="update-button extstats-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
       </tr>
     }
 
@@ -66,8 +66,7 @@
         <td class="url-column"><a href="{{file.url}}">{{file.description}}</a></td>
         <td class="date-column">{{file.lastUpdate}}</td>
         <td class="date-column">{{file.nextUpdate}}</td>
-        <td><button class="update-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
-        <!--        <td class="plays-columns">{{file['recorded'] || 0}}</td>-->
+        <td><button class="update-button extstats-button" type="button" (click)="onRefresh(file.url)">Refresh</button></td>
       </tr>
     }
   </tbody>
@@ -102,6 +101,6 @@
 
 <p>
   Refresh Old Files:&nbsp;
-  <button class="update-button" type="button" (click)="onRefreshOld()">Refresh</button>
+  <button class="update-button extstats-button" type="button" (click)="onRefreshOld()">Refresh</button>
 </p>
 
