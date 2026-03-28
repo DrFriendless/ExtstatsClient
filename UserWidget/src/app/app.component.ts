@@ -1,9 +1,9 @@
 import {Component, HostListener, OnDestroy, OnInit} from "@angular/core"
 import { Subscription } from 'rxjs/internal/Subscription';
-import {BuddySet, DisambiguationData} from 'extstats-core';
+import {BuddySet} from 'extstats-core';
 import {GeekChipsComponent, GeekComboComponent, LoaderComponent, UserConfigService} from "extstats-angular";
 import {BuddySetComponent} from "./buddy-set/buddy-set.component";
-import {ExtstatsApi} from "extstats-api";
+import {DisambiguationData, ExtstatsApi} from "extstats-api";
 import {NgClass} from "@angular/common";
 
 @Component({

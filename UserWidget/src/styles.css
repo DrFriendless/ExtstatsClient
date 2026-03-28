@@ -1,16 +1,7 @@
-extstats-user-config .extstats-button {
-  background: orange;
-  color: black;
-  margin: 2px;
-  border: 2px transparent solid;
-  width: auto;
-  height: 24px;
-}
-extstats-user-config .extstats-button:hover {
-  border: 2px black solid;
-}
-extstats-user-config .extstats-button:disabled {
-  background: #aaaaaa;
+.user-config-form .extstats-button {
+  --background-colour: orange;
+  --foreground-colour: black;
+  --disabled-colour: #b8996c;
 }
 .buddy-set-ro {
   margin-bottom: 20px;
