@@ -5,7 +5,7 @@ import {
   BoardGameLinkComponent,
   LoaderComponent,
   SelectorComboComponent,
-  UserConfigService
+  UserConfigService, UserTagService
 } from "extstats-angular";
 import {NgClass} from "@angular/common";
 
@@ -25,8 +25,8 @@ export class DesignersWidget implements AfterViewInit {
   data: DesignerResult[] = [];
   expanded: Set<number> = new Set<number>();
 
-  constructor(private api: ExtstatsApi, public userService: UserConfigService) {
-    this.userService.get("bob", 1);
+  constructor(private api: ExtstatsApi, public userService: UserConfigService, public tagService: UserTagService) {
+    this.userService.checkDataIsLoaded().then();
   }
 
   async ngAfterViewInit(): Promise<void> {

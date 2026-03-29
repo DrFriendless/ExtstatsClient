@@ -15,7 +15,7 @@
     </thead>
     <tbody>
       @if (data) {
-        @let allTags = userService.getAllTags();
+        @let allTags = tagService.allTags;
         @for (designer of data; track designer.bggid) {
           @let expanded = isExpanded(designer);
           @let count = (designer.games && designer.games.length) || 0;
