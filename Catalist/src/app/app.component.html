@@ -1,0 +1,40 @@
+<p>USe this page to compose new selectors.</p>
+
+<P>Choose a selector from the Chooser.
+  Configure it in the Composer.
+  Save it into the Store - these are the configured selectors you have to work with.
+  Selectors may be run from the Store, producing results in the Selection Results.
+  "Running" a selector means seeing what games it selects for you.
+</P>
+
+<div class="catalist-main">
+  @if (showDeployment) {
+    <div class="deployment">
+      <h2>Deployment</h2>
+      <div class="deployment-targets">
+
+      </div>
+    </div>
+  }
+  <div class="top-section">
+    <div class="store">
+      <h2>Store</h2>
+      <catalist-store #store [data]="storeData" />
+    </div>
+    <div class="chooser">
+      <h2>Chooser</h2>
+      <type-chooser #chooser (choose)="chooseType($event)"/>
+    </div>
+  </div>
+  <div class="composer">
+    <h2>Composer</h2>
+    <catalist-composer #composer [store]="storeData" (run)="run($event)" />
+  </div>
+  <div class="results">
+    <h2>Selection Results</h2>
+    @if (loading) {
+      <extstats-loader/>
+    }
+    <run-results #results></run-results>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="composer-whole">
+  <div class="composer-top">
+    <div class="composer-top-buttons">
+      <button class="extstats-button" (click)="onDiscard()" [disabled]="!typ()">Discard</button>
+    </div>
+    <div class="composer-key">
+      @if (typeKey()) {
+        <span>{{typeKey()}}(</span>
+        @for (arg of typ()?.args; track arg) {
+          <span>{{arg}}</span>
+          <arg-editor [argType]="arg"/>
+        }
+        <span>)</span>
+      }
+    </div>
+    <div class="composer-gap"></div>
+    @if (typ()?.hints) {
+      <div class="composer-hint">
+        <span>{{typ()?.hints}}</span>
+      </div>
+    }
+  </div>
+  <div class="composer-bottom">
+    @if  (warning()) {
+      <div class="composer-warning">
+        <span>{{warning()}}</span>
+      </div>
+    } @else {
+      <div class="composer-preview">
+        <span>{{preview()}}</span>
+      </div>
+    }
+    <div class="composer-buttons">
+      <button class="extstats-button" (click)="onSave()" [disabled]="!needToSave()">Save</button>
+      <button class="extstats-button" (click)="onRun()" [disabled]="!runnable()">Run</button>
+    </div>
+  </div>
+</div>

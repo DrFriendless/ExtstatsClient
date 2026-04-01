@@ -1,0 +1,9 @@
+<div class="selector-type-chooser">
+  <table>
+  @for (type of SELECTOR_TYPES; track type.key) {
+    <tr class="selector-type" [style.color]="type.colour" (click)="onChoose(type)">
+      <td><span class="type-key">{{type.key}}</span> - <span class="type-description">{{type.description}}</span></td>
+    </tr>
+  }
+  </table>
+</div>

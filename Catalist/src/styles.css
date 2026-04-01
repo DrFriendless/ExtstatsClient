@@ -1,0 +1,113 @@
+.catalist-main {
+  --foreground-colour: black;
+  --background-colour: springgreen;
+  --disabled-colour: darkseagreen;
+  --primary-colour: linen;
+  --text-colour: black;
+  --even-colour: burlywood;
+}
+.top-section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  gap: 8px;
+}
+.chooser {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-weight: bold;
+  gap: 8px;
+  flex-grow: 1;
+  background: linen;
+}
+.chooser .selector-type:hover {
+  background: burlywood;
+}
+.composer {
+  width: 100%;
+  border: 1px solid black;
+  height: fit-content;
+  background: linen;
+}
+.results {
+  width: 100%;
+  /*border: 1px solid black;*/
+  /*background: linen;*/
+}
+.catalist-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.store {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid black;
+  gap: 8px;
+  flex-grow: 1;
+  background: linen;
+}
+body .catalist-main h2 {
+  margin: 8px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.selector-type-chooser {
+  font-family: monospace;
+}
+.selector-type-chooser td {
+  padding: 0 6px;
+}
+.deployment {
+  width: 100%;
+  border: 1px solid black;
+  height: fit-content;
+  background: linen;
+}
+.deployment-targets {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.composer-top {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: baseline;
+}
+.composer-key {
+  font-size: 30px;
+  font-style: italic;
+  font-family: "Overlock", cursive;
+  line-height: 30px;
+  margin-left: 20px;
+}
+.composer-gap {
+  flex-grow: 1;
+}
+.composer-hint {
+  width: 280px;
+  max-height: 72px;
+  align-self: flex-start;
+}
+.composer-bottom {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.composer-preview {
+  flex-grow: 1;
+  margin: 8px;
+  font-size: 20px;
+  font-style: italic;
+  font-family: "Overlock", cursive;
+}
+.composer-buttons {
+  margin: 8px;
+}
