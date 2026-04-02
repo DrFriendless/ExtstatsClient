@@ -1,8 +1,46 @@
 export type ARG_TYPE = "GAME_IDS" | "SELECTOR_ARRAY" | "USER" | "DESIGNER" | "PUBLISHER" | "CATEGORY" | "MECHANIC" | "TAG"
 
+export type USER_TYPE = "ME" | { user: string }
+
+export type ParamType =
+  { type: "GAME_IDS"; value: number[] } |
+  { type: "SELECTOR_ARRAY"; value: SelectorType[] } |
+  { type: "USER"; value: USER_TYPE } |
+  { type: "DESIGNER"; value: number } |
+  { type: "PUBLISHER"; value: number } |
+  { type: "CATEGORY"; value: string } |
+  { type: "MECHANIC"; value: string } |
+  { type: "TAG"; value: string };
+
+export function paramTypeToString(p: ParamType): string {
+  switch (p.type) {
+    case "CATEGORY": return `"${p.value}"`;
+    case "DESIGNER": return p.value.toString();
+    case "GAME_IDS": return p.value.join(",");
+    case "MECHANIC": return `"${p.value}"`;
+    case "PUBLISHER": return p.value.toString();
+    case "SELECTOR_ARRAY": return p.value.map(selectorToString).join(",");
+    case "TAG": return `"${p.value}"`;
+    case "USER": return `"${p.value}"`;
+  }
+}
+
+export function selectorToString(s: SelectorType): string {
+  if (s.args.length === 0) {
+    return `${s.key}()`;
+  } else if (!s.params) {
+    return "need params"
+  } else {
+    return `${s.key}(${s.params?.map(paramTypeToString).join(",")})`;
+  }
+}
+
 export interface SelectorType {
   key: string;
+  // formal parameter types
   args: ARG_TYPE[];
+  // actual parameters
+  params?: ParamType[];
   description: string;
   colour: string;
   disabled?: boolean;

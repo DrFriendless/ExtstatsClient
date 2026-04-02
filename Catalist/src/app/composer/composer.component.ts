@@ -16,26 +16,23 @@ import {ArgEditorComponent} from "../arg-editor/arg-editor.component";
 export class CatalistComposerComponent {
   @Input({ required: true }) store!: WritableSignal<string[]>;
   @Output() run = new EventEmitter<string>();
+  @Output() save = new EventEmitter<string>();
   argEditors: Signal<readonly ArgEditorComponent[]> = viewChildren(ArgEditorComponent);
   typ: WritableSignal<SelectorType | undefined> = signal(undefined);
   warning: WritableSignal<string> = signal("");
   typeKey = computed(() => this.typ()?.key);
   needToSave: Signal<boolean> = computed(() => this.runnable() && !this.duplicated());
   runnable: Signal<boolean> = computed(() => {
-    console.log("runnable");
     const typ = this.typ();
     if (!typ) return false;
     const argsHaveValue = this.argEditors().map(ed => ed.hasValue());
     return argsHaveValue.indexOf(false) < 0;
   });
   duplicated: Signal<boolean> = computed(() => {
-    console.log("duplicated");
     const p = this.preview();
-    console.log(p, JSON.stringify(this.store()), this.store().indexOf(p));
     return this.store().indexOf(p) >= 0;
   });
   preview: Signal<string> = computed((() => {
-    console.log("preview");
     const typ = this.typ();
     if (!typ) return "";
     const argsHaveValue = this.argEditors().map(ed => ed.hasValue());
@@ -54,7 +51,7 @@ export class CatalistComposerComponent {
   }
 
   onSave() {
-    this.store.update(val => [...val, this.preview()]);
+    this.save.emit(this.preview());
   }
 
   onRun() {

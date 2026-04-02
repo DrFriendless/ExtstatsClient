@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input} from "@angular/core";
 import {FormsModule} from "@angular/forms";
-import {ARG_TYPE} from "../selector-types.mjs";
+import {ARG_TYPE, ParamType} from "../selector-types.mjs";
 import {CatalistComposerComponent} from "../composer/composer.component";
 
 @Component({
@@ -15,6 +15,10 @@ export class ArgEditorComponent implements AfterViewInit {
   text: string = "";
 
   constructor(private composer: CatalistComposerComponent) {
+  }
+
+  getValue(): ParamType | undefined {
+    return undefined;
   }
 
   calcText() {
