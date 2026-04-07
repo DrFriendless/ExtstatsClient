@@ -1,27 +1,45 @@
 export type ARG_TYPE = "GAME_IDS" | "SELECTOR_ARRAY" | "USER" | "DESIGNER" | "PUBLISHER" | "CATEGORY" | "MECHANIC" | "TAG"
 
-export type USER_TYPE = "ME" | { user: string }
+export type USER_TYPE = "ME" | { user: string } | undefined
 
 export type ParamType =
   { type: "GAME_IDS"; value: number[] } |
   { type: "SELECTOR_ARRAY"; value: SelectorType[] } |
   { type: "USER"; value: USER_TYPE } |
-  { type: "DESIGNER"; value: number } |
-  { type: "PUBLISHER"; value: number } |
-  { type: "CATEGORY"; value: string } |
-  { type: "MECHANIC"; value: string } |
-  { type: "TAG"; value: string };
+  { type: "DESIGNER"; value: number | undefined } |
+  { type: "PUBLISHER"; value: number | undefined } |
+  { type: "CATEGORY"; value: string | undefined } |
+  { type: "MECHANIC"; value: string | undefined } |
+  { type: "TAG"; value: string | undefined };
 
 export function paramTypeToString(p: ParamType): string {
   switch (p.type) {
-    case "CATEGORY": return `"${p.value}"`;
-    case "DESIGNER": return p.value.toString();
+    case "CATEGORY": return `"${p.value || '??'}"`;
+    case "DESIGNER": return p?.value?.toString() || "??";
     case "GAME_IDS": return p.value.join(",");
-    case "MECHANIC": return `"${p.value}"`;
-    case "PUBLISHER": return p.value.toString();
+    case "MECHANIC": return `"${p.value || '??'}"`;
+    case "PUBLISHER": return p?.value?.toString() || "??";
     case "SELECTOR_ARRAY": return p.value.map(selectorToString).join(",");
-    case "TAG": return `"${p.value}"`;
-    case "USER": return `"${p.value}"`;
+    case "TAG": return `"${p.value || '??'}"`;
+    case "USER": {
+      const v = p.value;
+      if (!v) return "??";
+      if (v === "ME") return v;
+      return `"${v.user}"`;
+    }
+  }
+}
+
+export function hasValidValue(p: ParamType): boolean {
+  switch (p.type) {
+    case "CATEGORY": return !!p.value;
+    case "DESIGNER": return !!p.value;
+    case "GAME_IDS": return p.value.length > 0;
+    case "MECHANIC": return !!p.value;
+    case "PUBLISHER": return !!p.value;
+    case "SELECTOR_ARRAY": return p.value.length > 0;
+    case "TAG": return !!p.value;
+    case "USER": return !!p.value;
   }
 }
 

@@ -1,9 +1,31 @@
-@if (argType === "SELECTOR_ARRAY") {
 
-} @else if (argType === "GAME_IDS") {
-} @else if (argType === "USER") {
-} @else if (argType === "CATEGORY") {
-} @else if (argType === "MECHANIC") {
-} @else if (argType === "DESIGNER") {
-} @else if (argType === "PUBLISHER") {
+@let at = argType();
+@if (at === "SELECTOR_ARRAY") {
+  <selector-chips></selector-chips>
+} @else if (at === "GAME_IDS") {
+  <input type="text">
+} @else if (at === "USER") {
+  <geek-combo [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
+} @else if (at === "CATEGORY") {
+  <select id="categories" name="categories" #categories>
+    @let meta = metadata();
+    @if (meta) {
+      @for (entry of meta.categories; track entry) {
+        <option value="{{entry}}">{{entry}}</option>
+      }
+    }
+  </select>
+} @else if (at === "MECHANIC") {
+  <select id="mechanics" name="mechanics" #mechanics>
+    @let meta = metadata();
+    @if (meta) {
+      @for (entry of meta.mechanics; track entry) {
+        <option value="{{entry}}">{{entry}}</option>
+      }
+    }
+  </select>
+} @else if (at === "DESIGNER") {
+  <designer-combo></designer-combo>
+} @else if (at === "PUBLISHER") {
+  <publisher-combo></publisher-combo>
 }

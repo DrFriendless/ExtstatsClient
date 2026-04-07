@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, signal, ViewChild, WritableSignal} from '@angular/core';
-import {ExtstatsApi} from "extstats-api";
+import {CatalistMetadata, ExtstatsApi} from "extstats-api";
 import {LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
 import {FormsModule} from "@angular/forms";
 import {SelectorTypeChooserComponent} from "./selector-chooser/selector-type-chooser.component";
@@ -32,6 +32,7 @@ export class CatalistWidget implements AfterViewInit {
   loading: boolean = false;
   loggedIn = false;
   showDeployment = false;
+  metadata: WritableSignal<CatalistMetadata> = signal({ tags: [], mechanics: [], categories: [] });
   storeData: WritableSignal<string[]> = signal([]);
   @ViewChild('chooser') chooser!: SelectorTypeChooserComponent;
   @ViewChild('store') store!: CatalistStoreComponent;
@@ -58,7 +59,10 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   private async refresh() {
-    this.storeData.set(await this.userService.get("catalist.store", []) || []);
+    const sdp = this.userService.get("catalist.store", []);
+    const mdp = this.api.getCatalistMetadata();
+    this.storeData.set(await sdp || []);
+    this.metadata.set(await mdp);
   }
 
   async save(selector: string) {
@@ -67,7 +71,8 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   async run(selector: string) {
-    const query = `{games(selector: "${selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) { bggid name } }`;
+    const s = selector.replaceAll('"', '\\"');
+    const query = `{games(selector: "${s}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) { bggid name } }`;
     this.loading = true;
     const data = await this.api.retrieve(query) as RetrieveResult;
     console.log(JSON.stringify(data));

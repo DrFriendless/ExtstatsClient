@@ -1,9 +1,10 @@
 import {
-  Component, computed, EventEmitter, Input, Output, signal, Signal, viewChildren, WritableSignal
+  Component, computed, EventEmitter, input, Output, signal, Signal, viewChildren, WritableSignal
 } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {SelectorType} from "../selector-types.mjs";
 import {ArgEditorComponent} from "../arg-editor/arg-editor.component";
+import {CatalistMetadata} from "extstats-api";
 
 @Component({
   selector: 'catalist-composer',
@@ -14,7 +15,8 @@ import {ArgEditorComponent} from "../arg-editor/arg-editor.component";
   templateUrl: './composer.component.html'
 })
 export class CatalistComposerComponent {
-  @Input({ required: true }) store!: WritableSignal<string[]>;
+  store = input<string[]>([]);
+  metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [] });
   @Output() run = new EventEmitter<string>();
   @Output() save = new EventEmitter<string>();
   argEditors: Signal<readonly ArgEditorComponent[]> = viewChildren(ArgEditorComponent);
@@ -35,14 +37,23 @@ export class CatalistComposerComponent {
   preview: Signal<string> = computed((() => {
     const typ = this.typ();
     if (!typ) return "";
-    const argsHaveValue = this.argEditors().map(ed => ed.hasValue());
-    if (argsHaveValue.indexOf(false) >= 0) return "";
-    const argTexts = this.argEditors().map(ed => ed.text);
+    const argTexts = this.argEditors().map(ed => ed.text());
     return `${typ.key}(${argTexts.join(",")})`;
   }));
 
+  /**
+   * If the selector being composed has an arg slot for a selector, then sending us a selector means to put it in the slot.
+   * Otherwise it means to replace the current selector, but don't do that if it might destroy the user's work.
+   *
+   * @param typ
+   */
   setType(typ: SelectorType | undefined) {
-    if (!this.needToSave()) {
+    const editing = this.typ();
+    const args = (!!editing && editing.args) || undefined;
+    if (typ && editing && args && (args.indexOf('SELECTOR_ARRAY') >= 0)) {
+      const index = args.indexOf('SELECTOR_ARRAY');
+      this.argEditors()[index].chosenSelector.set(typ);
+    } else if (!this.needToSave()) {
       this.warning.set("");
       this.typ.set(typ);
     } else {

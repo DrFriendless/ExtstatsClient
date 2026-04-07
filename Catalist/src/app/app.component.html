@@ -28,7 +28,7 @@
   </div>
   <div class="composer">
     <h2>Composer</h2>
-    <catalist-composer #composer [store]="storeData" (run)="run($event)" (save)="save($event)" />
+    <catalist-composer #composer [metadata]="metadata()" [store]="storeData()" (run)="run($event)" (save)="save($event)" />
   </div>
   <div class="results">
     <h2>Selection Results</h2>

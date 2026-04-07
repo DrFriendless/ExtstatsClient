@@ -7,8 +7,7 @@
       @if (typeKey()) {
         <span>{{typeKey()}}(</span>
         @for (arg of typ()?.args; track arg) {
-          <span>{{arg}}</span>
-          <arg-editor [argType]="arg"/>
+          <arg-editor [argType]="arg" [metadata]="metadata()"/>
         }
         <span>)</span>
       }

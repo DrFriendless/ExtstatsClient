@@ -4,7 +4,6 @@ import {compile} from "./moo.js";
 
 export function parseSelector(selector: string): SelectorType | undefined {
   const expr = parse(selector);
-  console.log(JSON.stringify(expr));
   return expressionToSelectorType(expr);
 }
 
@@ -60,7 +59,9 @@ function argToParamType(arg: { 0: ARG_TYPE, 1: Arg}): ParamType | undefined {
         case "TAG":
           return { type: arg[0], value: (arg[1] as StringValue).value }
         case "USER":
-          return { type: "USER", value: { user: (arg[1] as StringValue).value } }
+          const u = (arg[1] as StringValue).value;
+          const noQuotes = u.slice(1, u.length - 1);
+          return { type: "USER", value: { user: noQuotes } };
       }
       console.log(`Type error expected ${arg[0]} got ${arg[1].kind}`);
       return undefined;
@@ -144,6 +145,7 @@ class ParseState {
 function parse(input: string): Expression {
   const lexer = compile(tokens);
   lexer.reset(input);
+  lexer.reset(input);
   return parseExpression(new ParseState((Array.from(lexer) as Token[]).filter(tok => tok.type !== 'whitespace')));
 }
 
@@ -175,7 +177,8 @@ function parseArg(state: ParseState): Arg {
   } else if (next.type === "int") {
     return { kind: Argument.Integer, value: parseInt(next.value) } as Integer;
   } else if (next.type === "str") {
-    return { kind: Argument.StringValue, value: next.value } as StringValue;
+    const v = next.value.replaceAll('\\"', "");
+    return { kind: Argument.StringValue, value: v } as StringValue;
   } else {
     state.pushback();
     return parseExpression(state);
