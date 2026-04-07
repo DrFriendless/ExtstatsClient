@@ -1,7 +1,8 @@
 
 @let at = argType();
 @if (at === "SELECTOR_ARRAY") {
-  <selector-chips></selector-chips>
+  <selector-chips [editable]="true" [selectors]="selectors().map(selectorToString)"></selector-chips>
+  <button>...</button>
 } @else if (at === "GAME_IDS") {
   <input type="text">
 } @else if (at === "USER") {

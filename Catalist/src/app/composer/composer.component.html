@@ -7,7 +7,8 @@
       @if (typeKey()) {
         <span>{{typeKey()}}(</span>
         @for (arg of typ()?.args; track arg) {
-          <arg-editor [argType]="arg" [metadata]="metadata()"/>
+          @let v = typ()?.params ? typ()?.params![$index] : undefined;
+          <arg-editor [argType]="arg" [init]="v" [metadata]="metadata()"/>
         }
         <span>)</span>
       }

@@ -15,6 +15,17 @@ function expressionToSelectorType(expr: Expression): SelectorType | undefined {
   }
   const typ = matches[0];
   if (typ.args.length === 0) return typ;
+  if (typ.args.length === 1) {
+    if (typ.args[0] === "SELECTOR_ARRAY") {
+      typ.params = [ { type: "SELECTOR_ARRAY", value: expr.args.map(s => expressionToSelectorType(s as Expression) as SelectorType) }];
+      return typ;
+    } else if (typ.args[0] === "GAME_IDS") {
+      console.log(JSON.stringify(typ.args));
+      console.log(JSON.stringify(expr.args));
+      // TODO - look at one of these and see how the args arrive
+      return undefined;
+    }
+  }
   const params = zip(typ.args, expr.args).map(argToParamType);
   if (params.indexOf(undefined) >= 0) {
     console.log("Could not parse all arguments");

@@ -46,7 +46,7 @@ export function hasValidValue(p: ParamType): boolean {
 export function selectorToString(s: SelectorType): string {
   if (s.args.length === 0) {
     return `${s.key}()`;
-  } else if (!s.params) {
+  } else if (s.params === undefined) {
     return "need params"
   } else {
     return `${s.key}(${s.params?.map(paramTypeToString).join(",")})`;

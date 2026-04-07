@@ -19,7 +19,7 @@
   <div class="top-section">
     <div class="store">
       <h2>Store</h2>
-      <catalist-store #store [data]="storeData" (choose)="chooseSelector($event)" />
+      <catalist-store #store [data]="storeData()" (choose)="chooseSelector($event)" />
     </div>
     <div class="chooser">
       <h2>Chooser</h2>

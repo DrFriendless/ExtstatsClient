@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, WritableSignal} from "@angular/core";
+import {Component, input, output} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 
 @Component({
@@ -9,8 +9,8 @@ import {FormsModule} from "@angular/forms";
   templateUrl: './catalist-store-component.html'
 })
 export class CatalistStoreComponent {
-  @Input({ required: true }) data!: WritableSignal<string[]>;
-  @Output() choose = new EventEmitter<string>;
+  data = input<string[]>([]);
+  choose = output<string>();
 
   onChoose(s: string) {
     this.choose.emit(s);

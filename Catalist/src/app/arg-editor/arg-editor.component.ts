@@ -1,6 +1,14 @@
 import {Component, computed, effect, input, signal, Signal, untracked, WritableSignal} from "@angular/core";
 import {FormsModule} from "@angular/forms";
-import {ARG_TYPE, hasValidValue, ParamType, paramTypeToString, SelectorType, USER_TYPE} from "../selector-types.mjs";
+import {
+  ARG_TYPE,
+  hasValidValue,
+  ParamType,
+  paramTypeToString,
+  selectorToString,
+  SelectorType,
+  USER_TYPE
+} from "../selector-types.mjs";
 import {
   DesignerComboComponent,
   GeekComboComponent,
@@ -19,11 +27,15 @@ import {CatalistMetadata} from "extstats-api";
     SelectorChipsComponent,
   ],
   templateUrl: './arg-editor.component.html',
-  styleUrl: './arg-editor.component.css'
+  styleUrl: './arg-editor.component.css',
+  host: {
+    style: "display: contents"
+  }
 })
 export class ArgEditorComponent {
   metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [] });
   argType = input<ARG_TYPE | undefined>(undefined);
+  init = input<ParamType | undefined>(undefined);
   value: WritableSignal<ParamType | undefined> = signal(undefined);
   hasValue: Signal<boolean> = computed(() => {
       if (!this.argType()) return false;
@@ -37,17 +49,27 @@ export class ArgEditorComponent {
     if (!v) return "";
     return paramTypeToString(v);
   });
+  selectors: Signal<SelectorType[]> = computed(() => {
+    const at = this.argType();
+    if (!at) return [];
+    if (at !== "SELECTOR_ARRAY") return [];
+    const v = this.value();
+    if (!v) return [];
+    return v.value as SelectorType[];
+  });
   // something provided us with a selector
   chosenSelector: WritableSignal<SelectorType | undefined> = signal(undefined);
   // something provided us with a user
   chosenUser: WritableSignal<USER_TYPE | undefined> = signal(undefined);
 
   constructor() {
-    // initialise value when arg type changes
+    // initialise value
     effect(() => {
+      const v = this.init();
       const t = this.argType();
-      console.log(`arg type ${t}`);
-      if (!t) {
+      if (v) {
+        this.value.set(v);
+      } else if (!t) {
         this.value.set(undefined);
       } else {
         this.value.set(this.emptyValue(t));
@@ -90,4 +112,6 @@ export class ArgEditorComponent {
       case "GAME_IDS": return { type: "GAME_IDS", value: [] };
     }
   }
+
+  protected readonly selectorToString = selectorToString;
 }
