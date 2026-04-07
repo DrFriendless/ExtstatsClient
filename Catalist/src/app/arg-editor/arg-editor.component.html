@@ -8,7 +8,7 @@
 } @else if (at === "USER") {
   <geek-combo [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
 } @else if (at === "CATEGORY") {
-  <select id="categories" name="categories" #categories>
+  <select id="category" name="categories" [(ngModel)]="categories">
     @let meta = metadata();
     @if (meta) {
       @for (entry of meta.categories; track entry) {
@@ -17,7 +17,7 @@
     }
   </select>
 } @else if (at === "MECHANIC") {
-  <select id="mechanics" name="mechanics" #mechanics>
+  <select id="mechanic" name="mechanics" [(ngModel)]="mechanics">
     @let meta = metadata();
     @if (meta) {
       @for (entry of meta.mechanics; track entry) {
@@ -29,4 +29,13 @@
   <designer-combo></designer-combo>
 } @else if (at === "PUBLISHER") {
   <publisher-combo></publisher-combo>
+} @else if (at === "TAG") {
+  <select id="tag" name="tags" [(ngModel)]="tags">
+    @let meta = metadata();
+    @if (meta) {
+      @for (entry of meta.tags; track entry) {
+        <option value="{{entry}}">{{entry}}</option>
+      }
+    }
+  </select>
 }

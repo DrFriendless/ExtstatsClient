@@ -1,4 +1,15 @@
-import {Component, computed, effect, input, signal, Signal, untracked, WritableSignal} from "@angular/core";
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  model,
+  signal,
+  Signal,
+  untracked,
+  viewChild,
+  WritableSignal
+} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {
   ARG_TYPE,
@@ -36,6 +47,9 @@ export class ArgEditorComponent {
   metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [] });
   argType = input<ARG_TYPE | undefined>(undefined);
   init = input<ParamType | undefined>(undefined);
+  tags = model<string | undefined>();
+  categories = model<string | undefined>();
+  mechanics = model<string | undefined>();
   value: WritableSignal<ParamType | undefined> = signal(undefined);
   hasValue: Signal<boolean> = computed(() => {
       if (!this.argType()) return false;
@@ -74,6 +88,18 @@ export class ArgEditorComponent {
       } else {
         this.value.set(this.emptyValue(t));
       }
+    });
+    effect(() => {
+      const t = this.tags();
+      if (t) this.value.set({ type: "TAG", value: t });
+    });
+    effect(() => {
+      const t = this.categories();
+      if (t) this.value.set({ type: "CATEGORY", value: t });
+    });
+    effect(() => {
+      const t = this.mechanics();
+      if (t) this.value.set({ type: "MECHANIC", value: t });
     });
     effect(() => {
       // we got a selector

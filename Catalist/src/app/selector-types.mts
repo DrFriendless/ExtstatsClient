@@ -20,7 +20,9 @@ export function paramTypeToString(p: ParamType): string {
     case "MECHANIC": return `"${p.value || '??'}"`;
     case "PUBLISHER": return p?.value?.toString() || "??";
     case "SELECTOR_ARRAY": return p.value.map(selectorToString).join(",");
-    case "TAG": return `"${p.value || '??'}"`;
+    case "TAG":
+      console.log(JSON.stringify(p));
+      return `"${p.value || '??'}"`;
     case "USER": {
       const v = p.value;
       if (!v) return "??";
@@ -141,12 +143,12 @@ export const SELECTOR_TYPES: SelectorType[] = [
     description: "All games by this designer",
     colour: "black"
   },
-  // {
-  //   key: "publisher",
-  //   args: [ "PUBLISHER" ],
-  //   description: "All games by this publisher",
-  //   colour: "black"
-  // },
+  {
+    key: "publisher",
+    args: [ "PUBLISHER" ],
+    description: "All games by this publisher",
+    colour: "black"
+  },
   {
     key: "books",
     args: [ ],
@@ -165,16 +167,16 @@ export const SELECTOR_TYPES: SelectorType[] = [
     description: "All games given the tag by the logged-in user",
     colour: "green"
   },
-  // {
-  //   key: "category",
-  //   args: [ "CATEGORY" ],
-  //   description: "All games in the given category",
-  //   colour: "gray"
-  // },
-  // {
-  //   key: "mechanic",
-  //   args: [ "MECHANIC" ],
-  //   description: "All games using the given mechanic",
-  //   colour: "gray"
-  // },
+  {
+    key: "category",
+    args: [ "CATEGORY" ],
+    description: "All games in the given category",
+    colour: "gray"
+  },
+  {
+    key: "mechanic",
+    args: [ "MECHANIC" ],
+    description: "All games using the given mechanic",
+    colour: "gray"
+  },
 ];
