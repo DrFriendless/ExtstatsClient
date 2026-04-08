@@ -53,9 +53,13 @@ export class CatalistWidget implements AfterViewInit {
 
   chooseSelector(selector: string) {
     const typ = parseSelector(selector);
-    console.log("chooseSelector");
-    console.log(JSON.stringify(typ));
     if (typ) this.composer.setType(typ);
+  }
+
+  async removeSelector(selector: string) {
+    const sd = this.storeData().filter(s => s !== selector);
+    await this.userService.setAndSave("catalist.store", sd);
+    this.storeData.set(sd);
   }
 
   private async refresh() {

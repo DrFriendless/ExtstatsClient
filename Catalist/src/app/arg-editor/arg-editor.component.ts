@@ -26,7 +26,7 @@ import {
   PublisherComboComponent,
   SelectorChipsComponent
 } from "extstats-angular";
-import {CatalistMetadata} from "extstats-api";
+import {CatalistMetadata, Designer, Publisher} from "extstats-api";
 
 @Component({
   selector: 'arg-editor',
@@ -124,6 +124,14 @@ export class ArgEditorComponent {
         this.value.set({ type: "USER", value: user });
       }
     });
+  }
+
+  onDesignerChosen(event: Designer) {
+    this.value.set({ type: "DESIGNER", value: event.bggid});
+  }
+
+  onPublisherChosen(event: Publisher) {
+    this.value.set({ type: "PUBLISHER", value: event.bggid });
   }
 
   emptyValue(argTpe: ARG_TYPE): ParamType {

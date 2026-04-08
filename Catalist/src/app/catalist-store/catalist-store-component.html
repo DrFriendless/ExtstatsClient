@@ -1,5 +1,5 @@
 <table>
   @for (s of data(); track s) {
-    <tr><td (click)="onChoose(s)">{{s}}</td></tr>
+    <tr><td class="kill" (click)="onRemove(s)">&#10060;</td><td (click)="onChoose(s)">{{s}}</td></tr>
   }
 </table>

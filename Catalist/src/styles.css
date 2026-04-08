@@ -92,6 +92,9 @@ body .catalist-main h2 {
   flex-wrap: wrap;
   row-gap: 6px;
 }
+.composer-key input[type=search] {
+  padding: 0;
+}
 .composer-gap {
   flex-grow: 1;
 }
@@ -114,4 +117,14 @@ body .catalist-main h2 {
 }
 .composer-buttons {
   margin: 8px;
+}
+td.kill {
+  color: red;
+  padding: 1px 4px;
+  font-size: 20px;
+  line-height: 24px;
+}
+td.kill:hover {
+  font-weight: bold;
+  cursor: pointer;
 }

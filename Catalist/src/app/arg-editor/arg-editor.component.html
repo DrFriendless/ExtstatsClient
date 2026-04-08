@@ -26,9 +26,9 @@
     }
   </select>
 } @else if (at === "DESIGNER") {
-  <designer-combo></designer-combo>
+  <designer-combo (designerChosen)="onDesignerChosen($event)"></designer-combo>
 } @else if (at === "PUBLISHER") {
-  <publisher-combo></publisher-combo>
+  <publisher-combo (publisherChosen)="onPublisherChosen($event)"></publisher-combo>
 } @else if (at === "TAG") {
   <select id="tag" name="tags" [(ngModel)]="tags">
     @let meta = metadata();

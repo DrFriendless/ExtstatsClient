@@ -11,8 +11,13 @@ import {FormsModule} from "@angular/forms";
 export class CatalistStoreComponent {
   data = input<string[]>([]);
   choose = output<string>();
+  remove = output<string>();
 
   onChoose(s: string) {
     this.choose.emit(s);
+  }
+
+  onRemove(s: string) {
+    this.remove.emit(s);
   }
 }
