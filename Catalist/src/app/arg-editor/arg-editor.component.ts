@@ -7,7 +7,6 @@ import {
   signal,
   Signal,
   untracked,
-  viewChild,
   WritableSignal
 } from "@angular/core";
 import {FormsModule} from "@angular/forms";
@@ -52,10 +51,10 @@ export class ArgEditorComponent {
   mechanics = model<string | undefined>();
   value: WritableSignal<ParamType | undefined> = signal(undefined);
   hasValue: Signal<boolean> = computed(() => {
-      if (!this.argType()) return false;
+    if (!this.argType()) return false;
     const v = this.value();
-      if (!v) return false;
-      return hasValidValue(v);
+    if (!v) return false;
+    return hasValidValue(v);
   });
   text: Signal<string> = computed(() => {
     if (!this.argType()) return "";
@@ -75,6 +74,8 @@ export class ArgEditorComponent {
   chosenSelector: WritableSignal<SelectorType | undefined> = signal(undefined);
   // something provided us with a user
   chosenUser: WritableSignal<USER_TYPE | undefined> = signal(undefined);
+
+
 
   constructor() {
     // initialise value
@@ -104,19 +105,18 @@ export class ArgEditorComponent {
     effect(() => {
       // we got a selector
       const selector = this.chosenSelector();
-      console.log(`selector ${selector}`);
       if (!selector) return;
       const t = untracked(this.argType);
       if (!t) return;
       if (t === "SELECTOR_ARRAY") {
-        const v = untracked(this.value)!;
-        const existing = v.value as SelectorType[];
-        this.value.set({ type: "SELECTOR_ARRAY", value: [...existing, selector] });
+        this.value.update(v => {
+          const existing = v!.value as SelectorType[];
+          return { type: "SELECTOR_ARRAY", value: [...existing, selector] }
+        });
       }
     });
     effect(() => {
       const user = this.chosenUser();
-      console.log(`user ${JSON.stringify(user)}`);
       if (!user) return;
       const t = untracked(this.argType);
       if (!t) return;

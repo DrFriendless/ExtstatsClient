@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, signal, ViewChild, WritableSignal} from '@angular/core';
+import {AfterViewInit, Component, signal, viewChild, WritableSignal} from '@angular/core';
 import {CatalistMetadata, ExtstatsApi} from "extstats-api";
-import {LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
+import {LoaderComponent, UserConfigService} from "extstats-angular";
 import {FormsModule} from "@angular/forms";
 import {SelectorTypeChooserComponent} from "./selector-chooser/selector-type-chooser.component";
 import {CatalistStoreComponent} from "./catalist-store/catalist-store-component";
@@ -29,17 +29,15 @@ interface RetrieveResult {
   templateUrl: './app.component.html'
 })
 export class CatalistWidget implements AfterViewInit {
-  loading: boolean = false;
+  loading = signal<boolean>(false);
   loggedIn = false;
   showDeployment = false;
   metadata: WritableSignal<CatalistMetadata> = signal({ tags: [], mechanics: [], categories: [] });
   storeData: WritableSignal<string[]> = signal([]);
-  @ViewChild('chooser') chooser!: SelectorTypeChooserComponent;
-  @ViewChild('store') store!: CatalistStoreComponent;
-  @ViewChild('composer') composer!: CatalistComposerComponent;
-  @ViewChild('results') results!: RunResultsComponent;
+  composer = viewChild<CatalistComposerComponent>('composer');
+  results = viewChild<RunResultsComponent>('results');
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService, private tagService: UserTagService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
   }
 
   async ngAfterViewInit() {
@@ -48,12 +46,12 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   chooseType(typ: SelectorType) {
-    this.composer.setType(typ);
+    this.composer()!.setType(typ);
   }
 
   chooseSelector(selector: string) {
     const typ = parseSelector(selector);
-    if (typ) this.composer.setType(typ);
+    if (typ) this.composer()!.setType(typ);
   }
 
   async removeSelector(selector: string) {
@@ -77,11 +75,12 @@ export class CatalistWidget implements AfterViewInit {
   async run(selector: string) {
     const s = selector.replaceAll('"', '\\"');
     const query = `{games(selector: "${s}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) { bggid name } }`;
-    this.loading = true;
+    this.loading.set(true);
     const data = await this.api.retrieve(query) as RetrieveResult;
-    console.log(JSON.stringify(data));
-    data.games.sort((g1, g2) => g1.name < g2.name ? -1 : g2.name < g1.name ? 1 : 0);
-    this.loading = false;
-    this.results.setData(data.games);
+    if (data && data.games) {
+      data.games.sort((g1, g2) => g1.name < g2.name ? -1 : g2.name < g1.name ? 1 : 0);
+    }
+    this.loading.set(false);
+    this.results()!.setData(data.games);
   }
 }

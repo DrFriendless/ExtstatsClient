@@ -13,7 +13,8 @@ function expressionToSelectorType(expr: Expression): SelectorType | undefined {
     console.log(`No selector type for key ${expr.func}`);
     return undefined;
   }
-  const typ = matches[0];
+  // spread it so we have a new object.
+  const typ = {...matches[0]};
   if (typ.args.length === 0) return typ;
   if (typ.args.length === 1) {
     if (typ.args[0] === "SELECTOR_ARRAY") {
@@ -65,13 +66,26 @@ function argToParamType(arg: { 0: ARG_TYPE, 1: Arg}): ParamType | undefined {
       return undefined;
     case Argument.StringValue:
       switch (arg[0]) {
-        case "CATEGORY":
-        case "MECHANIC":
-        case "TAG":
-        case "USER":
+        case "CATEGORY":{
+          const u = (arg[1] as StringValue).value;
+          const noQuotes = u.slice(1, u.length - 1);
+          return { type: "CATEGORY", value: noQuotes };
+        }
+        case "MECHANIC":{
+          const u = (arg[1] as StringValue).value;
+          const noQuotes = u.slice(1, u.length - 1);
+          return { type: "MECHANIC", value: noQuotes };
+        }
+        case "TAG": {
+          const u = (arg[1] as StringValue).value;
+          const noQuotes = u.slice(1, u.length - 1);
+          return { type: "TAG", value: noQuotes };
+        }
+        case "USER": {
           const u = (arg[1] as StringValue).value;
           const noQuotes = u.slice(1, u.length - 1);
           return { type: "USER", value: { user: noQuotes } };
+        }
       }
       console.log(`Type error expected ${arg[0]} got ${arg[1].kind}`);
       return undefined;

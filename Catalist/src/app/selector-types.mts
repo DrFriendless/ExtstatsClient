@@ -20,9 +20,7 @@ export function paramTypeToString(p: ParamType): string {
     case "MECHANIC": return `"${p.value || '??'}"`;
     case "PUBLISHER": return p?.value?.toString() || "??";
     case "SELECTOR_ARRAY": return p.value.map(selectorToString).join(",");
-    case "TAG":
-      console.log(JSON.stringify(p));
-      return `"${p.value || '??'}"`;
+    case "TAG": return `"${p.value || '??'}"`;
     case "USER": {
       const v = p.value;
       if (!v) return "??";

@@ -32,7 +32,7 @@
   </div>
   <div class="results">
     <h2>Selection Results</h2>
-    @if (loading) {
+    @if (loading()) {
       <extstats-loader/>
     }
     <run-results #results></run-results>
