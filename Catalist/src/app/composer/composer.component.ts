@@ -57,7 +57,15 @@ export class CatalistComposerComponent {
       this.warning.set("");
       this.typ.set(typ);
     } else {
-      this.warning.set("Please save or discard the selector currently in the composer.")
+      this.warning.set("Please save or discard the selector currently in the composer.");
+    }
+  }
+
+  setWarning(message: string | undefined) {
+    if (message) {
+      this.warning.set(message);
+    } else {
+      this.warning.set("");
     }
   }
 

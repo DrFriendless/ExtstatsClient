@@ -3,7 +3,7 @@ import {
   computed,
   effect,
   input,
-  model,
+  model, output,
   signal,
   Signal,
   untracked,
@@ -49,6 +49,8 @@ export class ArgEditorComponent {
   tags = model<string | undefined>();
   categories = model<string | undefined>();
   mechanics = model<string | undefined>();
+  ids = model<string | undefined>();
+  warning = output<string | undefined>();
   value: WritableSignal<ParamType | undefined> = signal(undefined);
   hasValue: Signal<boolean> = computed(() => {
     if (!this.argType()) return false;
@@ -124,6 +126,19 @@ export class ArgEditorComponent {
         this.value.set({ type: "USER", value: user });
       }
     });
+  }
+
+  onIdsEntered(event: any) {
+    const re = /^\s*(?:([1-9][0-9]*)\s*,\s*)*([1-9][0-9]*)$/
+    const s = this.ids();
+    if (s && re.test(s)) {
+      const noSpaces = s.replaceAll(/\s/g, "");
+      const fields = noSpaces.split(',').map(x => parseInt(x));
+      this.value.set({ type: "GAME_IDS", value: fields });
+      this.warning.emit(undefined);
+    } else if (s) {
+      this.warning.emit("Please enter numbers separated by commas");
+    }
   }
 
   onDesignerChosen(event: Designer) {

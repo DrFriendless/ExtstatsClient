@@ -21,10 +21,9 @@ function expressionToSelectorType(expr: Expression): SelectorType | undefined {
       typ.params = [ { type: "SELECTOR_ARRAY", value: expr.args.map(s => expressionToSelectorType(s as Expression) as SelectorType) }];
       return typ;
     } else if (typ.args[0] === "GAME_IDS") {
-      console.log(JSON.stringify(typ.args));
       console.log(JSON.stringify(expr.args));
-      // TODO - look at one of these and see how the args arrive
-      return undefined;
+      typ.params = [ { type: "GAME_IDS", value: expr.args.map(i => (i as Integer).value) }];
+      return typ;
     }
   }
   const params = zip(typ.args, expr.args).map(argToParamType);

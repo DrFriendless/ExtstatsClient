@@ -108,6 +108,11 @@ body .catalist-main h2 {
   flex-direction: row;
   gap: 8px;
 }
+.composer-warning {
+  flex-grow: 1;
+  margin: 8px;
+  font-size: 20px;
+}
 .composer-preview {
   flex-grow: 1;
   margin: 8px;

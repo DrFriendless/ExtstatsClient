@@ -8,7 +8,7 @@
         <span>{{typeKey()}}(</span>
         @for (arg of typ()?.args; track arg) {
           @let v = typ()?.params ? typ()?.params![$index] : undefined;
-          <arg-editor [argType]="arg" [init]="v" [metadata]="metadata()"/>
+          <arg-editor [argType]="arg" [init]="v" [metadata]="metadata()" (warning)="setWarning($event)"/>
         }
         <span>)</span>
       }

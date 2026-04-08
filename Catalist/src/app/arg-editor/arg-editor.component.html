@@ -4,7 +4,7 @@
   <selector-chips [editable]="true" [selectors]="selectors().map(selectorToString)"></selector-chips>
   <button>...</button>
 } @else if (at === "GAME_IDS") {
-  <input type="text">
+  <input type="text" [(ngModel)]="ids"><button (click)="onIdsEntered($event)">✓</button>
 } @else if (at === "USER") {
   <geek-combo [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
 } @else if (at === "CATEGORY") {
