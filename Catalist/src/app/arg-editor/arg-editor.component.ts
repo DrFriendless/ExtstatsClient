@@ -6,7 +6,7 @@ import {
   model, output,
   signal,
   Signal,
-  untracked,
+  untracked, viewChild,
   WritableSignal
 } from "@angular/core";
 import {FormsModule} from "@angular/forms";
@@ -25,7 +25,7 @@ import {
   PublisherComboComponent,
   SelectorChipsComponent
 } from "extstats-angular";
-import {CatalistMetadata, Designer, Publisher} from "extstats-api";
+import {CatalistMetadata, Designer, ExtstatsApi, Publisher} from "extstats-api";
 
 @Component({
   selector: 'arg-editor',
@@ -43,6 +43,9 @@ import {CatalistMetadata, Designer, Publisher} from "extstats-api";
   }
 })
 export class ArgEditorComponent {
+  geek: Signal<GeekComboComponent | undefined> = viewChild('geek');
+  designer: Signal<DesignerComboComponent | undefined> = viewChild('designer');
+  publisher: Signal<PublisherComboComponent | undefined> = viewChild('publisher');
   metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [] });
   argType = input<ARG_TYPE | undefined>(undefined);
   init = input<ParamType | undefined>(undefined);
@@ -77,9 +80,7 @@ export class ArgEditorComponent {
   // something provided us with a user
   chosenUser: WritableSignal<USER_TYPE | undefined> = signal(undefined);
 
-
-
-  constructor() {
+  constructor(private api: ExtstatsApi) {
     // initialise value
     effect(() => {
       const v = this.init();
@@ -90,6 +91,59 @@ export class ArgEditorComponent {
         this.value.set(undefined);
       } else {
         this.value.set(this.emptyValue(t));
+      }
+    });
+    effect(async () => {
+      // populate editor fields from existing values
+      const v = this.value();
+      if (v) {
+        switch (v.type) {
+          case "MECHANIC": {
+            if (v.value) this.mechanics.set(v.value);
+            return;
+          }
+          case "CATEGORY": {
+            if (v.value) this.categories.set(v.value);
+            return;
+          }
+          case "TAG": {
+            if (v.value) this.tags.set(v.value);
+            return;
+          }
+          case "GAME_IDS": {
+            if (v.value) this.ids.set(v.value.join(","));
+            return;
+          }
+          case "USER": {
+            const g = this.geek();
+            if (g && v.value && v.value !== "ME" && (g.selectedItem !== v.value.user)) {
+              g.select(v.value.user);
+            }
+            return;
+          }
+          case "DESIGNER": {
+            const d = this.designer();
+            if (!d) return;
+            if (v.value) {
+              const des = await api.findDesigner(v.value as number);
+              const selected = d.selectedItem;
+              if (selected && des && selected.bggid === des.bggid) return;
+              if (des) d.select(des);
+            }
+            return;
+          }
+          case "PUBLISHER": {
+            const p = this.publisher();
+            if (!p) return;
+            if (v.value) {
+              const pub = await api.findPublisher(v.value as number);
+              const selected = p.selectedItem;
+              if (selected && pub && selected.bggid === pub.bggid) return;
+              if (pub) p.select(pub);
+            }
+            return;
+          }
+        }
       }
     });
     effect(() => {

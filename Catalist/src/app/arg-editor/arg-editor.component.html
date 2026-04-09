@@ -6,7 +6,7 @@
 } @else if (at === "GAME_IDS") {
   <input type="text" [(ngModel)]="ids"><button (click)="onIdsEntered($event)">✓</button>
 } @else if (at === "USER") {
-  <geek-combo [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
+  <geek-combo #geek [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
 } @else if (at === "CATEGORY") {
   <select id="category" name="categories" [(ngModel)]="categories">
     @let meta = metadata();
@@ -26,9 +26,9 @@
     }
   </select>
 } @else if (at === "DESIGNER") {
-  <designer-combo (designerChosen)="onDesignerChosen($event)"></designer-combo>
+  <designer-combo #designer (designerChosen)="onDesignerChosen($event)"></designer-combo>
 } @else if (at === "PUBLISHER") {
-  <publisher-combo (publisherChosen)="onPublisherChosen($event)"></publisher-combo>
+  <publisher-combo #publisher (publisherChosen)="onPublisherChosen($event)"></publisher-combo>
 } @else if (at === "TAG") {
   <select id="tag" name="tags" [(ngModel)]="tags">
     @let meta = metadata();
