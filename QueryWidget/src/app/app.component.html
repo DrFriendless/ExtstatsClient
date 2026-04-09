@@ -1,0 +1,8 @@
+<div class="query-widget extstats-page">
+  @if (loading()) {
+    <extstats-loader></extstats-loader>
+  }
+
+  <query-results [data]="results()" [mode]="mode()"></query-results>
+</div>
+

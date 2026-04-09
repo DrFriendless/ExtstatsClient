@@ -1,0 +1,6 @@
+.query-widget {
+  --primary-colour: #00cc99;
+  --text-colour: white;
+  --even-colour: rgba(179, 255, 236, 0.5);
+  --tab-border-colour: var(--primary-colour);
+}
