@@ -53,7 +53,7 @@ export class WanttoplayComponent implements OnDestroy, AfterViewInit {
     },
     { field: "rating", name: "Rating", tooltip: "Your rating for this game", classname: "col-rating" },
     { field: "yearPublished", name: "Year Published", tooltip: "Year this game was first published", classname: "col-year" },
-    { field: "playerCount", name: "Players", tooltip: "How many plahyers can play this game", classname: "col-number" },
+    { field: "playerCount", name: "Players", tooltip: "How many players can play this game", classname: "col-number" },
     { field: "subdomain", name: "Subdomain", tooltip: "BGG subdomain for this game", classname: "col-subdomain" },
     { field: "weight", name: "Weight", tooltip: "BGG weight for this game", classname: "col-number" },
   ];
