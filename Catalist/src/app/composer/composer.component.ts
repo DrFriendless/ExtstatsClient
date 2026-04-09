@@ -77,6 +77,11 @@ export class CatalistComposerComponent {
     this.run.emit(this.preview());
   }
 
+  onRunInNewWindow() {
+    const s = this.preview();
+    if (s) window.open(`/query.html?selector=${encodeURIComponent(s)}&mode=geekgames`, "_blank");
+  }
+
   onDiscard() {
     this.typ.set(undefined);
     this.warning.set("");
