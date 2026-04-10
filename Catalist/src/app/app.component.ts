@@ -60,7 +60,7 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   async removeSelector(ss: StoredSelector) {
-    const sd = this.storeData().filter(s => s.selector !== ss.selector || s.name !== s.name);
+    const sd = this.storeData().filter(s => s.selector !== ss.selector || s.name !== ss.name);
     await this.userService.setAndSave("catalist.store", sd);
     this.storeData.set(sd);
   }
@@ -73,7 +73,7 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   async save(ss: StoredSelector) {
-    this.storeData.update(val => [...val, ss]);
+    this.storeData.update(val => [...val, {...ss}]);
     await this.userService.setAndSave("catalist.store", this.storeData());
   }
 
