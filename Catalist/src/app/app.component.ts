@@ -16,6 +16,11 @@ interface RetrieveResult {
   }[];
 }
 
+export interface StoredSelector {
+  name: string;
+  selector: string;
+}
+
 @Component({
   selector: 'catalist-widget',
   imports: [
@@ -33,7 +38,7 @@ export class CatalistWidget implements AfterViewInit {
   loggedIn = false;
   showDeployment = false;
   metadata: WritableSignal<CatalistMetadata> = signal({ tags: [], mechanics: [], categories: [] });
-  storeData: WritableSignal<string[]> = signal([]);
+  storeData: WritableSignal<StoredSelector[]> = signal([]);
   composer = viewChild<CatalistComposerComponent>('composer');
   results = viewChild<RunResultsComponent>('results');
 
@@ -49,26 +54,26 @@ export class CatalistWidget implements AfterViewInit {
     this.composer()!.setType(typ);
   }
 
-  chooseSelector(selector: string) {
-    const typ = parseSelector(selector);
+  chooseSelector(selector: StoredSelector) {
+    const typ = parseSelector(selector.selector, selector.name);
     if (typ) this.composer()!.setType(typ);
   }
 
-  async removeSelector(selector: string) {
-    const sd = this.storeData().filter(s => s !== selector);
+  async removeSelector(ss: StoredSelector) {
+    const sd = this.storeData().filter(s => s.selector !== ss.selector || s.name !== s.name);
     await this.userService.setAndSave("catalist.store", sd);
     this.storeData.set(sd);
   }
 
   private async refresh() {
-    const sdp = this.userService.get("catalist.store", []);
-    const mdp = this.api.getCatalistMetadata();
-    this.storeData.set(await sdp || []);
-    this.metadata.set(await mdp);
+    this.userService.get("catalist.store", [])
+      .then(sd => (sd as (string | StoredSelector)[]).map(s => typeof s === "string" ? { name: s, selector: s } : s))
+      .then(fixed => this.storeData.set(fixed));
+    this.api.getCatalistMetadata().then(mdp => this.metadata.set(mdp));
   }
 
-  async save(selector: string) {
-    this.storeData.update(val => [...val, selector]);
+  async save(ss: StoredSelector) {
+    this.storeData.update(val => [...val, ss]);
     await this.userService.setAndSave("catalist.store", this.storeData());
   }
 

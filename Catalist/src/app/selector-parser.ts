@@ -2,9 +2,11 @@ import {ARG_TYPE, ParamType, SELECTOR_TYPES, SelectorType} from "./selector-type
 // @ts-ignore
 import {compile} from "./moo.js";
 
-export function parseSelector(selector: string): SelectorType | undefined {
+export function parseSelector(selector: string, name: string | undefined): SelectorType | undefined {
   const expr = parse(selector);
-  return expressionToSelectorType(expr);
+  const typ = expressionToSelectorType(expr);
+  if (typ) typ.name = name;
+  return typ;
 }
 
 function expressionToSelectorType(expr: Expression): SelectorType | undefined {

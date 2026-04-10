@@ -1,5 +1,6 @@
 import {Component, input, output} from "@angular/core";
 import {FormsModule} from "@angular/forms";
+import {StoredSelector} from "../app.component";
 
 @Component({
   selector: 'catalist-store',
@@ -9,15 +10,15 @@ import {FormsModule} from "@angular/forms";
   templateUrl: './catalist-store-component.html'
 })
 export class CatalistStoreComponent {
-  data = input<string[]>([]);
-  choose = output<string>();
-  remove = output<string>();
+  data = input<StoredSelector[]>([]);
+  choose = output<StoredSelector>();
+  remove = output<StoredSelector>();
 
-  onChoose(s: string) {
+  onChoose(s: StoredSelector) {
     this.choose.emit(s);
   }
 
-  onRemove(s: string) {
+  onRemove(s: StoredSelector) {
     this.remove.emit(s);
   }
 }

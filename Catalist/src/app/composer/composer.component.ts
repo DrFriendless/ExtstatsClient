@@ -1,10 +1,11 @@
 import {
-  Component, computed, EventEmitter, input, Output, signal, Signal, viewChildren, WritableSignal
+  Component, computed, EventEmitter, input, model, Output, signal, Signal, viewChildren, WritableSignal
 } from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {SelectorType} from "../selector-types.mjs";
 import {ArgEditorComponent} from "../arg-editor/arg-editor.component";
 import {CatalistMetadata} from "extstats-api";
+import {StoredSelector} from "../app.component";
 
 @Component({
   selector: 'catalist-composer',
@@ -15,10 +16,11 @@ import {CatalistMetadata} from "extstats-api";
   templateUrl: './composer.component.html'
 })
 export class CatalistComposerComponent {
-  store = input<string[]>([]);
+  name = model<string>("");
+  store = input<StoredSelector[]>([]);
   metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [] });
   @Output() run = new EventEmitter<string>();
-  @Output() save = new EventEmitter<string>();
+  @Output() save = new EventEmitter<StoredSelector>();
   argEditors: Signal<readonly ArgEditorComponent[]> = viewChildren(ArgEditorComponent);
   typ: WritableSignal<SelectorType | undefined> = signal(undefined);
   warning: WritableSignal<string> = signal("");
@@ -32,7 +34,8 @@ export class CatalistComposerComponent {
   });
   duplicated: Signal<boolean> = computed(() => {
     const p = this.preview();
-    return this.store().indexOf(p) >= 0;
+    const n = this.name();
+    return this.store().filter(ss => ss.selector === p && ss.name === n).length > 0;
   });
   preview: Signal<string> = computed((() => {
     const typ = this.typ();
@@ -48,14 +51,16 @@ export class CatalistComposerComponent {
    * @param typ
    */
   setType(typ: SelectorType | undefined) {
+    if (!typ) return;
     const editing = this.typ();
     const args = (!!editing && editing.args) || undefined;
-    if (typ && editing && args && (args.indexOf('SELECTOR_ARRAY') >= 0)) {
+    if (editing && args && (args.indexOf('SELECTOR_ARRAY') >= 0)) {
       const index = args.indexOf('SELECTOR_ARRAY');
       this.argEditors()[index].chosenSelector.set(typ);
     } else if (!this.needToSave()) {
       this.warning.set("");
       this.typ.set(typ);
+      this.name.set(typ.name || "Selector Name");
     } else {
       this.warning.set("Please save or discard the selector currently in the composer.");
     }
@@ -70,7 +75,9 @@ export class CatalistComposerComponent {
   }
 
   onSave() {
-    this.save.emit(this.preview());
+    const n = this.name();
+    const p = this.preview();
+    if (p && n) this.save.emit({ name: n, selector: p });
   }
 
   onRun() {
@@ -79,11 +86,13 @@ export class CatalistComposerComponent {
 
   onRunInNewWindow() {
     const s = this.preview();
-    if (s) window.open(`/query.html?selector=${encodeURIComponent(s)}&mode=geekgames`, "_blank");
+    const n = this.name() || "Unnamed";
+    if (s) window.open(`/query.html?selector=${encodeURIComponent(s)}&mode=geekgames&name=${encodeURIComponent(n)}`, "_blank");
   }
 
   onDiscard() {
     this.typ.set(undefined);
+    this.name.set("");
     this.warning.set("");
   }
 }

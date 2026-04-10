@@ -1,4 +1,8 @@
 <div class="composer-whole">
+  <div class="composer-name">
+    <label for="nameInput">Name:</label>
+    <input #nameInput type="text" class="name-editor" [(ngModel)]="name">
+  </div>
   <div class="composer-top">
     <div class="composer-top-buttons">
       <button class="extstats-button" (click)="onDiscard()" [disabled]="!typ()">Discard</button>

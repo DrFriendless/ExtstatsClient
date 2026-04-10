@@ -54,6 +54,7 @@ export function selectorToString(s: SelectorType): string {
 }
 
 export interface SelectorType {
+  name?: string;
   key: string;
   // formal parameter types
   args: ARG_TYPE[];

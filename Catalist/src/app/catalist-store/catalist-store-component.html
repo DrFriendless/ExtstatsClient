@@ -1,5 +1,11 @@
 <table>
-  @for (s of data(); track s) {
-    <tr><td class="kill" (click)="onRemove(s)">&#10060;</td><td (click)="onChoose(s)">{{s}}</td></tr>
+  @for (s of data(); track s.selector) {
+    <tr><td class="kill" (click)="onRemove(s)">&#10060;</td><td (click)="onChoose(s)">
+      @if (s.name === s.selector) {
+        <span [title]="s.selector">{{s.name}}</span>
+      } @else {
+        <span>{{s.name}}</span>
+      }
+    </td></tr>
   }
 </table>
