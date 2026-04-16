@@ -1,31 +1,30 @@
-import {ARG_TYPE, ParamType, SELECTOR_TYPES, SelectorType} from "./selector-types.mjs";
+import {ARG_TYPE, ParamType, Selector, SELECTOR_TYPES} from "./selector-types.mjs";
 // @ts-ignore
 import {compile} from "./moo.js";
 
-export function parseSelector(selector: string, name: string | undefined): SelectorType | undefined {
+export function parseSelector(selector: string, name: string | undefined): Selector | undefined {
   const expr = parse(selector);
-  const typ = expressionToSelectorType(expr);
-  if (typ) typ.name = name;
-  return typ;
+  const s = expressionToSelector(expr);
+  if (s) s.name = name;
+  return s;
 }
 
-function expressionToSelectorType(expr: Expression): SelectorType | undefined {
+function expressionToSelector(expr: Expression): Selector | undefined {
   const matches = SELECTOR_TYPES.filter(t => t.key === expr.func);
   if (matches.length === 0) {
     console.log(`No selector type for key ${expr.func}`);
     return undefined;
   }
-  // spread it so we have a new object.
-  const typ = {...matches[0]};
-  if (typ.args.length === 0) return typ;
+  const typ = matches[0];
+  const result = new Selector(typ);
+  if (typ.args.length === 0) return result;
   if (typ.args.length === 1) {
     if (typ.args[0] === "SELECTOR_ARRAY") {
-      typ.params = [ { type: "SELECTOR_ARRAY", value: expr.args.map(s => expressionToSelectorType(s as Expression) as SelectorType) }];
-      return typ;
+      result.params[0] = { type: "SELECTOR_ARRAY", value: expr.args.map(s => expressionToSelector(s as Expression) as Selector) };
+      return result;
     } else if (typ.args[0] === "GAME_IDS") {
-      console.log(JSON.stringify(expr.args));
-      typ.params = [ { type: "GAME_IDS", value: expr.args.map(i => (i as Integer).value) }];
-      return typ;
+      result.params[0] = { type: "GAME_IDS", value: expr.args.map(i => (i as Integer).value) };
+      return result;
     }
   }
   const params = zip(typ.args, expr.args).map(argToParamType);
@@ -33,14 +32,14 @@ function expressionToSelectorType(expr: Expression): SelectorType | undefined {
     console.log("Could not parse all arguments");
     return undefined;
   }
-  typ.params = params as ParamType[];
-  return typ;
+  result.params = params as ParamType[];
+  return result;
 }
 
 function argToParamType(arg: { 0: ARG_TYPE, 1: Arg}): ParamType | undefined {
   switch (arg[1].kind) {
     case Argument.Expression:
-      const selector = expressionToSelectorType((arg[1] as Expression));
+      const selector = expressionToSelector((arg[1] as Expression));
       if (!selector) {
         console.log("Cannot find selector");
         return undefined;

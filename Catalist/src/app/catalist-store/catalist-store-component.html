@@ -1,7 +1,7 @@
 <table>
   @for (s of data(); track s.selector) {
     <tr><td class="kill" (click)="onRemove(s)">&#10060;</td><td (click)="onChoose(s)">
-      @if (s.name === s.selector) {
+      @if (s.name !== s.selector) {
         <span [title]="s.selector">{{s.name}}</span>
       } @else {
         <span>{{s.name}}</span>

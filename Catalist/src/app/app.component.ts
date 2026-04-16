@@ -5,9 +5,10 @@ import {FormsModule} from "@angular/forms";
 import {SelectorTypeChooserComponent} from "./selector-chooser/selector-type-chooser.component";
 import {CatalistStoreComponent} from "./catalist-store/catalist-store-component";
 import {CatalistComposerComponent} from "./composer/composer.component";
-import {SelectorType} from "./selector-types.mjs";
+import {Selector, SelectorType} from "./selector-types.mjs";
 import {RunResultsComponent} from "./run-results/run-results.component";
 import {parseSelector} from "./selector-parser";
+import {IdService} from "./id.service";
 
 interface RetrieveResult {
   games: {
@@ -42,7 +43,7 @@ export class CatalistWidget implements AfterViewInit {
   composer = viewChild<CatalistComposerComponent>('composer');
   results = viewChild<RunResultsComponent>('results');
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, private idService: IdService) {
   }
 
   async ngAfterViewInit() {
@@ -51,12 +52,17 @@ export class CatalistWidget implements AfterViewInit {
   }
 
   chooseType(typ: SelectorType) {
-    this.composer()!.setType(typ);
+    const s = new Selector(typ);
+    this.idService.assignIds(s, false);
+    this.composer()!.insertSelector(s);
   }
 
   chooseSelector(selector: StoredSelector) {
-    const typ = parseSelector(selector.selector, selector.name);
-    if (typ) this.composer()!.setType(typ);
+    const s = parseSelector(selector.selector, selector.name);
+    if (s) {
+      this.idService.assignIds(s, false);
+      this.composer()!.insertSelector(s);
+    }
   }
 
   async removeSelector(ss: StoredSelector) {

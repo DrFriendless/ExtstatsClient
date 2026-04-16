@@ -1,41 +1,34 @@
 <div class="composer-whole">
   <div class="composer-name">
     <label for="nameInput">Name:</label>
-    <input #nameInput type="text" class="name-editor" [(ngModel)]="name">
+    <input id="nameInput" type="text" class="name-editor" [(ngModel)]="name">
   </div>
   <div class="composer-top">
     <div class="composer-top-buttons">
-      <button class="extstats-button" (click)="onDiscard()" [disabled]="!typ()">Discard</button>
+      <button class="extstats-button" (click)="onDiscard()" [disabled]="!selector()">Discard</button>
     </div>
     <div class="composer-key">
-      @if (typeKey()) {
-        <span>{{typeKey()}}(</span>
-        @for (arg of typ()?.args; track arg) {
-          @let v = typ()?.params ? typ()?.params![$index] : undefined;
-          <arg-editor [argType]="arg" [init]="v" [metadata]="metadata()" (warning)="setWarning($event)"/>
-        }
-        <span>)</span>
-      }
+      <composer-selector [metadata]="metadata()" [selector]="selector()" [insertionPoint]="insertionPoint()"/>
     </div>
     <div class="composer-gap"></div>
-    @if (typ()?.hints) {
+    @if (selector()?.typeHints) {
       <div class="composer-hint">
-        <span>{{typ()?.hints}}</span>
+        <span>{{selector()?.typeHints}}</span>
       </div>
     }
   </div>
   <div class="composer-bottom">
-    @if  (warning()) {
+    @if (warning()) {
       <div class="composer-warning">
         <span>{{warning()}}</span>
       </div>
     } @else {
       <div class="composer-preview">
-        <span>{{preview()}}</span>
+        <span>{{selector()?.toString()}}</span>
       </div>
     }
     <div class="composer-buttons">
-      <button class="extstats-button" (click)="onSave()" [disabled]="!needToSave()">Save</button>
+      <button class="extstats-button" (click)="onSave()" [disabled]="!needToSave() || !canSave()">Save</button>
       <button class="extstats-button" (click)="onRun()" [disabled]="!runnable()">Run</button>
       <button class="extstats-button" (click)="onRunInNewWindow()" [disabled]="!runnable()">Run in new window</button>
     </div>

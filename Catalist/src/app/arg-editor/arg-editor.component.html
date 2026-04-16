@@ -1,10 +1,22 @@
 
-@let at = argType();
+@let at = value()?.type;
+@let iam = iAmTheInsertionPoint();
 @if (at === "SELECTOR_ARRAY") {
-  <selector-chips [editable]="true" [selectors]="selectors().map(selectorToString)"></selector-chips>
-  <button>...</button>
+  @for (selector of selectors(); track selector; let index = $index; let last = $last) {
+    @if (selector.isValid()) {
+      <selector-chip [editable]="true" [selector]="selector.toString()" (remove)="onRemove(index)"></selector-chip>
+    } @else {
+      <composer-selector [metadata]="metadata()" [selector]="selector"/>
+    }
+    @if (!last || iam) {
+      <span>, </span>
+    }
+  }
+  @if (iam) {
+    <button style="border: 1px solid black; background: white;">...</button>
+  }
 } @else if (at === "GAME_IDS") {
-  <input type="text" [(ngModel)]="ids"><button (click)="onIdsEntered($event)">✓</button>
+  <input type="text" [(ngModel)]="ids"><button (click)="onIdsEntered()">✓</button>
 } @else if (at === "USER") {
   <geek-combo #geek [placeholder]="'user'" (geekChosen)="chosenUser.set({ user: $event })"></geek-combo>
 } @else if (at === "CATEGORY") {

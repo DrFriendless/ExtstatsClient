@@ -4,7 +4,7 @@ export type USER_TYPE = "ME" | { user: string } | undefined
 
 export type ParamType =
   { type: "GAME_IDS"; value: number[] } |
-  { type: "SELECTOR_ARRAY"; value: SelectorType[] } |
+  { type: "SELECTOR_ARRAY"; value: Selector[] } |
   { type: "USER"; value: USER_TYPE } |
   { type: "DESIGNER"; value: number | undefined } |
   { type: "PUBLISHER"; value: number | undefined } |
@@ -12,14 +12,15 @@ export type ParamType =
   { type: "MECHANIC"; value: string | undefined } |
   { type: "TAG"; value: string | undefined };
 
-export function paramTypeToString(p: ParamType): string {
+export function paramTypeToString(p: ParamType | undefined): string {
+  if (!p) return "";
   switch (p.type) {
     case "CATEGORY": return `"${p.value || '??'}"`;
     case "DESIGNER": return p?.value?.toString() || "??";
     case "GAME_IDS": return p.value.join(",");
     case "MECHANIC": return `"${p.value || '??'}"`;
     case "PUBLISHER": return p?.value?.toString() || "??";
-    case "SELECTOR_ARRAY": return p.value.map(selectorToString).join(",");
+    case "SELECTOR_ARRAY": return p.value.map(s => s.toString()).join(",");
     case "TAG": return `"${p.value || '??'}"`;
     case "USER": {
       const v = p.value;
@@ -30,40 +31,163 @@ export function paramTypeToString(p: ParamType): string {
   }
 }
 
-export function hasValidValue(p: ParamType): boolean {
+export function isValid(p: ParamType): boolean {
   switch (p.type) {
     case "CATEGORY": return !!p.value;
     case "DESIGNER": return !!p.value;
     case "GAME_IDS": return p.value.length > 0;
     case "MECHANIC": return !!p.value;
     case "PUBLISHER": return !!p.value;
-    case "SELECTOR_ARRAY": return p.value.length > 0;
+    case "SELECTOR_ARRAY": return (p.value.map(s => s.isValid())).indexOf(false) < 0;
     case "TAG": return !!p.value;
     case "USER": return !!p.value;
   }
 }
 
-export function selectorToString(s: SelectorType): string {
-  if (s.args.length === 0) {
-    return `${s.key}()`;
-  } else if (s.params === undefined) {
-    return "need params"
-  } else {
-    return `${s.key}(${s.params?.map(paramTypeToString).join(",")})`;
+export class Selector {
+  key: string;
+  params: ParamType[];
+  typeDescription: string;
+  typeHints: string;
+  // used for indexing a complex selector
+  id?: number;
+  // name in the store
+  name?: string;
+
+  constructor(typ: SelectorType) {
+    this.key = typ.key;
+    this.params = typ.args.map(a => emptyValue(a));
+    this.typeDescription = typ.description;
+    this.typeHints = typ.hints || "";
+  }
+
+  cloneWithChange(change: ValueChange): Selector {
+    const args = this.params.map(p => p.type);
+    const s = new Selector({ key: this.key, args: args, description: this.typeDescription, hints: this.typeHints } as SelectorType);
+    s.name = this.name;
+    for (let i=0; i<args.length; i++) {
+      if (change.selectorId === this.id && change.argIndex === i) {
+        s.params[i] = change.value;
+      } else {
+        s.params[i].value = this.cloneValueWithChange(change, this.params[i].value);
+      }
+    }
+    return s;
+  }
+
+  clone(): Selector {
+    const args = this.params.map(p => p.type);
+    const s = new Selector({ key: this.key, args: args, description: this.typeDescription, hints: this.typeHints } as SelectorType);
+    s.name = this.name;
+    for (let i=0; i<args.length; i++) {
+      s.params[i].value = this.cloneValue(this.params[i].value);
+    }
+    return s;
+  }
+
+  cloneValue(v: string | number | number[] | Selector[] | { user: string} | undefined): string | number | number[] | Selector[] | { user: string} | undefined {
+    if (typeof v === "string" || typeof v === "number" || typeof v === "undefined") return v;
+    if ('user' in v) return v;
+    const ts = v.map(t => typeof t);
+    if (ts.length === 0) return [];
+    if (ts.indexOf('number') >= 0) return [...v] as number[];
+    return v.map(s => (s as Selector).clone());
+  }
+
+  cloneValueWithChange(change: ValueChange, v: string | number | number[] | Selector[] | { user: string} | undefined): string | number | number[] | Selector[] | { user: string} | undefined {
+    if (typeof v === "string" || typeof v === "number" || typeof v === "undefined") return v;
+    if ('user' in v) return v;
+    const ts = v.map(t => typeof t);
+    if (ts.length === 0) return [];
+    if (ts.indexOf('number') >= 0) return [...v] as number[];
+    return v.map(s => (s as Selector).cloneWithChange(change));
+  }
+
+  toString(): string {
+    if (this.params.length === 0) {
+      return `${this.key}()`;
+    } else {
+      return `${this.key}(${this.params.map(paramTypeToString).join(",")})`;
+    }
+  }
+
+  // would this be meaningful if turned into a string?
+  isValid(): boolean {
+    for (const p of this.params) {
+      if (!isValid(p)) return false;
+    }
+    return true;
+  }
+
+  // indicate where a selector will be inserted if one comes along.
+  findSelectorInsertionPoint(): ValuePosition | undefined {
+    if (!this.id) {
+      console.log("Selector has not been assigned IDs so we can't create value positions");
+      return undefined;
+    }
+    for (let i=0; i<this.params.length; i++) {
+      const p = this.params[i];
+      if (p.type === "SELECTOR_ARRAY") return { selectorId: this.id, argIndex: i }
+    }
+    for (const p of this.params) {
+      if (p.type === "SELECTOR_ARRAY") {
+        for (const s of p.value) {
+          const pos = s.findSelectorInsertionPoint();
+          if (pos) return pos;
+        }
+      }
+    }
+    // could be something like "books()"
+    return undefined;
+  }
+
+  // does this selector need selectors added to it to become valid, e.g. "all()"
+  needsSelectors(): boolean {
+    for (let i=0; i<this.params.length; i++) {
+      const p = this.params[i];
+      if (p.type === "SELECTOR_ARRAY" && p.value.length === 0) return true;
+    }
+    for (const p of this.params) {
+      if (p.type === "SELECTOR_ARRAY") {
+        for (const s of p.value) {
+          const needs = s.needsSelectors();
+          if (needs) return true;
+        }
+      }
+    }
+    return false;
+  }
+}
+
+export function emptyValue(argTpe: ARG_TYPE): ParamType {
+  switch (argTpe) {
+    case "USER": return { type: "USER", value: undefined };
+    case "TAG": return { type: "TAG", value: undefined };
+    case "SELECTOR_ARRAY": return { type: "SELECTOR_ARRAY", value: [] };
+    case "PUBLISHER": return { type: "PUBLISHER", value: undefined };
+    case "DESIGNER": return { type: "DESIGNER", value: undefined };
+    case "MECHANIC": return { type: "MECHANIC", value: undefined };
+    case "CATEGORY": return { type: "CATEGORY", value: undefined };
+    case "GAME_IDS": return { type: "GAME_IDS", value: [] };
   }
 }
 
 export interface SelectorType {
-  name?: string;
   key: string;
   // formal parameter types
   args: ARG_TYPE[];
-  // actual parameters
-  params?: ParamType[];
   description: string;
   colour: string;
-  disabled?: boolean;
   hints?: string;
+}
+
+export interface ValuePosition {
+  selectorId: number;
+  argIndex: number;
+}
+
+export interface ValueChange extends ValuePosition {
+  value: ParamType;
 }
 
 export const SELECTOR_TYPES: SelectorType[] = [
