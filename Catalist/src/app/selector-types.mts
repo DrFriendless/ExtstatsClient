@@ -192,12 +192,6 @@ export interface ValueChange extends ValuePosition {
 
 export const SELECTOR_TYPES: SelectorType[] = [
   {
-    key: "ids",
-    args: ["GAME_IDS"],
-    description: "Select games by explicit BGG ID",
-    colour: "orange",
-  },
-  {
     key: "all",
     args: ["SELECTOR_ARRAY"],
     description: "Intersection of one or more selectors",
@@ -255,9 +249,21 @@ export const SELECTOR_TYPES: SelectorType[] = [
     colour: "blue"
   },
   {
+    key: "ids",
+    args: ["GAME_IDS"],
+    description: "Select games by explicit BGG ID",
+    colour: "black",
+  },
+  {
     key: "expansions",
     args: [],
     description: "All games marked as expansions",
+    colour: "black"
+  },
+  {
+    key: "books",
+    args: [ ],
+    description: "All games which BGG says are books",
     colour: "black"
   },
   {
@@ -273,9 +279,15 @@ export const SELECTOR_TYPES: SelectorType[] = [
     colour: "black"
   },
   {
-    key: "books",
-    args: [ ],
-    description: "All games which BGG says are books",
+    key: "category",
+    args: [ "CATEGORY" ],
+    description: "All games in the given category",
+    colour: "black"
+  },
+  {
+    key: "mechanic",
+    args: [ "MECHANIC" ],
+    description: "All games using the given mechanic",
     colour: "black"
   },
   {
@@ -289,17 +301,5 @@ export const SELECTOR_TYPES: SelectorType[] = [
     args: [ "TAG" ],
     description: "All games given the tag by the logged-in user",
     colour: "green"
-  },
-  {
-    key: "category",
-    args: [ "CATEGORY" ],
-    description: "All games in the given category",
-    colour: "gray"
-  },
-  {
-    key: "mechanic",
-    args: [ "MECHANIC" ],
-    description: "All games using the given mechanic",
-    colour: "gray"
   },
 ];

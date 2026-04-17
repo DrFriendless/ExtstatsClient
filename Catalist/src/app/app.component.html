@@ -1,11 +1,30 @@
-<p>USe this page to compose new selectors.</p>
+<p>
+  Use this page to compose new selectors.
+  A selector is a criterion for selecting a set of board games.
+  It can refer to features of the game, your tags, and data retrieved from BGG.
+  Selectors can also be composed from other selectors.
+  For more details, <a href="/doco/selectors.html">refer to the documentation.</a>
+</p>
 
-<P>Choose a selector from the Chooser.
-  Configure it in the Composer.
-  Save it into the Store - these are the configured selectors you have to work with.
-  Selectors may be run from the Store, producing results in the Selection Results.
-  "Running" a selector means seeing what games it selects for you.
-</P>
+<p>
+  The Store is a place where you can store selectors that you like or want to use later - these must be fully formed selectors with no missing values.
+  The Chooser is a place which lists the selectors built-in to Extstats.
+  These don't come with values - you will need to add those yourself.
+  The Composer is where we display the selector currently being built.
+</p>
+
+<p>This is what you do:</p>
+<ul>
+<li>Choose a selector from the Chooser, or the Store</li>
+<li>Configure it in the Composer</li>
+<li>Save it into the Store</li>
+<li>Selectors may be run from the Composer, producing results in the Selection Results</li>
+</ul>
+
+<p>The "..." button means "if you choose a selector, it will be added here".
+  However at the moment you can't have two "..." buttons in the composer - if you want to do something complex you'll need to build the selector
+  from the bottom up by storing parts in the Store.
+</p>
 
 <div class="catalist-main">
   @if (showDeployment) {

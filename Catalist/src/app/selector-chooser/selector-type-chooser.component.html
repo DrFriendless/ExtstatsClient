@@ -2,7 +2,15 @@
   <table>
   @for (type of SELECTOR_TYPES; track type.key) {
     <tr class="selector-type" [style.color]="type.colour" (click)="onChoose(type)">
-      <td><span class="type-key">{{type.key}}</span> - <span class="type-description">{{type.description}}</span></td>
+      <td><span class="type-key">{{type.key}}(</span>
+        @for (arg of type.args; track arg; let last=$last) {
+          @if (!last) {
+            <span class="type-key">,</span>
+          }
+          <span class="type-key">{{arg}}</span>
+        }
+        <span class="type-key">)</span>
+        - <span class="type-description">{{type.description}}</span></td>
     </tr>
   }
   </table>

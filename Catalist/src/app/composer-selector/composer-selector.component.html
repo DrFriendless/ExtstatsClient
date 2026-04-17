@@ -1,8 +1,8 @@
 @let s = selector();
 @if (s) {
-  @if (s.id) {
-    <span style="font-size: 14px; color: deeppink; font-style: normal; margin: 0 4px;">{{s.id}}</span>
-  }
+<!--  @if (s.id) {-->
+<!--    <span style="font-size: 14px; color: deeppink; font-style: normal; margin: 0 4px;">{{s.id}}</span>-->
+<!--  }-->
   <span>{{s.key}}(</span>
   @for (param of s.params; track param; let argIndex = $index) {
     <arg-editor [value]="param" [metadata]="metadata()" [position]="{ argIndex, selectorId: s.id || -1 }" [insertionPoint]="insertionPoint()"
