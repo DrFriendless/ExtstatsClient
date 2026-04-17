@@ -71,7 +71,6 @@ export class QueryWidget {
       await this.run(s, mode);
     });
     effect(() => {
-      console.log("resukts");
       const g = this.gameResults();
       const gg = this.geekGameResults();
       const m = this.mode();
@@ -105,7 +104,6 @@ export class QueryWidget {
     this.loading.set(true);
     const data = await this.api.retrieve(query);
     this.loading.set(false);
-    console.log(JSON.stringify(data));
     switch (mode) {
       case 'games': {
         const d = data as GamesResult;
