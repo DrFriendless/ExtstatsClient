@@ -1,0 +1,77 @@
+<p style="max-width: var(--content-width)">
+  Would you like to increase your H-index? This chart gives you some insight into how it's calculated and what you can do to increase it.</p>
+
+<p style="max-width: var(--content-width)">
+  Your H-index is currently {{hindex()}}.
+  The graph below denotes your {{width()}} most-played games, with most-played on the left and decreasing to the right.
+  The number of plays is the height of the orange/red bar (but some of those bars might actually go off the top of the page).
+  The red part is the number of plays in the last year.
+  Your H-hindex is defined as the width of the biggest square that can be drawn inside the orange bars.
+</p>
+
+<p style="max-width: var(--content-width)">
+  To make that square bigger (i.e. increase your H-index) you need to make the square bigger, i.e. fill in more spaces to the top and right with orange.
+  That can be done by playing lesser=played games more, thus making their orange bar taller and bringing them to the left.
+</p>
+
+<style>
+  .hindex-table {
+    display: grid;
+    grid-auto-columns: 10px;
+    grid-auto-rows: 10px;
+    gap: 0;
+    padding: 20px;
+  }
+  .hindex-table.ginormous {
+    grid-auto-columns: 6px;
+    grid-auto-rows: 6px;
+  }
+  .hindex-table.huge {
+    grid-auto-columns: 8px;
+    grid-auto-rows: 8px;
+  }
+  .hindex-table .game {
+    border: 1px solid gray;
+    padding: 0;
+    font-size: 30px;
+    text-align: center;
+  }
+  .hindex-table .blank {
+    background: wheat;
+  }
+  .hindex-table .previous {
+    background: orange;
+  }
+  .hindex-table .lastYear {
+    background: red;
+  }
+  .hindex-table .hindex {
+    border: 2px solid black;
+    grid-column-start: 1;
+    z-index: 1;
+    pointer-events: none;
+  }
+</style>
+
+<div class="hindex-table" [ngClass]="{'ginormous': hindex() > 80, 'huge': hindex() > 60 && hindex() <= 80}">
+  @for (column of columns(); track column.bggid) {
+    @if (column.blank > 0) {
+      <div class="game blank" title="{{column.tooltip}}"
+           [ngStyle]="{'grid-column-start': column.index, 'grid-column-span': 1, 'grid-row-start': column.blankStart, 'grid-row-end': column.blankEnd }"
+      ></div>
+    }
+    @if (column.lastYear > 0) {
+      <div class="game lastYear" title="{{column.tooltip}}"
+           [ngStyle]="{'grid-column-start': column.index, 'grid-column-span': 1, 'grid-row-start': column.lastStart, 'grid-row-end': column.lastEnd }"
+      ></div>
+    }
+    @if (column.previous > 0) {
+      <div class="game previous" title="{{column.tooltip}}"
+           [ngStyle]="{'grid-column-start': column.index, 'grid-column-span': 1, 'grid-row-start': column.previousStart, 'grid-row-end': column.previousEnd }"
+      ></div>
+    }
+  }
+  @if (hindex()) {
+    <div class="hindex" [ngStyle]="{'grid-column-end': hindex() + 1, 'grid-row-start': height() - hindex() + 1, 'grid-row-end': height() + 1 }"></div>
+  }
+</div>

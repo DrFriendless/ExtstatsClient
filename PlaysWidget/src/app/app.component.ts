@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {GraphQuerySourceComponent, LoaderComponent, UserConfigService} from "extstats-angular";
 import {YMD} from "./library";
 import {LoginService} from "./login.service";
-import {ExtstatsApi} from "extstats-api";
+import {ExtstatsApi, GeekSummary} from "extstats-api";
 import {RatingOfPlayedComponent} from "./rating-of-played/rating-of-played.component";
 import {BestDaysComponent} from "./best-days/best-days.component";
 import {FlorenceNightingaleComponent} from "./florence-nightingale/florence-nightingale.component";
@@ -12,6 +12,7 @@ import {TemporalByDateComponent} from "./temporal-by-date/temporal-by-date.compo
 import {TemporalByMonthComponent} from "./temporal-by-month/temporal-by-month.component";
 import {TemporalByDayComponent} from "./temporal-by-day/temporal-by-day.component";
 import {PlaysByYearTableComponent} from "./plays-by-year/plays-by-year.component";
+import {HIndexComponent} from "./h-index/h-index.component";
 
 // these types are the shape of the data returned by the GraphQL query.
 export interface GameData {
@@ -53,15 +54,19 @@ export interface Result {
     MostPlayedByYearComponent,
     MostPlayedByYearComponent,
     MostPlayedByYearComponent,
-    PlaysByYearTableComponent
+    PlaysByYearTableComponent,
+    HIndexComponent
   ]
 })
 export class PlaysWidget extends GraphQuerySourceComponent<Result> implements OnInit {
+  geekData: GeekSummary | undefined;
+
   constructor(api: ExtstatsApi, private userService: UserConfigService, private loginService: LoginService) {
     super(api);
+
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log("features", this.loginService.features);
     this.loginService.isLoggedIn.subscribe(yes => {
       console.log("logged in = ", yes);
@@ -72,6 +77,12 @@ export class PlaysWidget extends GraphQuerySourceComponent<Result> implements On
       }
     })
     this.refresh();
+    this.geek = this.userService.getAGeek();
+    if (this.geek) {
+      this.loading = true;
+      this.geekData = await this.api.getGeekSummary(this.geek);
+      this.loading = false;
+    }
   }
 
   private loadSettings(): void {

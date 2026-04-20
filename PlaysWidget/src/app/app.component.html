@@ -9,6 +9,9 @@
     <extstats-loader></extstats-loader>
   }
 
+  <h2 id="hindex">Your H-Index</h2>
+  <h-index [data]="data$" [geekData]="geekData"></h-index>
+
   <h2 id="ratingofplayed">Your Rating of Games Played</h2>
   <rating-of-played [data]="data$"></rating-of-played>
 
@@ -28,11 +31,12 @@
   <plays-by-year-table [data]="data$"></plays-by-year-table>
 
   <h2 id="temporalbydate">Temporal Hotness by Date</h2>
-  <P>
+  <P style="max-width: var(--content-width)">
     This table implements an analysis <A href="https://boardgamegeek.com/image/1247651/randy-cox">designed by Randy Cox</A>.
     For each month since you really got into games, how many games did you play? The values are coloured according to the number of games played.
   </P>
-  <P>Note that this table includes plays before 2005, so the total may not be the same as the other temporal hotness tables.</P>
+  <P style="max-width: var(--content-width)">
+    Note that this table includes plays before 2005, so the total may not be the same as the other temporal hotness tables.</P>
   <temporal-by-date [data]="data$"></temporal-by-date>
   <p>
 
