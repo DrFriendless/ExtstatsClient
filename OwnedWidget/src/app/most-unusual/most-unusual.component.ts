@@ -1,14 +1,14 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {
   Column,
   ColumnParams,
   DataTable,
   DataTableBody,
   DataTableController,
-  DataTableHead,
+  DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
 
 interface Row {
   bggid: number;
@@ -35,17 +35,19 @@ interface Data {
     DataTable,
     DataTableBody,
     DataTableHead,
-    LoaderComponent
+    LoaderComponent,
+    BoardGameLinkComponent
   ],
   templateUrl: './most-unusual.component.html'
 })
 export class MostUnusualComponent implements AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<Row>>;
   private params: ColumnParams<Row>[] = [
     {
       field: "name",
       name: "Game",
       tooltip: "The unusual game",
-      valueHtml: (r: Row) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
+      template: this.boardgame,
       classname: "col-game-name"
      },
     { field: "yearPublished", name: "Published", tooltip: "Year this game was published", classname: "col-year" },
@@ -59,11 +61,13 @@ export class MostUnusualComponent implements AfterViewInit {
   loading = false;
   data: Data | undefined;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, public tagService: UserTagService) {
   }
 
   async ngAfterViewInit(): Promise<void> {
     await this.refresh();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<Row>(c));
   }
 
   protected processData(data: Data): any {
@@ -80,14 +84,6 @@ export class MostUnusualComponent implements AfterViewInit {
       this.data = await this.api.retrieve(`{mostunusual(geek: "${this.geek}", count: 50) { bggid yearPublished name bggRating weight minPlayers maxPlayers bggRanking usersOwned } }`) as Data;
       this.processData(this.data);
       this.loading = false;
-    }
-  }
-
-  private playersString(min: number, max: number): string {
-    if (min === max) {
-      return min.toString();
-    } else {
-      return `${min}-${max}`;
     }
   }
 }

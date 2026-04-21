@@ -1,12 +1,20 @@
-import { Component } from '@angular/core';
+import {Component, TemplateRef, ViewChild} from '@angular/core';
 import { makeIndex } from "extstats-core";
-import { DataViewComponent } from "extstats-angular";
+import {BoardGameLinkComponent, DataViewComponent, UserTagService} from "extstats-angular";
 import {Data, formatDate, ymdToDate} from "../app.component";
-import {Column, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
+import {
+  Column,
+  ColumnParams,
+  DataTable,
+  DataTableBody,
+  DataTableController,
+  DataTableHead,
+  RowContext
+} from "extstats-datatable";
 
 interface LeastLovedRow {
-    game: number;
-    gameName: string;
+    bggid: number;
+    name: string;
     rating: number;
     lastPlayed: string;
     leastLovedScore: number;
@@ -21,23 +29,40 @@ interface LeastLovedRow {
     DataTableController,
     DataTable,
     DataTableHead,
-    DataTableBody
+    DataTableBody,
+    BoardGameLinkComponent
   ],
   templateUrl: './least-loved.component.html'
 })
 export class LeastLovedComponent extends DataViewComponent<Data> {
-  public columns: Column<LeastLovedRow>[] = [
-    new Column({ field: "gameName", name: "Game", classname: "col-game-name",
-      valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.game}">${row.gameName}</a>`
-    }),
-    new Column({ field: "rating", name: "Your Rating", tooltip: "Your rating for this game.", classname: "col-rating" }),
-    new Column({ field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game.", classname: "col-date" }),
-    new Column({ field: "daysSince", name: "Days Since Last Play", tooltip: "Days since you last played this game.", classname: "col-days-since" }),
-    new Column({ field: "plays", name: "Plays", tooltip: "Times you have ever played this game.", classname: "col-plays" }),
-    new Column( { field: "forTrade", name: "For Trade", classname: "col-boolean",
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<LeastLovedRow>>;
+  public params: ColumnParams<LeastLovedRow>[] = [
+    {
+      field: "name",
+      name: "Game",
+      tooltip: "The game you don't really love",
+      classname: "col-game-name",
+      template: this.boardgame
+    },
+    { field: "rating", name: "Your Rating", tooltip: "Your rating for this game.", classname: "col-rating" },
+    { field: "lastPlayed", name: "Last Played", tooltip: "Last date you played this game.", classname: "col-date" },
+    { field: "daysSince", name: "Days Since Last Play", tooltip: "Days since you last played this game.", classname: "col-days-since" },
+    { field: "plays", name: "Plays", tooltip: "Times you have ever played this game.", classname: "col-plays" },
+    { field: "forTrade", name: "For Trade", classname: "col-boolean",
       valueHtml: (r: LeastLovedRow) => r.forTrade ? "✓" : ""
-    })
+    }
   ];
+  columns: Column<LeastLovedRow>[] = [];
+
+  constructor(public tagService: UserTagService) {
+    super();
+  }
+
+  public override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<LeastLovedRow>(c));
+  }
 
   public rows: LeastLovedRow[] = [];
 
@@ -53,8 +78,8 @@ export class LeastLovedComponent extends DataViewComponent<Data> {
         const daysSince = Math.round((now.valueOf() - lp.valueOf()) / 86400000);
         const ll = daysSince / gg.rating / gg.rating;
         const row: LeastLovedRow = {
-          gameName: game.name,
-          game: gg.bggid,
+          name: game.name,
+          bggid: gg.bggid,
           rating: gg.rating,
           lastPlayed: formatDate(gg.lastPlay),
           daysSince: daysSince,

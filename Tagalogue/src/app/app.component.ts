@@ -135,6 +135,13 @@ export class TagalogueWidget implements AfterViewInit {
       }
     }
     this.inTwoGroups = inTwoGroup;
+    if (this.currentGroup && this.tagGroups.map(g => g.name).indexOf(this.currentGroup.name) < 0) {
+      if (this.tagGroups.length === 0) {
+        this.currentGroup = undefined;
+      } else {
+        this.currentGroup = this.tagGroups[0];
+      }
+    }
   }
 
   async onClick(tag: string, game: string, present: boolean) {

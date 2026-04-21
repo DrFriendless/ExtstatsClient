@@ -1,5 +1,5 @@
 {
-  "name": "ranking-table",
+  "name": "owned-games",
   "version": "2.0.0",
   "scripts": {
     "start": "ng serve",
@@ -10,10 +10,10 @@
     "@angular/core": "^20.3.6",
     "@angular/platform-browser": "^20.3.6",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
-    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.0.0.tgz",
-    "extstats-api": "file:/home/john/projects/repo/extstats-api-2.0.2.tgz",
-    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.1.tgz",
-    "extstats-datatable": "file:/home/john/projects/repo/extstats-datatable-4.3.7.tgz",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.3.11.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-2.1.5.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.4.tgz",
+    "extstats-datatable": "file:/home/john/projects/repo/extstats-datatable-4.4.0.tgz",
     "ngx-bootstrap": "^20.0.2",
     "lodash-es": "^4.17.21",
     "vega-embed": "^7.1.0",

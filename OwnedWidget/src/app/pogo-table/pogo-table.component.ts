@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { makeIndex } from "extstats-core"
-import { DataViewComponent } from "extstats-angular";
+import {BoardGameLinkComponent, DataViewComponent, UserTagService} from "extstats-angular";
 import { Data, formatDate } from "../app.component";
-import {Column, DataTable, DataTableBody, DataTableController, DataTableHead, DefaultSorter} from "extstats-datatable";
+import { DataTable, DataTableController, DefaultSorter} from "extstats-datatable";
 
 type PogoTableRow = {
   bggid: number;
@@ -23,12 +23,17 @@ const LAMBDA = Math.log(0.1) / -10.0;
   imports: [
     DataTableController,
     DataTable,
-    DefaultSorter
+    DefaultSorter,
+    BoardGameLinkComponent
   ],
   templateUrl: './pogo-table.component.html'
 })
 export class PogoTableComponent extends DataViewComponent<Data> {
   public rows: PogoTableRow[] = [];
+
+  constructor(public tagService: UserTagService) {
+    super();
+  }
 
   protected processData(data: Data): any {
     if (!data || !data.geekGames) return;
