@@ -1,19 +1,28 @@
-import { Component } from "@angular/core"
+import {Component, TemplateRef, ViewChild} from "@angular/core"
 import {makeIndex} from "extstats-core"
 import {
+  BoardGameLinkComponent,
   ButtonGroupButtonDirective,
   ButtonGroupComponent,
   DataViewComponent,
-  DocumentationComponent
+  DocumentationComponent, UserTagService
 } from "extstats-angular";
-import {Column, ColumnParams, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable"
+import {
+  Column,
+  ColumnParams,
+  DataTable,
+  DataTableBody,
+  DataTableController,
+  DataTableHead,
+  RowContext
+} from "extstats-datatable"
 import { Data, GeekGameResult, Result } from "../app.component"
 import {daysBetween, intToDate, toDateString} from "../library";
 import {GameData} from "extstats-api";
 
 interface Row {
   bggid: number;
-  gameName: string;
+  name: string;
   rating: number;
   plays: number;
   bggRanking: number;
@@ -39,13 +48,20 @@ interface Row {
     DataTable,
     ButtonGroupComponent,
     DocumentationComponent,
-    ButtonGroupButtonDirective
+    ButtonGroupButtonDirective,
+    BoardGameLinkComponent
   ]
 })
 export class FavouritesTableComponent extends DataViewComponent<Result> {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<Row>>;
   private params: ColumnParams<Row>[] = [
-    {field: "gameName", name: "Game", classname: "col-game-name",
-      valueHtml: (row) => `<a href="https://boardgamegeek.com/boardgame/${row.bggid}">${row.gameName}</a>`},
+    {
+      field: "name",
+      name: "Game",
+      tooltip: "The game you love",
+      classname: "col-game-name",
+      template: this.boardgame
+    },
     {field: "rating", name: "Rating", tooltip: "Your rating for this game.", classname: "col-rating" },
     {field: "plays", name: "Plays", tooltip: "The number of times you have played this game.", classname: "col-number" },
     {field: "bggRanking", name: "BGG Ranking", tooltip: "This game's ranking on BoardGameGeek.", classname: "col-ranking" },
@@ -60,9 +76,19 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
     {field: "ruhm", name: "R!UHM", tooltip: "Randy Cox Not Unhappiness Metric", classname: "col-number" },
     {field: "yearPublished", name: "Published", tooltip: "The year in which this game was first published.", classname: "col-year" }
   ];
-  columns = this.params.map(c => new Column<Row>(c));
-  rows: Row[] = []
-  data: Data | undefined
+  columns: Column<Row>[] = [];
+  rows: Row[] = [];
+  data: Data | undefined;
+
+  constructor(public tagService: UserTagService) {
+    super();
+  }
+
+  public override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<Row>(c));
+  }
 
   protected processData(data: Result) {
     if (!data) return;
@@ -100,7 +126,7 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       // gg["hh"] = huberHeat
       // gg["ruhm"] = ruhm
       const row = {
-        gameName: game.name,
+        name: game.name,
         bggid: gg.bggid,
         rating: Math.floor(gg.rating * 100)/100,
         plays: gg.plays,

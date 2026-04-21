@@ -5,3 +5,7 @@
     <tbody es-table-body [columns]="columns"></tbody>
   </table>
 </div>
+
+<ng-template #boardgame let-game>
+  <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
+</ng-template>
