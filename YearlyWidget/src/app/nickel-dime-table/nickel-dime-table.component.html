@@ -2,11 +2,12 @@
 <table class="table extstats-table nickel-dime-table">
   <thead><tr><th class="col-number">Plays</th><th class="col-game-name">Game</th></tr></thead>
   <tbody>
-    @for (g of data; track g.url) {
+    @for (g of data; track g.bggid) {
       <tr>
         <td class="col-number">{{g.plays}}</td>
-        <td class="col-game-name"><a href="{{g.url}}">{{g.name}}</a></td>
+        <td class="col-game-name"><boardgame [game]="g" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(g.bggid)"></boardgame></td>
       </tr>
     }
   </tbody>
 </table>
+

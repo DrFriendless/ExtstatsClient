@@ -1,9 +1,29 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {LoaderComponent, PlaysViewComponent, UserConfigService} from "extstats-angular";
-import {Result} from "../app.component";
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {
+  BoardGameLinkComponent,
+  LoaderComponent,
+  UserConfigService,
+  UserTagService
+} from "extstats-angular";
 // @ts-ignore
 import {ExtstatsApi, Hotness, MostPlayedEntry} from "extstats-api";
-import {Column, ColumnParams, DataTable, DataTableBody, DataTableController, DataTableHead} from "extstats-datatable";
+import {
+  Column,
+  ColumnParams,
+  DataTable,
+  DataTableBody,
+  DataTableController,
+  DataTableHead,
+  RowContext
+} from "extstats-datatable";
 
 @Component({
   selector: 'yearly-hotness',
@@ -17,11 +37,13 @@ import {Column, ColumnParams, DataTable, DataTableBody, DataTableController, Dat
     DataTableBody,
     DataTableController,
     DataTableHead,
-    LoaderComponent
+    LoaderComponent,
+    BoardGameLinkComponent
   ],
   templateUrl: './hotness.component.html'
 })
-export class YearlyHotnessComponent implements OnChanges {
+export class YearlyHotnessComponent implements OnChanges, AfterViewInit {
+  @ViewChild('boardgame') boardgame!: TemplateRef<RowContext<MostPlayedEntry>>;
   data: Hotness | undefined;
   loading = false;
   @Input('year') year: number | undefined;
@@ -30,8 +52,8 @@ export class YearlyHotnessComponent implements OnChanges {
       field: "name",
       name: "Game",
       tooltip: "The hot game",
-      valueHtml: (r: MostPlayedEntry) =>  `<a href="https://boardgamegeek.com/boardgame/${r.bggid}">${r.name}</a>`,
-      classname: "col-game-name"
+      classname: "col-game-name",
+      template: this.boardgame
     },
     { field: "geeks", name: "Geeks Playing", tooltip: "Distinct players of the game in this year", classname: "col-number" },
     { field: "plays", name: "Total Plays", tooltip: "Plays by all players in this year", classname: "col-number" },
@@ -59,9 +81,14 @@ export class YearlyHotnessComponent implements OnChanges {
       valueHtml: (r: MostPlayedEntry) => r.yourPlays > 0 ? r.yourPlays.toString() : ""
     }
   ];
-  columns = this.params.map(p => new Column(p));
+  columns: Column<MostPlayedEntry>[] = this.params.map(p => new Column(p));
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private userService: UserConfigService, public tagService: UserTagService) {
+  }
+
+  public ngAfterViewInit() {
+    this.params[0].template = this.boardgame;
+    this.columns = this.params.map(c => new Column<MostPlayedEntry>(c));
   }
 
   async refresh() {

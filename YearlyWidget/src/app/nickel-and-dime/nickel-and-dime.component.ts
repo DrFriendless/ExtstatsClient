@@ -8,7 +8,7 @@ import {NickelDimeTableComponent} from "../nickel-dime-table/nickel-dime-table.c
 export interface Row {
   plays: number;
   name: string;
-  url: string;
+  bggid: number;
 }
 
 @Component({
@@ -44,7 +44,7 @@ export class NickelAndDimeComponent extends PlaysViewComponent<Result> {
       const plays = counter.get(key);
       if (plays < 4) break;
       const game = gamesIndex[key];
-      const row = { plays, name: game.name, url: `https://boardgamegeek.com/boardgame/${game.bggid}` };
+      const row = { plays, name: game.name, bggid: game.bggid };
       if (plays >= 100) {
         this.dollars.push(row);
       } else if (plays >= 25) {
