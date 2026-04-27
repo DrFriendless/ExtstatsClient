@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
       await this.api.getPersonalData();
       this.disambiguationData = await this.api.getDisambiguationData();
       this.disambiguationUserConfig = await this.userService.get("disambiguation.defaults", {}) || {};
-      let dis = await this.userService.get("disambigation.enable", true);
+      let dis = await this.userService.get("disambiguation.enable", true);
       if (dis === undefined) dis = true;
       this.disambiguate.set(dis);
       console.log(`dis ${dis} ${this.disambiguate()}`);
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     console.log(`saving ${this.disambiguate()}`);
     this.loading.set(true);
     await this.userService.set("disambiguation.defaults", this.disambiguationUserConfig || {});
-    await this.userService.set("disambigation.enable", this.disambiguate());
+    await this.userService.set("disambiguation.enable", this.disambiguate());
     this.disambiguationData = undefined;
     await this.userService.save();
     await this.reload();
