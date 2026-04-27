@@ -1,0 +1,44 @@
+.user-pref-form {
+  --switch-on: orange;
+  --switch-off: gray;
+  --switch-width: 40px;
+  --switch-height: 22px;
+}
+.user-pref-form label {
+  font-weight: bold;
+}
+.user-pref-form .extstats-button {
+  --background-colour: orange;
+  --foreground-colour: black;
+  --disabled-colour: #b8996c;
+}
+.buddy-set-ro {
+  margin-bottom: 20px;
+}
+.buddy-set-rw {
+  margin-bottom: 30px;
+}
+.disambiguation-basegame {
+  margin-left: 24px;
+  line-height: 20px;
+}
+.disambiguation-basegame span {
+  margin-left: 8px;
+}
+.disambiguation-basegame.assigned {
+  font-weight: bold;
+}
+.disambiguation-expansion.unassigned {
+  color: mediumvioletred;
+  text-decoration: underline;
+}
+.disambiguation-expansion {
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+h5 {
+  margin-top: 20px;
+}
+h4 {
+  margin-top: 30px;
+}

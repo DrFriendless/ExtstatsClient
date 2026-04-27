@@ -1,0 +1,61 @@
+<div class="user-pref-form">
+  <h2>Options</h2>
+  @if (loggedIn()) {
+    @if (loading()) {
+      <extstats-loader/>
+    }
+    <p>
+      <extstats-switch class="pref-switch" id="enable" [(value)]="disambiguate"/>&nbsp;<label for="enable">Enable automatic inference of base games from expansion plays.</label>
+    </p>
+    <p>The official Extended Stats approach is that if you played an expansion, then you also played a base game.
+      We will look to see what that base game was, by looking for plays of possible base games on the same day.
+      If you play Dominion with 4 expansions mixed in, that will count as 1 play, and as 1 play each of Dominion and each of the expansions.
+    </p>
+    <p>Some players take the view that an expansion like (to choose from many examples)
+      <a href="https://boardgamegeek.com/boardgame/21385" target="_blank">Carcassonne: Towers and Thieves</a> implement such fundamental changes from the base game
+      that they are like playing a different game with the same components.
+      So a play of that expansion should count as only a play of that expansion, and not of the base game.
+    </p>
+    <p>If you turn this option off and then reprocess plays on the Updates page, we'll do our best to present your data as if you are of the second view.</p>
+    @if (disambiguationData) {
+      <h2>Base Game Disambiguation</h2>
+      <h4>Default Base Games</h4>
+      <p>These are expansions for which we don't necessarily know the base game.</p>
+      <dl>
+        @for (item of disambiguationData.items; track item; ) {
+          @let base = assignedBaseGame(item.expansion.bggid);
+          <dt class="disambiguation-expansion" [ngClass]="{ 'unassigned': base === undefined }">{{item.expansion.name}}</dt>
+          @for (bg of item.basegames; track bg.bggid) {
+            <dd class="disambiguation-basegame" [ngClass]="{ 'assigned': base === bg.bggid }" (click)="assign(item.expansion.bggid, bg.bggid)">
+              <input type="radio" [checked]="base === bg.bggid">
+              <span>{{bg.name}}</span>
+            </dd>
+          }
+          <dd class="disambiguation-basegame" [ngClass]="{ 'assigned': base === undefined }" (click)="unassign(item.expansion.bggid)">
+            <input type="radio" [checked]="base === undefined">
+            <span>(no default)</span>
+          </dd>
+        }
+      </dl>
+      <button type="button" class="extstats-button" (click)="save()">Save</button>
+
+      <h4>Ambiguous Plays</h4>
+      <p>
+        These are plays you've recorded on BGG for which we coudln't infer a base game.
+        You can fix these by either adding a base game to your plays on BGG on the day,
+        or by setting a default base game in the options above.
+        Those changes will take effect when Extended Stats next downloads the play -
+        in this case of historical plays you will need to initiate that on the Updates page.
+      </p>
+      <ul>
+        @for (play of disambiguationData.plays; track play) {
+          <li>Played {{play.name}} in {{play.year}}</li>
+        } @empty {
+          <P>None of your plays are ambiguous!</P>
+        }
+      </ul>
+    }
+  } @else {
+    <p>You need to be logged-in to use this page, as it creates data which is stored against your user in Extended Stats.</p>
+  }
+</div>
