@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   geek: string | undefined = undefined;
   downloaderQueue: Record<string, number> = {};
   loading = false;
+  disableRecalculatePlays = false;
 
   constructor(private api: ExtstatsApi, private userService: UserConfigService, private socks: WebSocketService) {
   }
@@ -115,6 +116,11 @@ export class AppComponent implements OnInit {
 
   onRefreshOld(): void {
     this.doRefreshOld(this.geek!).then(urls => urls.forEach(url => this.noLastUpdate(url)));
+  }
+
+  async onRecalculatePlays(): Promise<void> {
+    this.disableRecalculatePlays = true;
+    await this.api.recalculatePlays(this.geek!);
   }
 
   private async doRefreshOld(geek: string): Promise<string[]> {

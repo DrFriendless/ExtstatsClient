@@ -104,3 +104,14 @@
   <button class="update-button extstats-button" type="button" (click)="onRefreshOld()">Refresh</button>
 </p>
 
+<p>
+  This button will recalculate your plays, without downloading any data.
+  This can be useful if you've changed your default base games used to infer what a play of an expansion means,
+  or the BGG metadata about expansions has changed.
+  The task to do this update will be sent to the back-end and executed when it has time.
+</p>
+
+<p>
+  Recalculate Plays:&nbsp;
+  <button class="update-button extstats-button" type="button" (click)="onRecalculatePlays()" [disabled]="disableRecalculatePlays">Recalculate</button>
+</p>
