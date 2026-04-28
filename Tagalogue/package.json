@@ -10,9 +10,9 @@
     "@angular/core": "^20.3.6",
     "@angular/platform-browser": "^20.3.6",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
-    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.3.11.tgz",
-    "extstats-api": "file:/home/john/projects/repo/extstats-api-2.1.5.tgz",
-    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.4.tgz",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.3.13.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-3.0.0.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.5.tgz",
     "@angular-slider/ngx-slider": "^20.0.0",
     "ngx-bootstrap": "20.0.2",
     "zone.js": "^0.15.1"
