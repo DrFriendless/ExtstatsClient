@@ -267,6 +267,12 @@ export const SELECTOR_TYPES: SelectorType[] = [
     colour: "black"
   },
   {
+    key: "ranked",
+    args: [ ],
+    description: "All games which have a BGG ranking",
+    colour: "black"
+  },
+  {
     key: "designer",
     args: [ "DESIGNER" ],
     description: "All games by this designer",
