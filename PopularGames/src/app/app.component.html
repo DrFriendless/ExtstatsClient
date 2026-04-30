@@ -1,0 +1,24 @@
+<div class="popular-games extstats-page">
+
+  <p>A nickel is when one player plays the same game 5 times in a calendar year.
+    A dime is when one player plays the same game 10 times in a calendar year.
+    This table shows which games have most often been nickels and dimes for the users of this site.
+    In this table, a game which is a dime is not also counted as a nickel for that year.
+  </p>
+
+  @if (loading) {
+    <extstats-loader/>
+  }
+
+  <div class="extstats-table-block extstats-table-wide">
+    <es-table-controller [table]="ndTable"></es-table-controller>
+    <table es-table class="table extstats-table" [data]="rows" #ndTable="esTable" [rowsOnPage]="50" [sortBy]="'nickels'" [sortOrder]="'desc'">
+      <thead es-table-head [columns]="columns">Head</thead>
+      <tbody es-table-body [columns]="columns">Body</tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #boardgame let-game>
+  <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
+</ng-template>

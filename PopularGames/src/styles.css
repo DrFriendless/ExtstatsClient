@@ -1,0 +1,7 @@
+.popular-games {
+  --primary-colour: #e62565;
+  --text-colour: white;
+  --even-colour: rgba(255, 190, 254, 0.5);
+  --tab-border-colour: var(--primary-colour);
+}
+
