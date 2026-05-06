@@ -1,126 +1,86 @@
-import {Component, effect, signal, WritableSignal} from '@angular/core';
-import {LoaderComponent, UserConfigService} from "extstats-angular";
-import {ExtstatsApi} from "extstats-api";
-import {QueryResultsComponent} from "./query-results/query-results.component";
+import {Component, effect, model, signal, viewChild, ViewContainerRef} from '@angular/core';
+import {ViewMode} from "./view-mode";
+import {GameTableView} from "./game-table-view/game-table-view";
+import {GeekGameTableView} from "./geekgame-table-view/geekgame-table-view";
+import {TagTableView} from "./tag-table-view/tag-table-view";
+import {FormsModule} from "@angular/forms";
+import {UserConfigService} from "extstats-angular";
 
 export interface Row {
   bggid: number;
   name: string;
 }
-// these types are the shape of the data returned by the GraphQL query.
-export interface GameResult extends Row {
-  bggRanking: number;
-  bggRating: number;
-  yearPublished: number;
-  weight: number;
-  minPlayers: number;
-  maxPlayers: number;
-  playerCount: string;
-}
-export interface GamesResult {
-  games: GameResult[];
-}
-export interface GeekGameResult extends Row {
-  rating: number;
-  wantInTrade: boolean;
-  wantToPlay: boolean;
-  wantToBuy: boolean;
-  owned: boolean;
-  game: {
-    name: string;
-  }
-}
-export interface GeekGamesResult {
-  geekgames: {
-    geekGames: GeekGameResult[];
-  }
-}
 
-export type QueryMode = 'games' | 'geekgames';
+export interface StoredSelector {
+  name: string;
+  selector: string;
+}
 
 @Component({
   selector: 'query-widget',
-  templateUrl: './app.component.html',
   imports: [
-    LoaderComponent,
-    QueryResultsComponent,
-  ]
+    FormsModule
+  ],
+  templateUrl: './app.component.html'
 })
-export class QueryWidget {
-  loading = signal<boolean>(false);
-  mode = signal<QueryMode>('games');
-  selector = signal<string | undefined>(undefined);
-  gameResults = signal<GamesResult>({ games: [] });
-  geekGameResults = signal<GeekGamesResult>({ geekgames: { geekGames: [] }});
-  results: WritableSignal<Row[]> = signal<Row[]>([]);
+export class AppComponent {
+  mode = model<ViewMode | undefined>(undefined);
+  selector = signal<StoredSelector | undefined>(undefined);
+  selectors = signal<StoredSelector[]>([]);
+  modes = signal<ViewMode[]>([]);
+  viewComponent: any;
+  controlsComponent: any;
+  outlet = viewChild.required('outlet', { read: ViewContainerRef });
+  controls = viewChild.required('controls', { read: ViewContainerRef });
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(gameTableView: GameTableView, geekgameTableView: GeekGameTableView, tagTableView: TagTableView,
+              private userService: UserConfigService) {
+    this.modes.set([ gameTableView.mode, geekgameTableView.mode, tagTableView.mode ]);
+
+    effect(async () => {
+      const s = this.selector();
+      const mode = this.mode();
+      if (!s || !mode) return;
+      document.title = s.name;
+      document.getElementById("h1Title")!.textContent = s.name;
+      this.outlet().clear();
+      this.controls().clear();
+      const comp = mode.view?.getComponent();
+      const control = mode.view?.getControlsComponent();
+      this.viewComponent = this.outlet()?.createComponent(comp).instance;
+      this.controlsComponent = control ? this.controls()?.createComponent(control).instance : undefined;
+      if (mode.view && this.viewComponent) {
+        await mode.view.refresh(s.selector, this.userService.getAGeek(), this.viewComponent, this.controlsComponent);
+      }
+    });
+
     const url = URL.parse(window.location.href);
     if (url) {
       const params = url.searchParams;
       const m = params.get('mode');
-      if (m && (m === "games" || m === "geekgames")) this.mode.set(m);
+      for (const mm of this.modes()) {
+        if (m === mm.key) {
+          this.mode.set(mm);
+          break;
+        }
+      }
+      const name = params.get('name') || "Unnamed";
       const s = params.get('selector');
-      if (s) this.selector.set(s);
-    }
-    effect(async () => {
-      const s = this.selector();
-      const mode = this.mode();
-      if (!s) return;
-      console.log("running", s, mode);
-      await this.run(s, mode);
-    });
-    effect(() => {
-      const g = this.gameResults();
-      const gg = this.geekGameResults();
-      const m = this.mode();
-      switch (m) {
-        case "games": {
-          this.results.set(g.games);
-          break;
-        }
-        case "geekgames": {
-          this.results.set(gg.geekgames.geekGames);
-          break;
+      if (s) {
+        const s0 = { selector: s, name };
+        this.selector.set(s0);
+        const ss = this.selectors();
+        if ((ss.filter(x => x.selector === s)).length === 0) {
+          this.selectors.set([s0, ...ss]);
         }
       }
-    });
-  }
-
-  protected buildQuery(selector: string, mode: QueryMode): string {
-    const geek = this.userService.getAGeek();
-    switch (mode) {
-      case 'games':
-        return `{games(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) { bggid name bggRanking bggRating yearPublished weight minPlayers maxPlayers } }`;
-      case 'geekgames':
-        return `{geekgames(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
-          " geekGames { bggid rating owned wantInTrade wantToPlay wantToBuy game { name }}}}";
     }
-  }
-
-  async run(selector: string, mode: QueryMode) {
-    const s = selector.replaceAll('"', '\\"');
-    const query = this.buildQuery(s, mode);
-    this.loading.set(true);
-    const data = await this.api.retrieve(query);
-    this.loading.set(false);
-    switch (mode) {
-      case 'games': {
-        const d = data as GamesResult;
-        for (const g of d.games) {
-          g.playerCount = (g.minPlayers === g.maxPlayers) ? g.minPlayers.toString() : `${g.minPlayers}-${g.maxPlayers}`;
+    this.userService.get("catalist.store", [])
+      .then((stored: StoredSelector[] | undefined) => {
+        if (stored) {
+          const ss = this.selectors();
+          this.selectors.set([...ss, ...stored]);
         }
-        this.gameResults.set(data as GamesResult);
-        this.geekGameResults.set({ geekgames: { geekGames: [] } });
-        break;
-      }
-      case 'geekgames': {
-        const d = data as GeekGamesResult;
-        for (const gg of d.geekgames.geekGames) gg.name = gg.game.name;
-        this.gameResults.set({ games: [] });
-        this.geekGameResults.set(data as GeekGamesResult);
-        break;
-      }
-    }
+      })
   }
 }

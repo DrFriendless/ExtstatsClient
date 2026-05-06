@@ -4,3 +4,23 @@
   --even-colour: rgba(179, 255, 236, 0.5);
   --tab-border-colour: var(--primary-colour);
 }
+.control-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.outlet-panel {
+  display: block;
+}
+.control-panel select {
+  height: 32px;
+  font-size: 20px;
+}
+.control-panel span.label {
+  font-size: 20px;
+  color: #02b98b;
+}
+

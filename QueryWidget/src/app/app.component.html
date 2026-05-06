@@ -1,8 +1,23 @@
-<div class="query-widget extstats-page">
-  @if (loading()) {
-    <extstats-loader></extstats-loader>
-  }
+<div class="query-widget">
+  <div class="control-panel">
+    <span class="label">Selector:</span>
+    <select [(ngModel)]="selector" style="max-width: 760px">
+      @for (m of selectors(); track m.selector) {
+        <option [ngValue]="m">{{m.name}} &mdash; {{m.selector}}</option>
+      }
+    </select>
+  </div>
+  <div class="control-panel">
+    <span class="label">View:</span>
+    <select [(ngModel)]="mode">
+      @for (m of modes(); track m.key) {
+        <option [ngValue]="m">{{m.description}}</option>
+      }
+    </select>
+    <ng-container #controls></ng-container>
+  </div>
 
-  <query-results [data]="results()" [mode]="mode()"></query-results>
+  <div class="outlet-panel">
+    <ng-container #outlet></ng-container>
+  </div>
 </div>
-

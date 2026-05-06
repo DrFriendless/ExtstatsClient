@@ -1,0 +1,18 @@
+<div class="query-results-table">
+  <div class="extstats-table-block">
+    <es-table-controller [table]="queryTable"></es-table-controller>
+    <table es-table class="table extstats-table" [data]="data()" #queryTable="esTable"
+           [rowsOnPage]="30" [sortBy]="'name'" [sortOrder]="'asc'">
+      <thead es-table-head [columns]="columns()"></thead>
+      <tbody es-table-body [columns]="columns()"></tbody>
+    </table>
+  </div>
+</div>
+
+@if (loading()) {
+  <extstats-loader></extstats-loader>
+}
+
+<ng-template #boardgame let-game>
+  <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
+</ng-template>

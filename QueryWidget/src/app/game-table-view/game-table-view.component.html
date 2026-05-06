@@ -9,6 +9,10 @@
   </div>
 </div>
 
+@if (loading()) {
+  <extstats-loader></extstats-loader>
+}
+
 <ng-template #boardgame let-game>
   <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
 </ng-template>

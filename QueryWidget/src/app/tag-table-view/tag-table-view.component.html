@@ -1,0 +1,25 @@
+<div class="extstats-table-block">
+  <es-table-controller [table]="queryTable"></es-table-controller>
+  <table es-table class="table extstats-table" [data]="data()" #queryTable="esTable"
+         [rowsOnPage]="30" [sortBy]="'name'" [sortOrder]="'asc'">
+    <thead es-table-head [columns]="columns()"></thead>
+    <tbody class="tag-table" es-table-body [columns]="columns()"></tbody>
+  </table>
+</div>
+
+@if (loading()) {
+  <extstats-loader></extstats-loader>
+}
+
+<ng-template #boardgame let-game>
+  <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
+</ng-template>
+
+<ng-template #tagstemplate let-game>
+  @let allTags = currentGroup()?.tags || [];
+  @let tags = tagsByGame[game.bggid.toString()] || [];
+  @for (tag of allTags; track tag) {
+    @let present = tags.indexOf(tag) >= 0;
+    <tagchip [value]="tag" [present]="present" [removable]="false" (click)="onClick(tag, game.bggid.toString(), present)"/>
+  }
+</ng-template>
