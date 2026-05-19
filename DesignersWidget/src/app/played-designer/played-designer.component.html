@@ -1,0 +1,20 @@
+@if (loading) {
+  <extstats-loader></extstats-loader>
+}
+
+<div class="extstats-table-block">
+  <es-table-controller [table]="pdesTable"></es-table-controller>
+  <table es-table class="table extstats-table you-should-play" [data]="data" #pdesTable="esTable" [rowsOnPage]="30"
+         [sortBy]="'name'" [sortOrder]="'asc'">
+    <thead es-table-head [columns]="columns"></thead>
+    <tbody es-table-body [columns]="columns"></tbody>
+  </table>
+</div>
+
+<ng-template #designer let-row>
+  <designer [designer]="row.designer"/>
+</ng-template>
+
+<ng-template #boardgame let-game>
+  <boardgame [game]="game" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(game.bggid)"></boardgame>
+</ng-template>

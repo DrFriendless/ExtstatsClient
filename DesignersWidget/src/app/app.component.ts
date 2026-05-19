@@ -8,6 +8,7 @@ import {
   UserConfigService, UserTagService
 } from "extstats-angular";
 import {NgClass} from "@angular/common";
+import {PlayedByDesignerWidget} from "./played-designer/played-designer.component";
 
 @Component({
   selector: 'designers-widget',
@@ -16,6 +17,7 @@ import {NgClass} from "@angular/common";
     BoardGameLinkComponent,
     NgClass,
     BoardGameDesignerLinkComponent,
+    PlayedByDesignerWidget,
   ],
   templateUrl: './app.component.html'
 })
