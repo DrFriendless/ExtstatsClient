@@ -6,6 +6,13 @@
   --tertiary-colour: #fffae6;
   --border-style: 1px solid black;
   --inner-border-style: 1px solid gray;
+  --switch-on: var(--primary-colour);
+  --switch-off: gray;
+  --switch-width: 40px;
+  --switch-height: 22px;
+}
+.designers-widget label {
+  font-weight: bold;
 }
 
 .designers-table, .designers-table th, .designers-table tr {
@@ -91,4 +98,7 @@
   width: 60px;
   max-width: 60px;
   text-align: center;
+}
+.played-designer-opts {
+  margin-bottom: 12px;
 }

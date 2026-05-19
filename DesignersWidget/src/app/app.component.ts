@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, signal, ViewChild, WritableSignal} from '@angular/core';
 import {DesignerResult, ExtstatsApi} from "extstats-api";
 import {
   BoardGameDesignerLinkComponent,
@@ -23,9 +23,9 @@ import {PlayedByDesignerWidget} from "./played-designer/played-designer.componen
 })
 export class DesignersWidget implements AfterViewInit {
   @ViewChild(SelectorComboComponent) selectorCombo: SelectorComboComponent | undefined;
-  loading: boolean = false;
-  data: DesignerResult[] = [];
-  expanded: Set<number> = new Set<number>();
+  loading = signal<boolean>(false);
+  data: WritableSignal<DesignerResult[]> = signal([]);
+  expanded: WritableSignal<number[]> = signal([]);
 
   constructor(private api: ExtstatsApi, public userService: UserConfigService, public tagService: UserTagService) {
     this.userService.checkDataIsLoaded().then();
@@ -38,29 +38,32 @@ export class DesignersWidget implements AfterViewInit {
   async refresh(): Promise<void> {
     const geek = this.userService.getAGeek();
     if (geek) {
-      this.loading = true;
-      this.data = await this.api.getDesignerInfo(geek);
-      this.data.forEach(designer => {
+      this.loading.set(true);
+      const data = await this.api.getDesignerInfo(geek);
+      data.forEach(designer => {
         if (designer.games && designer.games.length > 1) {
           designer.games.sort((g1, g2) => g1.bggid - g2.bggid);
         }
         if (designer.games) {
           designer.games.forEach(g => g.bggRating = Math.floor(g.bggRating * 100) / 100)
         }
-      })
-      this.loading = false;
+      });
+      this.data.set(data);
+      this.loading.set(false);
     }
   }
 
   expand(designer: DesignerResult) {
     if (this.isExpanded(designer)) {
-      this.expanded.delete(designer.bggid);
+      const newExpanded = this.expanded().filter(x => x !== designer.bggid);
+      this.expanded.set(newExpanded);
     } else {
-      this.expanded.add(designer.bggid);
+      const newExpanded = [...this.expanded(), designer.bggid];
+      this.expanded.set(newExpanded);
     }
   }
 
   isExpanded(designer: DesignerResult): boolean {
-    return this.expanded.has(designer.bggid);
+    return this.expanded().indexOf(designer.bggid) >= 0;
   }
 }
