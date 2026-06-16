@@ -1,7 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { GeekSummary } from 'extstats-core';
 import {GeekComboComponent, LoaderComponent, UserConfigService} from 'extstats-angular';
-import {ExtstatsApi} from "extstats-api";
+import {ExtstatsApi, GeekSummary} from "extstats-api";
 import {CollectionPanelComponent} from "./collection-panel/collection-panel.component";
 import {OwnedPanelComponent} from "./owned-panel/owned-panel.component";
 import {FavouritesPanelComponent} from "./favourites-panel/favourites-panel.component";

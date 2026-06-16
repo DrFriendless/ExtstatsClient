@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GeekSummary } from "extstats-core";
+import { Component, Input } from '@angular/core';
+import {GeekSummary} from "extstats-api";
 
 @Component({
   selector: 'yearly-panel',

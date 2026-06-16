@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { GeekSummary } from "extstats-core";
-import { Observer } from "rxjs";
+import {GeekSummary} from "extstats-api";
 
 @Component({
   selector: 'owned-panel',

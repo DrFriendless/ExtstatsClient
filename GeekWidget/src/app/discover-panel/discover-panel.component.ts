@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { GeekSummary } from "extstats-core";
-import { Observer } from "rxjs";
-import {DecimalPipe} from "@angular/common";
+import {GeekSummary} from "extstats-api";
 
 @Component({
   selector: 'discover-panel',

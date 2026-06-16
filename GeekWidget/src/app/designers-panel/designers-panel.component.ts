@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core"
-import { GeekSummary } from "extstats-core";
+import {GeekSummary} from "extstats-api";
 
 @Component({
   selector: 'designers-panel',

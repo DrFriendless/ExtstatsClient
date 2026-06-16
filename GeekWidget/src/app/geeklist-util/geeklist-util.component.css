@@ -47,3 +47,13 @@ span.rating {
   border: none;
   color: white;
 }
+.opts-row {
+  --switch-height: 20px;
+  --switch-width: 35px;
+}
+.opts-row {
+  margin-top: 8px;
+}
+.opts-row label {
+  margin-right: 6px;
+}

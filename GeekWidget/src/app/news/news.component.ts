@@ -1,6 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { NewsItem } from "extstats-core";
-import {ExtstatsApi} from "extstats-api";
+import {ExtstatsApi, NewsItem} from "extstats-api";
 import {DatePipe} from "@angular/common";
 
 @Component({

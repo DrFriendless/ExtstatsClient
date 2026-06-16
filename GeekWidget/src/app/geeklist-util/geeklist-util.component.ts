@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {ExtstatsApi, GeeklistCheck, GeeklistItemCheck} from "extstats-api";
-import {LoaderComponent, UserConfigService} from "extstats-angular";
+import {LoaderComponent, SwitchComponent} from "extstats-angular";
 import {NgClass} from "@angular/common";
 
 const RE = /^(.*\/geeklist\/)?([0-9]+)(\/.*)?$/;
@@ -13,20 +13,26 @@ const RE = /^(.*\/geeklist\/)?([0-9]+)(\/.*)?$/;
   imports: [
     FormsModule,
     NgClass,
-    LoaderComponent
+    LoaderComponent,
+    SwitchComponent
   ],
   standalone: true
 })
 export class GeeklistUtilComponent {
   public geeklistId: string =  "";
+  public tradeList = false;
+  public tradeOnly = false;
   public geek: string | undefined;
   public checkResult: GeeklistCheck | undefined;
   public loading = false;
+  public error = "";
+  public hasTradeCodes = false;
 
-  constructor(private api: ExtstatsApi, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi) {
   }
 
   public async check() {
+    this.error = "";
     const orig = this.geeklistId.trim();
     const match = orig.match(RE);
     let n: number | undefined;
@@ -38,14 +44,20 @@ export class GeeklistUtilComponent {
       console.log("no match");
     }
     if (!n) {
-      console.log("don't like that geeklist");
+      this.error = "I can't understand the geeklist";
       return;
     }
     this.checkResult = undefined;
     this.loading = true;
-    // TODO - display error
-    this.checkResult = await this.api.checkGeeklist(n);
+    console.log(`trade list ${this.tradeList}`);
+    try {
+      this.checkResult = await this.api.checkGeeklist(n, this.tradeList);
+    } catch (err) {
+      // TODO - display error
+      console.log(err);
+    }
     this.loading = false;
+    this.hasTradeCodes = (this.checkResult && this.checkResult.items && (this.checkResult.items.filter(i => !!i.tradeCode).length > 0)) || false;
   }
 
   calcClass(item: GeeklistItemCheck): string {
@@ -67,6 +79,7 @@ export class GeeklistUtilComponent {
     if (item.owned) deets.push("owned");
     if (item.prevOwned) deets.push("previously owned");
     if (item.wishlist > 0) deets.push(`wishlist ${item.wishlist}`);
+    if (item.tradeCode) deets.push(item.tradeCode);
     if (deets.length === 0) deets.push("(no information)");
     return deets.join(", ");
   }
