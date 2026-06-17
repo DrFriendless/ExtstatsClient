@@ -1,0 +1,7 @@
+<div class="accept" (click)="onClick()">
+  @let text = `Accept ${want().name} for ${mine().name}`;
+  <p class="summary" [ngClass]="{'hidden': accept()}" [title]="text">{{text}}</p>
+  @if (accept()) {
+    <span class="check">✓</span>
+  }
+</div>

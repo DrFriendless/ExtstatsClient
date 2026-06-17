@@ -1,0 +1,21 @@
+.trade-item a {
+  text-decoration: none;
+}
+.trade-item a:hover {
+  text-decoration: underline;
+}
+.trade-item {
+  background: lavender;
+  padding: 2px;
+  color: black;
+}
+.trade-item .name {
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  overflow: clip;
+  max-width: 136px;
+  display: inline-block;
+}
+.trade-item .trade-code {
+  max-width: 136px;
+}

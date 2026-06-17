@@ -3,6 +3,10 @@ import {FormsModule} from "@angular/forms";
 import {ExtstatsApi, GeeklistCheck, GeeklistItemCheck} from "extstats-api";
 import {LoaderComponent, SwitchComponent} from "extstats-angular";
 import {NgClass} from "@angular/common";
+import {TradeItemComponent} from "../trade-item/trade-item.component";
+import {AcceptComponent} from "../accept/accept.component";
+import {CashComponent} from "../cash/cash.component";
+import {TradeModel} from "./trade-model";
 
 const RE = /^(.*\/geeklist\/)?([0-9]+)(\/.*)?$/;
 
@@ -14,19 +18,23 @@ const RE = /^(.*\/geeklist\/)?([0-9]+)(\/.*)?$/;
     FormsModule,
     NgClass,
     LoaderComponent,
-    SwitchComponent
+    SwitchComponent,
+    TradeItemComponent,
+    AcceptComponent,
+    CashComponent
   ],
   standalone: true
 })
 export class GeeklistUtilComponent {
   public geeklistId: string =  "";
-  public tradeList = false;
+  public tradeList = true;
   public tradeOnly = false;
   public geek: string | undefined;
   public checkResult: GeeklistCheck | undefined;
   public loading = false;
   public error = "";
   public hasTradeCodes = false;
+  public model: TradeModel | undefined = undefined;
 
   constructor(private api: ExtstatsApi) {
   }
@@ -58,6 +66,27 @@ export class GeeklistUtilComponent {
     }
     this.loading = false;
     this.hasTradeCodes = (this.checkResult && this.checkResult.items && (this.checkResult.items.filter(i => !!i.tradeCode).length > 0)) || false;
+    if (this.checkResult) {
+      const myItems = this.checkResult.items
+        .filter(i => i.tradeCode && this.calcClass(i) === "yours")
+        .map(i => {
+          return {
+            link: `https://boardgamegeek.com/geeklist/${n}?itemid=${i.id}`,
+            name: i.name,
+            tradeCode: i.tradeCode!
+          }
+        });
+      const interestingItems = this.checkResult.items
+        .filter(i => i.tradeCode && ["trade", "buy"].indexOf(this.calcClass(i)) >= 0)
+        .map(i => {
+          return {
+            link: `https://boardgamegeek.com/geeklist/${n}?itemid=${i.id}`,
+            name: i.name,
+            tradeCode: i.tradeCode!
+          }
+        });
+      this.model = new TradeModel(this.checkResult.geek, n, myItems, interestingItems);
+    }
   }
 
   calcClass(item: GeeklistItemCheck): string {

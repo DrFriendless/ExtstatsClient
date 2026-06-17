@@ -1,0 +1,25 @@
+.accept {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+}
+p.summary {
+  color: #159588;
+  overflow: hidden;
+  font-size: 13px;
+  text-wrap: wrap;
+  width: 140px;
+  height: 50px;
+  position: absolute;
+}
+p.summary.hidden {
+  opacity: 25%;
+}
+.check {
+  z-index: 1;
+  color: black;
+  font-size: 40px;
+  font-weight: bold;
+  margin-left: 50px;
+  position: relative;
+}

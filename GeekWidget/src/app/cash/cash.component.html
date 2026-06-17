@@ -1,0 +1,11 @@
+@let text = mine() ? `Accept $ for ${item().name}` : `Offer $ for ${item().name}`;
+<div class="summary-holder" (click)="onClick()">
+  <p class="summary" [ngClass]="{'hidden': !!amount()}" title="{{text}}">{{text}}</p>
+</div>
+@if (amount() && !editing()) {
+  <div class="amount-holder">
+    <span class="amount">${{amount()}}</span>
+  </div>
+} @else if (editing()) {
+  <input #editor type="text" class="cash-editor" [(ngModel)]="editAmount" (blur)="stopEditing()" (keydown)="watchEditorKey($event)"/>
+}

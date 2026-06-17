@@ -30,7 +30,9 @@
 @if (checkResult && checkResult.geeklistId) {
   <p></p>
   <p>
-    <span>Checking completed for <a href="https://www.boardgamegeek.com/geeklist/{{checkResult.geeklistId}}">geeklist {{checkResult.geeklistId}}</a> for {{checkResult.geek}}.</span>
+    <span>Checking completed for
+      <a href="https://www.boardgamegeek.com/geeklist/{{checkResult.geeklistId}}" target="_blank">
+        geeklist {{checkResult.geeklistId}}</a> for {{checkResult.geek}}.</span>
     @if (tradeList && hasTradeCodes) {
       <span> I found trade codes in the list.</span>
     } @else if (tradeList) {
@@ -48,14 +50,40 @@
     @for (item of checkResult.items; track item.id) {
       @let cls = calcClass(item);
       @if (!tradeOnly || (["yours", "trade", "buy"].indexOf(cls) >= 0)) {
-      <li><span class="item" [ngClass]="cls"><a href="https://boardgamegeek.com/boardgame/{{item.bggid}}">{{item.name}}</a> -
+        <li><span class="item" [ngClass]="cls"><a href="https://boardgamegeek.com/boardgame/{{item.bggid}}">{{item.name}}</a> -
       <a href="https://boardgamegeek.com/geeklist/{{checkResult.geeklistId}}?itemid={{item.id}}">{{calcDetails(item)}}</a>&nbsp;
-        @if (item.rating > 0) {
-          <span class="rating">{{item.rating}}</span>
-        }
+          @if (item.rating > 0) {
+            <span class="rating">{{item.rating}}</span>
+          }
       </span>
-      </li>
+        </li>
       }
     }
   </ul>
+  @if (tradeOnly && hasTradeCodes && model) {
+    <div class="trade-grid">
+      <span style="grid-area: 1 / 1 / 1 / 1">&nbsp;</span>
+      <span style="grid-area: 1 / 2 / 1 / 2">Want<br>Cash</span>
+      @for (i of model.interestingItems; track i.tradeCode) {
+        <trade-item [item]="i" [mine]="false" class="want-game"></trade-item>
+      }
+      <span style="grid-area: 2 / 1 / 2 / 1">Offer<br>Cash</span>
+      <span style="grid-area: 2 / 2 / 2 / 2">&nbsp;</span>
+      @for (i of model.interestingItems; track i.tradeCode) {
+        <div class="wide"><trade-cash [item]="i" [mine]="false" [model]="model"/></div>
+      }
+      @for (mine of model.myItems; track mine.tradeCode) {
+        <trade-item [item]="mine" [mine]="true" class="my-game"></trade-item>
+        <trade-cash [item]="mine" [mine]="true" [model]="model"/>
+        @for (i of model.interestingItems; track i.tradeCode) {
+          <trade-accept [mine]="mine" [want]="i" [model]="model"></trade-accept>
+        }
+      }
+    </div>
+
+    <div class="output">
+      <textarea class="output-box" readonly [value]="model.wantList()">
+      </textarea>
+    </div>
+  }
 }

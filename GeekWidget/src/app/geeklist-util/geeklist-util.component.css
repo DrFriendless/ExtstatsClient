@@ -57,3 +57,31 @@ span.rating {
 .opts-row label {
   margin-right: 6px;
 }
+.trade-grid {
+  display: grid;
+  grid-template-columns: [game] 140px [cash] 80px;
+  grid-template-rows: [game] 50px [cash] 40px;
+  grid-auto-columns: 140px;
+  grid-auto-rows: 50px;
+  gap: 6px;
+  overflow: scroll;
+  width: fit-content;
+  height: fit-content;
+}
+.trade-grid .my-game {
+  grid-column: game;
+}
+.trade-grid .want-cash {
+  grid-column: cash;
+}
+.trade-grid .want-game {
+  grid-row: game;
+}
+.trade-grid .offer-cash {
+  grid-row: cash;
+}
+.output-box {
+  min-height: 300px;
+  width: 1120px;
+  margin-top: 20px;
+}
