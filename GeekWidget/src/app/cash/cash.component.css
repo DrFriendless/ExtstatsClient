@@ -4,6 +4,7 @@
   position: absolute;
   z-index: 0;
   display: contents;
+  cursor: pointer;
 }
 .wide .summary-holder {
   width: 136px;

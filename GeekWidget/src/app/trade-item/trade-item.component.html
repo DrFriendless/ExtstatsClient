@@ -3,4 +3,9 @@
     <span class="name" title="{{item().name}}">{{item().name}}</span><br>
     <span class="trade-code">{{item().tradeCode}}</span>
   </a>
+  <select class="move-item" [(ngModel)]="newPos">
+    @for (x of Array(max()).keys(); track x) {
+      <option [value]="x+1" [disabled]="(x + 1) === newPos()">{{x+1}}</option>
+    }
+  </select>
 </div>

@@ -85,3 +85,9 @@ span.rating {
   width: 1120px;
   margin-top: 20px;
 }
+.gridop {
+  border: 0;
+  background: lightskyblue;
+  box-shadow: 2px 2px 1px #ccc;
+  width: 26px;
+}

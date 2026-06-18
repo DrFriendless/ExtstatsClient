@@ -2,6 +2,7 @@
   width: fit-content;
   height: fit-content;
   position: absolute;
+  cursor: pointer;
 }
 p.summary {
   color: #159588;

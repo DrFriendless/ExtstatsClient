@@ -8,6 +8,9 @@
   background: lavender;
   padding: 2px;
   color: black;
+  position: absolute;
+  width: 140px;
+  height: 50px;
 }
 .trade-item .name {
   text-overflow: ellipsis;
@@ -19,3 +22,18 @@
 .trade-item .trade-code {
   max-width: 136px;
 }
+.move-item {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: 1px black dashed;
+  position: relative;
+  left: 118px;
+  top: -51px;
+  z-index: 1;
+  color: transparent;
+}
+.move-item:open {
+  color: black;
+}
+

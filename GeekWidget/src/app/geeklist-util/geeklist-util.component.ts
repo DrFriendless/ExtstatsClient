@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, signal, viewChildren} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {ExtstatsApi, GeeklistCheck, GeeklistItemCheck} from "extstats-api";
 import {LoaderComponent, SwitchComponent} from "extstats-angular";
 import {NgClass} from "@angular/common";
-import {TradeItemComponent} from "../trade-item/trade-item.component";
+import {MoveEvent, TradeItemComponent} from "../trade-item/trade-item.component";
 import {AcceptComponent} from "../accept/accept.component";
 import {CashComponent} from "../cash/cash.component";
 import {TradeModel} from "./trade-model";
@@ -35,6 +35,7 @@ export class GeeklistUtilComponent {
   public error = "";
   public hasTradeCodes = false;
   public model: TradeModel | undefined = undefined;
+  private accepts = viewChildren(AcceptComponent);
 
   constructor(private api: ExtstatsApi) {
   }
@@ -89,6 +90,18 @@ export class GeeklistUtilComponent {
     }
   }
 
+  canFillDown() {
+    return this.model && this.model.canFillDown();
+  }
+
+  moveWanted(event: MoveEvent) {
+    this.model = this.model!.moveWanted(event.original, event.destination);
+  }
+
+  moveMine(event: MoveEvent) {
+    this.model = this.model!.moveMine(event.original, event.destination);
+  }
+
   calcClass(item: GeeklistItemCheck): string {
     if (item.user === this.checkResult?.geek) return "yours";
     if (item.wit) return "trade";
@@ -111,5 +124,27 @@ export class GeeklistUtilComponent {
     if (item.tradeCode) deets.push(item.tradeCode);
     if (deets.length === 0) deets.push("(no information)");
     return deets.join(", ");
+  }
+
+  syncAcceptsToModel() {
+    if (!this.model) return;
+    const ax = this.accepts();
+    for (const ac of ax) {
+      ac.accept.set(this.model.willAccept(ac.mine().tradeCode, ac.want().tradeCode));
+    }
+  }
+
+  fillDown() {
+    if (this.model) {
+      this.model.fillDown();
+      this.syncAcceptsToModel();
+    }
+  }
+
+  clear() {
+    if (this.model) {
+      this.model.clear();
+      this.syncAcceptsToModel();
+    }
   }
 }

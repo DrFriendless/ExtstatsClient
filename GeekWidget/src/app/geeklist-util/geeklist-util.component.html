@@ -61,25 +61,56 @@
     }
   </ul>
   @if (tradeOnly && hasTradeCodes && model) {
+    <p>
+      Now you need to fill in the trade grid, to say what you'll accept for what you're offering.
+      This app is designed to support this method (which is specific to the Australian maths-trade style):
+    </p>
+    <ol>
+      <li>Use the outlined position combos in each wanted-game column header to move the games you want most to the left, and the games you want least to the right.
+        There is a bug where sometimes the position combos wander off from the header box, please look around for stray ones!
+      </li>
+      <li>Use the outlined position combos in each offered-game row header to move the games you value most to the top, and the games you value least to the bottom.</li>
+      <li>Fill in how much cash you will offer for each game you want.</li>
+      <li>Fill in how much cash you will accept for each game you have.</li>
+      <li>For each game you want to get, click the Accept box for the top game you'd accept for that.
+        Because all of your games below that are worth less, you'd probably accept that game for any of them.
+        Because all of the games you want to the left of that are worth more, you'd probably accept any of those games for this one.
+      </li>
+      <li>(optional) Click the Fill Down button <span class="fill-down-example">◣</span> below. It will fill in the rest of the grid. Alternatively, you can fill in other spaces manually.</li>
+      <li>The sample wants list is shown below the grid. Copy and paste it into a verifier before submitting.
+        <ul>
+          <li>this wants list does not do duplicate protection</li>
+          <li>this wants list does not have a spending limit</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p>
+      <label for="filldown">Fill Down:&nbsp;</label><button class="gridop" id="filldown" title="Fill Down" [disabled]="!canFillDown()" (click)="fillDown()">◣</button>
+      <label for="clear">&nbsp;Clear:&nbsp;</label><button class="gridop" id="clear" title="Clear" (click)="clear()">&nbsp;</button>
+    </p>
+
     <div class="trade-grid">
       <span style="grid-area: 1 / 1 / 1 / 1">&nbsp;</span>
-      <span style="grid-area: 1 / 2 / 1 / 2">Want<br>Cash</span>
+      <span style="grid-area: 1 / 2 / 1 / 2"><b>Want<br>Cash</b></span>
       @for (i of model.interestingItems; track i.tradeCode) {
-        <trade-item [item]="i" [mine]="false" class="want-game"></trade-item>
+        <trade-item [item]="i" [mine]="false" [position]="$index + 1" [max]="$count" (move)="moveWanted($event)" class="want-game"></trade-item>
       }
-      <span style="grid-area: 2 / 1 / 2 / 1">Offer<br>Cash</span>
+      <span style="grid-area: 2 / 1 / 2 / 1"><b>Offer<br>Cash</b></span>
       <span style="grid-area: 2 / 2 / 2 / 2">&nbsp;</span>
       @for (i of model.interestingItems; track i.tradeCode) {
         <div class="wide"><trade-cash [item]="i" [mine]="false" [model]="model"/></div>
       }
       @for (mine of model.myItems; track mine.tradeCode) {
-        <trade-item [item]="mine" [mine]="true" class="my-game"></trade-item>
+        <trade-item [item]="mine" [mine]="true" [position]="$index + 1" [max]="$count" (move)="moveMine($event)" class="my-game"></trade-item>
         <trade-cash [item]="mine" [mine]="true" [model]="model"/>
         @for (i of model.interestingItems; track i.tradeCode) {
           <trade-accept [mine]="mine" [want]="i" [model]="model"></trade-accept>
         }
       }
     </div>
+
+    <h2>Basic Want-List</h2>
 
     <div class="output">
       <textarea class="output-box" readonly [value]="model.wantList()">
