@@ -1,4 +1,4 @@
-import {Component, signal, viewChildren} from '@angular/core';
+import {Component, viewChildren} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {ExtstatsApi, GeeklistCheck, GeeklistItemCheck} from "extstats-api";
 import {LoaderComponent, SwitchComponent} from "extstats-angular";
@@ -29,6 +29,7 @@ export class GeeklistUtilComponent {
   public geeklistId: string =  "";
   public tradeList = true;
   public tradeOnly = false;
+  public interestOnly = false;
   public geek: string | undefined;
   public checkResult: GeeklistCheck | undefined;
   public loading = false;
@@ -40,7 +41,17 @@ export class GeeklistUtilComponent {
   constructor(private api: ExtstatsApi) {
   }
 
+  public async checkSBGJ() {
+    this.error = "";
+    this.tradeList = false;
+    this.geeklistId = "318181";
+    this.interestOnly = true;
+    this.tradeOnly = false;
+    await this.doCheck(318181);
+  }
+
   public async check() {
+    this.interestOnly = false;
     this.error = "";
     const orig = this.geeklistId.trim();
     const match = orig.match(RE);
@@ -57,8 +68,11 @@ export class GeeklistUtilComponent {
       return;
     }
     this.checkResult = undefined;
+    await this.doCheck(n);
+  }
+
+  private async doCheck(n: number) {
     this.loading = true;
-    console.log(`trade list ${this.tradeList}`);
     try {
       this.checkResult = await this.api.checkGeeklist(n, this.tradeList);
     } catch (err) {
@@ -100,6 +114,17 @@ export class GeeklistUtilComponent {
 
   moveMine(event: MoveEvent) {
     this.model = this.model!.moveMine(event.original, event.destination);
+  }
+
+  showItem(item: GeeklistItemCheck): boolean {
+    if (this.tradeOnly) {
+      const cls = this.calcClass(item);
+      return ["yours", "trade", "buy"].indexOf(cls) >= 0;
+    } else if (this.interestOnly) {
+      return item.wit || item.wtb || item.owned || (item.wishlist >= 1 && item.wishlist <= 4);
+    } else {
+      return true;
+    }
   }
 
   calcClass(item: GeeklistItemCheck): string {

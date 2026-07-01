@@ -54,6 +54,11 @@ span.rating {
 .opts-row {
   margin-top: 8px;
 }
+.button-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .opts-row label {
   margin-right: 6px;
 }
