@@ -1,6 +1,6 @@
 .login-container {
   position: relative;
-  width: 230px;
+  width: 250px;
 }
 .login-form {
   display: flex;
@@ -9,13 +9,17 @@
   align-items: flex-end;
   gap: 10px;
 }
+.login-form input[type=text],
+.login-form input[type=password] {
+    width: 100%;
+}
 .login-button {
   --background-colour: #2424e5;
   --foreground-colour: white;
   --disabled-colour: #6d6dee;
 }
 .extstats-button.login-button {
-  margin-left: 140px;
+  margin-left: 150px;
   cursor: pointer;
   border: 0;
   width: 90px;
@@ -23,7 +27,7 @@
 }
 .login-panel {
   position: absolute;
-  width: 230px;
+  width: 250px;
   top: -30px;
   bottom: 0;
   left: 0;
@@ -64,7 +68,7 @@ input.error {
   font-size: larger;
 }
 .account-select {
-  width: 130px;
+  width: 150px;
   float: left;
   display: block;
   margin-top: 3px;
