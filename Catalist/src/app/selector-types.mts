@@ -253,6 +253,12 @@ export const SELECTOR_TYPES: SelectorType[] = [
     colour: "blue"
   },
   {
+    key: "trade",
+    args: ["USER"],
+    description: "Games the user has marked as for-trade",
+    colour: "blue"
+  },
+  {
     key: "wtp",
     args: ["USER"],
     description: "Games the user has marked as want-to-play",
