@@ -20,6 +20,7 @@ import {
 } from "extstats-angular";
 import {CatalistMetadata, Designer, ExtstatsApi, Publisher} from "extstats-api";
 import {ComposerSelectorComponent} from "../composer-selector/composer-selector.component";
+import {YearPickerComponent} from "../year-picker/year-picker.component";
 
 @Component({
   selector: 'arg-editor',
@@ -30,6 +31,7 @@ import {ComposerSelectorComponent} from "../composer-selector/composer-selector.
     PublisherComboComponent,
     SelectorChipComponent,
     forwardRef(() => ComposerSelectorComponent),
+    YearPickerComponent,
   ],
   templateUrl: './arg-editor.component.html',
   styleUrl: './arg-editor.component.css',
@@ -42,6 +44,7 @@ export class ArgEditorComponent {
   remove = output<number>();
   geek: Signal<GeekComboComponent | undefined> = viewChild('geek');
   designer: Signal<DesignerComboComponent | undefined> = viewChild('designer');
+  year: Signal<YearPickerComponent | undefined> = viewChild('year');
   publisher: Signal<PublisherComboComponent | undefined> = viewChild('publisher');
   metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [] });
   value = input<ParamType | undefined>(undefined);
@@ -71,6 +74,11 @@ export class ArgEditorComponent {
       const v = this.value();
       if (v) {
         switch (v.type) {
+          case "YEAR": {
+            const y = this.year();
+            if (v.value !== undefined && y) y.select(v.value);
+            break;
+          }
           case "MECHANIC": {
             if (v.value) this.mechanics.set(v.value);
             break;
@@ -158,6 +166,11 @@ export class ArgEditorComponent {
   onDesignerChosen(event: Designer) {
     const p = this.position();
     if (p) this.changes.emit({...p, value: { type: "DESIGNER", value: event.bggid}});
+  }
+
+  onYearChosen(event: number) {
+    const p = this.position();
+    if (p) this.changes.emit({...p, value: { type: "YEAR", value: event}});
   }
 
   onPublisherChosen(event: Publisher) {

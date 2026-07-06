@@ -39,6 +39,8 @@
   </select>
 } @else if (at === "DESIGNER") {
   <designer-combo #designer (designerChosen)="onDesignerChosen($event)"></designer-combo>
+} @else if (at === "YEAR") {
+  <year-picker #year (yearChosen)="onYearChosen($event)"></year-picker>
 } @else if (at === "PUBLISHER") {
   <publisher-combo #publisher (publisherChosen)="onPublisherChosen($event)"></publisher-combo>
 } @else if (at === "TAG") {

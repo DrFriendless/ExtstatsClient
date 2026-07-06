@@ -1,0 +1,31 @@
+<div class="year-chooser" style="position:relative;display: inline-block">
+  <input autocomplete="off"
+         type="search"
+         role="combobox"
+         aria-haspopup="listbox"
+         [placeholder]="placeholder()"
+         [(ngModel)]="inputs"
+         [attr.aria-expanded]="isListVisible"
+         (keydown.enter)="selectionEntered($event)"
+         (keydown.arrowDown)="navigateDownToListItem($event)"
+         (keydown.arrowUp)="navigateUpToListItem($event)"
+         (keydown.escape)="reset()"
+         (blur)="isListVisible = false" />
+
+  @if (isListVisible) {
+    <div class="list-container" style="position: absolute; left: 0">
+      <ul role="listbox">
+        @for (item of filteredItems(); track item) {
+          <li role="option"
+              [attr.aria-selected]="$index === focusedItemIndex"
+              [class]="{ 'focused': $index === focusedItemIndex }"
+              (mouseenter)="focusOn($index)"
+              (mousedown)="select(item)">
+            {{item || ""}}
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>
+

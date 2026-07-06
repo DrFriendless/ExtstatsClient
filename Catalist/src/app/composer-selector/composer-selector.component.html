@@ -4,9 +4,12 @@
 <!--    <span style="font-size: 14px; color: deeppink; font-style: normal; margin: 0 4px;">{{s.id}}</span>-->
 <!--  }-->
   <span>{{s.key}}(</span>
-  @for (param of s.params; track param; let argIndex = $index) {
+  @for (param of s.params; track param; let argIndex = $index; let last=$last) {
     <arg-editor [value]="param" [metadata]="metadata()" [position]="{ argIndex, selectorId: s.id || -1 }" [insertionPoint]="insertionPoint()"
                 (warning)="onWarning($event)" (remove)="onRemove(argIndex, $event)" (changes)="onChange($event)" />
+    @if (!last) {
+      <span class="type-key">,&nbsp;</span>
+    }
   }
   <span>)</span>
 }

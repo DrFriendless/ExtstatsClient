@@ -1,4 +1,4 @@
-export type ARG_TYPE = "GAME_IDS" | "SELECTOR_ARRAY" | "USER" | "DESIGNER" | "PUBLISHER" | "CATEGORY" | "MECHANIC" | "TAG"
+export type ARG_TYPE = "GAME_IDS" | "SELECTOR_ARRAY" | "USER" | "DESIGNER" | "PUBLISHER" | "CATEGORY" | "MECHANIC" | "TAG" | "YEAR"
 
 export type USER_TYPE = "ME" | { user: string } | undefined
 
@@ -7,6 +7,7 @@ export type ParamType =
   { type: "SELECTOR_ARRAY"; value: Selector[] } |
   { type: "USER"; value: USER_TYPE } |
   { type: "DESIGNER"; value: number | undefined } |
+  { type: "YEAR"; value: number | undefined } |
   { type: "PUBLISHER"; value: number | undefined } |
   { type: "CATEGORY"; value: string | undefined } |
   { type: "MECHANIC"; value: string | undefined } |
@@ -17,6 +18,7 @@ export function paramTypeToString(p: ParamType | undefined): string {
   switch (p.type) {
     case "CATEGORY": return `"${p.value || '??'}"`;
     case "DESIGNER": return p?.value?.toString() || "??";
+    case "YEAR": return p?.value?.toString() || "??";
     case "GAME_IDS": return p.value.join(",");
     case "MECHANIC": return `"${p.value || '??'}"`;
     case "PUBLISHER": return p?.value?.toString() || "??";
@@ -38,6 +40,7 @@ export function isValid(p: ParamType): boolean {
     case "GAME_IDS": return p.value.length > 0;
     case "MECHANIC": return !!p.value;
     case "PUBLISHER": return !!p.value;
+    case "YEAR": return (!!p.value && p.value.toString().length === 4) || p.value === 0;
     case "SELECTOR_ARRAY": return (p.value.map(s => s.isValid())).indexOf(false) < 0;
     case "TAG": return !!p.value;
     case "USER": return !!p.value;
@@ -159,13 +162,14 @@ export class Selector {
   }
 }
 
-export function emptyValue(argTpe: ARG_TYPE): ParamType {
-  switch (argTpe) {
+export function emptyValue(argType: ARG_TYPE): ParamType {
+  switch (argType) {
     case "USER": return { type: "USER", value: undefined };
     case "TAG": return { type: "TAG", value: undefined };
     case "SELECTOR_ARRAY": return { type: "SELECTOR_ARRAY", value: [] };
     case "PUBLISHER": return { type: "PUBLISHER", value: undefined };
     case "DESIGNER": return { type: "DESIGNER", value: undefined };
+    case "YEAR": return { type: "YEAR", value: undefined };
     case "MECHANIC": return { type: "MECHANIC", value: undefined };
     case "CATEGORY": return { type: "CATEGORY", value: undefined };
     case "GAME_IDS": return { type: "GAME_IDS", value: [] };
@@ -222,6 +226,12 @@ export const SELECTOR_TYPES: SelectorType[] = [
     key: "played",
     args: ["USER"],
     description: "Games played by the user",
+    colour: "blue"
+  },
+  {
+    key: "piy",
+    args: ["USER","YEAR"],
+    description: "Games played by the user in the specified year",
     colour: "blue"
   },
   {
