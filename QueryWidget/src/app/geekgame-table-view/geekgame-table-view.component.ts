@@ -40,7 +40,7 @@ export class GeekGameTableViewComponent implements AfterViewInit, ViewComponent 
     {
       field: "name",
       name: "Game",
-      tooltip: "The game you want in trade",
+      tooltip: "The name of the gam,e",
       template: this.boardgame as unknown as TemplateRef<RowContext<GeekGameResult>>,
       classname: "col-game-name"
     },
@@ -62,6 +62,10 @@ export class GeekGameTableViewComponent implements AfterViewInit, ViewComponent 
     {
       field: "wantToPlay", name: "Want to Play", tooltip: "Want to play", classname: "col-boolean",
       valueHtml: (r: GeekGameResult) => r.wantToPlay ? "✓" : ""
+    },
+    {
+      field: "forTrade", name: "For Trade", tooltip: "For trade", classname: "col-boolean",
+      valueHtml: (r: GeekGameResult) => r.forTrade ? "✓" : ""
     }
   ];
   columns: WritableSignal<Column<any>[]> = signal([]);

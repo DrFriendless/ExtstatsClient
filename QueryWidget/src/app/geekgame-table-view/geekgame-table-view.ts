@@ -14,6 +14,7 @@ export interface GeekGameResult extends Row {
   game: {
     name: string;
   }
+  forTrade: boolean;
 }
 
 export interface GeekGamesResult {
@@ -30,7 +31,7 @@ export class GeekGameTableView extends View {
 
   protected buildQuery(selector: string, geek: string | undefined): string {
     return `{geekgames(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
-      " geekGames { bggid rating owned wantInTrade wantToPlay wantToBuy game { name }}}}";
+      " geekGames { bggid rating owned wantInTrade wantToPlay wantToBuy forTrade game { name }}}}";
   }
 
   async refresh(selector: string, geek: string | undefined, view: ViewComponent, controls: ViewComponent): Promise<void> {
