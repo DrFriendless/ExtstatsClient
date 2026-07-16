@@ -3,7 +3,9 @@ import {ARG_TYPE, ParamType, Selector, SELECTOR_TYPES} from "./selector-types.mj
 import {compile} from "./moo.js";
 
 export function parseSelector(selector: string, name: string | undefined): Selector | undefined {
+  console.log(`parsing ${selector}`);
   const expr = parse(selector);
+  console.log(JSON.stringify(expr));
   const s = expressionToSelector(expr);
   if (s) s.name = name;
   return s;
@@ -54,6 +56,7 @@ function argToParamType(arg: { 0: ARG_TYPE, 1: Arg}): ParamType | undefined {
       switch (arg[0]) {
         case "DESIGNER":
         case "PUBLISHER":
+        case "YEAR":
           return { type: arg[0], value: (arg[1] as Integer).value };
       }
       console.log(`Type error expected ${arg[0]} got ${arg[1].kind}`);
