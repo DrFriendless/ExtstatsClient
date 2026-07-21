@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
   GraphQuerySourceComponent,
   LoaderComponent,
-  SelectorComboComponent,
+  SelectorComboComponent, TaggedGame,
   UserConfigService,
 } from "extstats-angular";
 import {ExtstatsApi} from "extstats-api";
@@ -24,6 +24,7 @@ export interface GeekGameResult {
   shouldPlayScore: number;
   daysSincePlayed: number;
   rating: number;
+  tags: string[] | undefined
   years: number;
   months: number;
   expansion: boolean;
@@ -88,7 +89,7 @@ export class UserOwnedComponent extends GraphQuerySourceComponent<Result> implem
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRanking bggRating yearPublished isExpansion } " +
-      " geekGames { bggid rating shouldPlayScore years months expansion plays lastPlay firstPlay lyPlays daysSincePlayed forTrade } " +
+      " geekGames { bggid rating tags shouldPlayScore years months expansion plays lastPlay firstPlay lyPlays daysSincePlayed forTrade } " +
       "}}";
   }
 

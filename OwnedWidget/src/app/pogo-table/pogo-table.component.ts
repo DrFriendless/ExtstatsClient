@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { makeIndex } from "extstats-core"
-import {BoardGameLinkComponent, DataViewComponent, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, DataViewComponent, TaggedGame, UserTagService} from "extstats-angular";
 import { Data, formatDate } from "../app.component";
 import { DataTable, DataTableController, DefaultSorter} from "extstats-datatable";
 
-type PogoTableRow = {
-  bggid: number;
-  name: string;
+interface PogoTableRow extends TaggedGame {
   plays: number;
   bggRank: number;
   bggRating: number;
@@ -49,7 +47,7 @@ export class PogoTableComponent extends DataViewComponent<Data> {
         name: game.name, plays, bggRank: game.bggRanking, bggRating,
         rating: gg.rating < 0 ? "" : gg.rating.toString(), bggid: gg.bggid,
         lastPlay: formatDate(gg.lastPlay), firstPlay: formatDate(gg.firstPlay),
-        playsInLastYear: gg.lyPlays, utilisation
+        playsInLastYear: gg.lyPlays, utilisation, tags: gg.tags
       };
       rows.push(row);
     });

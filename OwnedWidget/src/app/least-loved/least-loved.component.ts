@@ -1,6 +1,6 @@
 import {Component, TemplateRef, ViewChild} from '@angular/core';
 import { makeIndex } from "extstats-core";
-import {BoardGameLinkComponent, DataViewComponent, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, DataViewComponent, TaggedGame, UserTagService} from "extstats-angular";
 import {Data, formatDate, ymdToDate} from "../app.component";
 import {
   Column,
@@ -12,9 +12,7 @@ import {
   RowContext
 } from "extstats-datatable";
 
-interface LeastLovedRow {
-    bggid: number;
-    name: string;
+interface LeastLovedRow extends TaggedGame {
     rating: number;
     lastPlayed: string;
     leastLovedScore: number;
@@ -79,6 +77,7 @@ export class LeastLovedComponent extends DataViewComponent<Data> {
         const ll = daysSince / gg.rating / gg.rating;
         const row: LeastLovedRow = {
           name: game.name,
+          tags: gg.tags,
           bggid: gg.bggid,
           rating: gg.rating,
           lastPlayed: formatDate(gg.lastPlay),

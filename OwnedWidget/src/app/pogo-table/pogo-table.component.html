@@ -20,7 +20,7 @@
         <tbody>
           @for (row of pogoTable.data; track row.bggid) {
             <tr>
-              <td class="col-game-name"><boardgame [game]="row" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(row.bggid)"></boardgame></td>
+              <td class="col-game-name"><boardgame [game]="row" [allTags]="tagService.allTags"></boardgame></td>
               <td class="col-plays">{{row.plays}}</td>
               <td class="col-ranking">{{row.bggRank}}</td>
               <td class="col-rating">{{row.bggRating}}</td>

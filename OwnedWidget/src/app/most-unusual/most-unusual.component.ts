@@ -8,12 +8,10 @@ import {
   DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, TaggedGame, UserConfigService, UserTagService} from "extstats-angular";
 
-interface Row {
-  bggid: number;
+interface Row extends TaggedGame {
   yearPublished: number;
-  name: string;
   bggRating: number;
   weight: number;
   bggRanking: number;
@@ -81,7 +79,7 @@ export class MostUnusualComponent implements AfterViewInit {
     this.geek = this.userService.getAGeek();
     if (this.geek) {
       this.loading = true;
-      this.data = await this.api.retrieve(`{mostunusual(geek: "${this.geek}", count: 50) { bggid yearPublished name bggRating weight minPlayers maxPlayers bggRanking usersOwned } }`) as Data;
+      this.data = await this.api.retrieve(`{mostunusual(geek: "${this.geek}", count: 50) { bggid tags yearPublished name bggRating weight minPlayers maxPlayers bggRanking usersOwned } }`) as Data;
       this.processData(this.data);
       this.loading = false;
     }
