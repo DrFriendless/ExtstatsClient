@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, OnDestroy} from "@angular/core";
 import {Subscription} from "rxjs/internal/Subscription";
-import {ExtstatsApi} from "extstats-api";
-import {SystemStats} from "extstats-core";
+import {ExtstatsApi, SystemStats} from "extstats-api";
 import {LoaderComponent} from "extstats-angular";
 
 @Component({
