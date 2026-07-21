@@ -25,7 +25,7 @@ export class TagTableControlsComponent implements ViewComponent {
     });
   }
 
-  setData(data: { tagsByGame: Record<string, string[]>, tagGroups: TagGroup[], callback: (tagGroup: TagGroup) => void }): void {
+  setData(data: { tagGroups: TagGroup[], callback: (tagGroup: TagGroup) => void }): void {
     this.callback = data.callback;
     this.tagGroups.set(data.tagGroups);
     if (data.tagGroups.length === 0) {

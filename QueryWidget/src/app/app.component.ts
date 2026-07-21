@@ -9,6 +9,7 @@ import {UserConfigService} from "extstats-angular";
 export interface Row {
   bggid: number;
   name: string;
+  tags: string[] | undefined;
 }
 
 export interface StoredSelector {

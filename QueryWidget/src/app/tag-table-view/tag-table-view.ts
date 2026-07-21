@@ -4,43 +4,59 @@ import {TagTableViewComponent} from "./tag-table-view.component";
 import {ExtstatsApi} from "extstats-api";
 import {Row} from "../app.component";
 import {TagTableControlsComponent} from "./tag-table-controls.component";
-import {UserConfigService, UserTagService} from "extstats-angular";
+import {UserTagService} from "extstats-angular";
 
-export interface GeekGamesTagResult {
-  games: GeekGameTagResult[];
+interface GeekGame {
+  tags: string[];
+  game: {
+    name: string;
+  };
+  bggid: number;
 }
 
-export interface GeekGameTagResult extends Row {
+export interface TagTableGame extends Row {
+  tags: string[];
+}
+
+export interface GeekGamesTagResult {
+  games: TagTableGame[];
+}
+
+interface QueryResult {
+  geekgames: {
+    geekGames: GeekGame[]
+  }
 }
 
 @Injectable({ providedIn: 'root' })
 export class TagTableView extends View {
-  constructor(private api: ExtstatsApi, private tagService: UserTagService, private userService: UserConfigService) {
+  constructor(private api: ExtstatsApi, private tagService: UserTagService) {
     super({ key: "tags", description: "Tags" });
   }
 
   protected buildQuery(selector: string, geek: string | undefined): string {
-    return `{games(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) { name bggid } }`;
+    return `{geekgames(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+      " geekGames { bggid tags game { name }}}}";
   }
 
-  async refreshGameData(selector: string, geek: string | undefined) {
+  async refreshGameData(selector: string, geek: string | undefined): Promise<GeekGamesTagResult> {
     const s = selector.replaceAll('"', '\\"');
     const query = this.buildQuery(s, geek);
-    return await this.api.retrieve(query);
+    const qr = await this.api.retrieve(query) as QueryResult;
+    return { games: qr.geekgames.geekGames.map(gg => { return { bggid: gg.bggid, name: gg.game.name, tags: gg.tags }; }) }
   }
 
   async refreshUserData() {
     this.tagService.refresh();
-    const tagsByGame = await this.userService.get("tagalogue.tagsbygame", {}) || {};
     const tagGroups = this.tagService.getTagGroups();
-    return { tagsByGame, tagGroups };
+    return { tagGroups };
   }
 
   async refresh(selector: string, geek: string | undefined, view: ViewComponent, controls: ViewComponent): Promise<void> {
     view.setLoading(true);
     this.refreshGameData(selector, geek).then(data => {
       view.setLoading(false);
-      view.setData(data as GeekGamesTagResult);
+      view.setData(data);
     });
     const callback = (view as any).setTagGroup.bind(view);
     this.refreshUserData().then(data => {

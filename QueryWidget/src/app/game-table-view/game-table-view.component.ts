@@ -8,7 +8,7 @@ import {
   WritableSignal
 } from "@angular/core";
 import {BoardGameLinkComponent, LoaderComponent, UserTagService} from "extstats-angular";
-import {GameResult, GamesResult} from "./game-table-view";
+import {GameTableRow} from "./game-table-view";
 import {ViewComponent} from "../view-mode";
 import {
   Column,
@@ -35,20 +35,20 @@ import {
 export class GameTableViewComponent implements AfterViewInit, ViewComponent {
   loading = signal<boolean>(false);
   boardgame: Signal<TemplateRef<any> | undefined> = viewChild('boardgame');
-  data = signal<GameResult[]>([]);
-  private columnParams: ColumnParams<GameResult>[] = [
+  data = signal<GameTableRow[]>([]);
+  private columnParams: ColumnParams<GameTableRow>[] = [
     {
       field: "name",
       name: "Game",
       tooltip: "The game you want in trade",
-      template: this.boardgame as unknown as TemplateRef<RowContext<GameResult>>,
+      template: this.boardgame as unknown as TemplateRef<RowContext<GameTableRow>>,
       classname: "col-game-name"
     },
     { field: "bggRanking", name: "BGG Ranking", tooltip: "Ranking of this game on BoardGameGeek", classname: "col-ranking",
-      valueHtml: (r: GameResult) => r.bggRanking.toString()
+      valueHtml: (r: GameTableRow) => r.bggRanking.toString()
     },
     { field: "bggRating", name: "BGG Rating", tooltip: "Rating of this game on BoardGameGeek", classname: "col-rating",
-      valueHtml: (r: GameResult) => r.bggRating.toString()
+      valueHtml: (r: GameTableRow) => r.bggRating.toString()
     },
     { field: "yearPublished", name: "Year Published", tooltip: "Year this game was first published", classname: "col-year" },
     { field: "playerCount", name: "Players", tooltip: "How many players can play this game", classname: "col-number" },
@@ -60,13 +60,13 @@ export class GameTableViewComponent implements AfterViewInit, ViewComponent {
   }
 
   public ngAfterViewInit() {
-    this.columnParams[0].template = this.boardgame()! as TemplateRef<RowContext<GameResult>>;
-    this.columns.set(this.columnParams.map(c => new Column<GameResult>(c)));
+    this.columnParams[0].template = this.boardgame()! as TemplateRef<RowContext<GameTableRow>>;
+    this.columns.set(this.columnParams.map(c => new Column<GameTableRow>(c)));
   }
 
-  setData(data: GamesResult): void {
-    data.games.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-    this.data.set(data.games);
+  setData(data: GameTableRow[]): void {
+    data.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+    this.data.set(data);
   }
 
   setLoading(loading: boolean): void {

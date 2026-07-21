@@ -11,11 +11,9 @@ import {
   LoaderComponent,
   TagChip,
   TagGroup,
-  UserConfigService,
   UserTagService
 } from "extstats-angular";
 import {ViewComponent} from "../view-mode";
-import {GeekGamesTagResult, GeekGameTagResult} from "./tag-table-view";
 import {
   Column,
   ColumnParams,
@@ -25,6 +23,7 @@ import {
   DataTableHead,
   RowContext
 } from "extstats-datatable";
+import {GeekGamesTagResult, TagTableGame} from "./tag-table-view";
 
 @Component({
   selector: 'tag-view',
@@ -44,39 +43,38 @@ export class TagTableViewComponent implements AfterViewInit, ViewComponent {
   boardgame: Signal<TemplateRef<any> | undefined> = viewChild('boardgame');
   tagstemplate: Signal<TemplateRef<any> | undefined> = viewChild('tagstemplate');
   currentGroup = signal<TagGroup | undefined>(undefined);
-  data = signal<GeekGameTagResult[]>([]);
-  private columnParams: ColumnParams<GeekGamesTagResult>[] = [
+  data = signal<TagTableGame[]>([]);
+  private columnParams: ColumnParams<TagTableGame>[] = [
     {
       field: "name",
       name: "Game",
       tooltip: "The game you want in trade",
-      template: this.boardgame as unknown as TemplateRef<RowContext<GeekGamesTagResult>>,
+      template: this.boardgame as unknown as TemplateRef<RowContext<TagTableGame>>,
       classname: "col-game-name"
     },
     {
       field: "tags", name: "Tags", tooltip: "Whether you have given this game these tags",
-      template: this.tagstemplate as unknown as TemplateRef<RowContext<GeekGamesTagResult>>,
+      template: this.tagstemplate as unknown as TemplateRef<RowContext<TagTableGame>>,
       classname: "col-tags"
     }
   ];
-  tagsByGame: Record<string, string[]> = {};
   tagGroups: TagGroup[] = [];
   columns: WritableSignal<Column<any>[]> = signal([]);
 
-  constructor(public tagService: UserTagService, private userService: UserConfigService) {
+  constructor(public tagService: UserTagService) {
   }
 
   public ngAfterViewInit() {
-    this.columnParams[0].template = this.boardgame()! as TemplateRef<RowContext<GeekGamesTagResult>>;
-    this.columnParams[1].template = this.tagstemplate()! as TemplateRef<RowContext<GeekGamesTagResult>>;
-    this.columns.set(this.columnParams.map(c => new Column<GeekGamesTagResult>(c)));
+    this.columnParams[0].template = this.boardgame()! as TemplateRef<RowContext<TagTableGame>>;
+    this.columnParams[1].template = this.tagstemplate()! as TemplateRef<RowContext<TagTableGame>>;
+    this.columns.set(this.columnParams.map(c => new Column<TagTableGame>(c)));
   }
 
-  async onClick(tag: string, game: string, present: boolean) {
+  async onToggle(tag: string, game: TagTableGame, present: boolean) {
     if (present) {
-      await this.userService.removeTagAndSave(game, tag);
+      game.tags = await this.tagService.removeTagAndSave(game.bggid, tag);
     } else {
-      await this.userService.addTagAndSave(game, tag);
+      game.tags = await this.tagService.addTagAndSave(game.bggid, tag);
     }
   }
 
@@ -91,8 +89,7 @@ export class TagTableViewComponent implements AfterViewInit, ViewComponent {
     }
   }
 
-  setTagData(data: { tagsByGame: Record<string, string[]>, tagGroups: TagGroup[] }) {
-    this.tagsByGame = data.tagsByGame;
+  setTagData(data: { tagGroups: TagGroup[] }) {
     this.tagGroups = data.tagGroups;
   }
 

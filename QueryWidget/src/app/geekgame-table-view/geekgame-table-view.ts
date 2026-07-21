@@ -3,6 +3,7 @@ import {Row} from "../app.component";
 import {GeekGameTableViewComponent} from "./geekgame-table-view.component";
 import {Injectable} from "@angular/core";
 import {ExtstatsApi} from "extstats-api";
+import {UserTagService} from "extstats-angular";
 
 
 export interface GeekGameResult extends Row {
@@ -15,6 +16,8 @@ export interface GeekGameResult extends Row {
     name: string;
   }
   forTrade: boolean;
+  name: string;
+  tags: string[];
 }
 
 export interface GeekGamesResult {
@@ -25,13 +28,13 @@ export interface GeekGamesResult {
 
 @Injectable({ providedIn: 'root' })
 export class GeekGameTableView extends View {
-  constructor(private api: ExtstatsApi) {
+  constructor(private api: ExtstatsApi, private tagService: UserTagService) {
     super({ key: "geekgames", description: "Geek Games" });
   }
 
   protected buildQuery(selector: string, geek: string | undefined): string {
     return `{geekgames(selector: "${selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
-      " geekGames { bggid rating owned wantInTrade wantToPlay wantToBuy forTrade game { name }}}}";
+      " geekGames { bggid rating owned wantInTrade wantToPlay wantToBuy forTrade tags game { name }}}}";
   }
 
   async refresh(selector: string, geek: string | undefined, view: ViewComponent, controls: ViewComponent): Promise<void> {
