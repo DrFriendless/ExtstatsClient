@@ -5,7 +5,7 @@
     @for (g of data; track g.bggid) {
       <tr>
         <td class="col-number">{{g.plays}}</td>
-        <td class="col-game-name"><boardgame [game]="g" [allTags]="tagService.allTags" [tagsForGame]="tagService.getTagsForGame(g.bggid)"></boardgame></td>
+        <td class="col-game-name"><boardgame [game]="g" [allTags]="tagService.allTags"></boardgame></td>
       </tr>
     }
   </tbody>

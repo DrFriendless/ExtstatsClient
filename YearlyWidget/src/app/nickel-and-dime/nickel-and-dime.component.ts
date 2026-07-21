@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import {PlaysViewComponent} from "extstats-angular";
+import {PlaysViewComponent, TaggedGame} from "extstats-angular";
 import {Result} from "../app.component";
 import {makeIndex} from "extstats-core";
 import {Counter} from "../library";
 import {NickelDimeTableComponent} from "../nickel-dime-table/nickel-dime-table.component";
 
-export interface Row {
+export interface Row extends TaggedGame {
   plays: number;
-  name: string;
-  bggid: number;
 }
 
 @Component({
@@ -44,7 +42,7 @@ export class NickelAndDimeComponent extends PlaysViewComponent<Result> {
       const plays = counter.get(key);
       if (plays < 4) break;
       const game = gamesIndex[key];
-      const row = { plays, name: game.name, bggid: game.bggid };
+      const row = { plays, name: game.name, bggid: game.bggid, tags: game.tags };
       if (plays >= 100) {
         this.dollars.push(row);
       } else if (plays >= 25) {

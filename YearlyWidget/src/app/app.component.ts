@@ -15,6 +15,7 @@ export interface Game {
   bggid: number;
   name: string;
   isExpansion: boolean;
+  tags: string[] | undefined;
 }
 export interface Plays {
   game: GameId;
@@ -73,6 +74,6 @@ export class YearlyComponent extends GraphQuerySourceComponent<Result> implement
   protected buildQuery(): string {
       const s = this.year * 10000;
       const e = this.year * 10000 + 1231;
-      return `{plays(geeks: ["${this.userService.getAGeek()}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid name isExpansion } plays { game { bggid } quantity ymd } geekgames { bggid rating } } }`;
+      return `{plays(geeks: ["${this.userService.getAGeek()}"], startYMD: ${s}, endYMD: ${e}) { geeks games { bggid tags name isExpansion } plays { game { bggid } quantity ymd } geekgames { bggid rating } } }`;
   }
 }
