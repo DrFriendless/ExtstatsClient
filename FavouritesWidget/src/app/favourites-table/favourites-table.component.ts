@@ -23,6 +23,7 @@ import {GameData} from "extstats-api";
 interface Row {
   bggid: number;
   name: string;
+  tags: string[] | undefined;
   rating: number;
   plays: number;
   bggRanking: number;
@@ -128,6 +129,7 @@ export class FavouritesTableComponent extends DataViewComponent<Result> {
       const row = {
         name: game.name,
         bggid: gg.bggid,
+        tags: gg.tags,
         rating: Math.floor(gg.rating * 100)/100,
         plays: gg.plays,
         bggRanking: game.bggRanking,

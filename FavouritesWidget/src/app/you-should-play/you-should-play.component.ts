@@ -60,6 +60,7 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
           bggid: gg.bggid,
           rating: gg.rating,
           plays: gg.plays,
+          tags: gg.tags,
           lastPlayed: toDateString(gg.lastPlay),
           shouldPlayScore: gg.shouldPlayScore,
           daysSincePlayed: gg.daysSincePlayed,
@@ -78,6 +79,7 @@ export class YouShouldPlayComponent extends DataViewComponent<Result> {
 interface Row {
   name: string;
   bggid: number;
+  tags: string[] | undefined;
   rating: number;
   plays: number;
   lastPlayed: string;
