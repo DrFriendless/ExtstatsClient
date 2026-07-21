@@ -8,7 +8,7 @@ import {
   DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, TaggedGame, UserConfigService, UserTagService} from "extstats-angular";
 
 interface RawRow {
   game : {
@@ -26,13 +26,12 @@ interface RawRow {
   wantToPlay: boolean;
   wantInTrade: boolean;
   preordered: boolean;
+  tags: string[] | undefined;
   wish: number;
 }
 
-interface Row {
-  bggid: number;
+interface Row extends TaggedGame {
   yearPublished: number;
-  name: string;
   bggRating: number;
   weight: number;
   bggRanking: number;
@@ -138,7 +137,7 @@ export class MostPlayedUnplayedComponent implements AfterViewInit {
     this.geek = this.userService.getAGeek();
     if (this.geek) {
       this.loading = true;
-      const data = await this.api.retrieve(`{mostplayedunplayed(geek: "${this.geek}", count: 50) { rating wantToBuy wantToPlay wantInTrade preordered wish game { bggid name minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as RawData;
+      const data = await this.api.retrieve(`{mostplayedunplayed(geek: "${this.geek}", count: 50) { rating wantToBuy wantToPlay wantInTrade preordered wish tags game { bggid name minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as RawData;
       this.processData(data);
       this.loading = false;
     }

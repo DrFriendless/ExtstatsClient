@@ -8,12 +8,10 @@ import {
   DataTableHead, RowContext,
 } from "extstats-datatable";
 import {ExtstatsApi} from "extstats-api";
-import {BoardGameLinkComponent, LoaderComponent, UserConfigService, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, LoaderComponent, TaggedGame, UserConfigService, UserTagService} from "extstats-angular";
 import {makeIndex} from "extstats-core";
 
-interface Row {
-  bggid: number;
-  name: string;
+interface Row extends TaggedGame {
   bggRating: number;
   weight: number;
   playTime: number;
@@ -114,7 +112,7 @@ export class ShameShelfComponent implements AfterViewInit {
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name playTime bggRating subdomain weight } " +
-      " geekGames { bggid wantToPlay } " +
+      " geekGames { bggid wantToPlay tags } " +
       "}}";
   }
 }

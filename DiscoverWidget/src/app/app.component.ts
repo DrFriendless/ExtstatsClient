@@ -27,6 +27,7 @@ export interface DataGeekGame {
   wantInTrade: boolean;
   wantToPlay: boolean;
   wantToBuy: boolean;
+  tags: string[] | undefined;
 }
 export interface RawData {
   geekgames: {
@@ -116,7 +117,7 @@ export class DiscoverWidget implements AfterViewInit {
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
       " games { bggid name bggRanking weight subdomain yearPublished minPlayers maxPlayers } " +
-      " geekGames { bggid rating wantInTrade wantToPlay wantToBuy } " +
+      " geekGames { bggid rating wantInTrade wantToPlay wantToBuy tags } " +
       "}}";
   }
 }

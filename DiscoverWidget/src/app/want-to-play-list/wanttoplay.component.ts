@@ -10,11 +10,9 @@ import {
   RowContext
 } from "extstats-datatable";
 import {Data} from "../app.component";
-import {BoardGameLinkComponent, UserTagService} from "extstats-angular";
+import {BoardGameLinkComponent, TaggedGame, UserTagService} from "extstats-angular";
 
-interface BuyListRow {
-  bggid: number;
-  name: string;
+interface BuyListRow extends TaggedGame {
   rating: number | undefined;
   yearPublished: number;
   playerCount: string;
