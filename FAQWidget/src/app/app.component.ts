@@ -1,12 +1,9 @@
 import {AfterViewInit, Component, OnDestroy} from '@angular/core';
 import { Subject } from "rxjs/internal/Subject";
 import { Subscription } from "rxjs/internal/Subscription";
-import { Observable } from "rxjs/internal/Observable";
-import { mergeMap, tap } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
-import { FAQCount } from "extstats-core";
+import { mergeMap } from "rxjs/operators";
 import { GeekComboComponent } from "extstats-angular";
-import {ExtstatsApi} from "extstats-api";
+import {ExtstatsApi, FAQCount} from "extstats-api";
 
 interface FAQ {
   index: number;
@@ -26,29 +23,25 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   public selected = 0;
   private clicks = new Subject<number[]>();
   private readonly subscription: Subscription;
-  private readonly faqSubscription: Subscription;
   public faqCounts: { [index: number]: FAQCount } = {};
   public faqs: FAQ[] = [];
   public geek: string | undefined;
 
-  constructor(private http: HttpClient, private api: ExtstatsApi) {
+  constructor(private api: ExtstatsApi) {
     this.subscription = this.clicks.asObservable().pipe(
       mergeMap(clix => this.api.incFAQCount(clix)))
       .subscribe(faqData => {
         this.indexFAQData(faqData as FAQCount[]);
       });
-    this.faqSubscription = (this.http.get("/json/en/doc/faqs.json") as Observable<object[]>).pipe(
-      tap(x => console.log(x)),
-    ).subscribe(faqs => this.faqs = faqs as FAQ[]);
   }
 
-  public ngAfterViewInit() {
+  public async ngAfterViewInit() {
+    this.faqs = await (await fetch("/json/en/doc/faqs.json")).json()
     this.clicks.next([]);
   }
 
   public ngOnDestroy() {
     if (this.subscription) this.subscription.unsubscribe();
-    if (this.faqSubscription) this.faqSubscription.unsubscribe();
   }
 
   private indexFAQData(faqData: FAQCount[]) {
