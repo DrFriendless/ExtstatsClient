@@ -1,17 +1,35 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {ExtstatsApi} from "extstats-api";
-import {LoaderComponent, SelectorComboComponent, TagGroup, UserConfigService, UserTagService} from "extstats-angular";
-import {TagChip} from "./tagchip/tagchip.component";
+import {
+  LoaderComponent,
+  SelectorComboComponent,
+  TagChip,
+  TagGroup,
+  UserConfigService,
+  UserTagService
+} from "extstats-angular";
 import {FormsModule} from "@angular/forms";
 
 interface Game {
-  bggid: number;
   name: string;
-  tags?: string[];
+}
+
+interface GeekGame {
+  tags: string[];
+  game: Game;
+  bggid: number;
+}
+
+interface DisplayGame {
+  name: string;
+  bggid: number;
+  tags: string[] | undefined;
 }
 
 interface QueryResult {
-  games: Game[];
+  geekgames: {
+    geekGames: GeekGame[]
+  }
 }
 
 @Component({
@@ -32,9 +50,8 @@ export class TagalogueWidget implements AfterViewInit {
   newtag: string = "";
   newname: string = "";
   loading: boolean = false;
-  tagsByGame: Record<string, string[]> = {};
-  gameData: Record<string, Game> = {}
-  rows: Game[] = [];
+  gameData: Record<string, DisplayGame> = {}
+  rows: DisplayGame[] = [];
   tagGroups: TagGroup[] = [];
   currentGroup: TagGroup | undefined;
   usedTags: Set<string> = new Set();
@@ -95,14 +112,16 @@ export class TagalogueWidget implements AfterViewInit {
   public async refresh() {
     this.loading = true;
     const d = await this.api.retrieve(this.buildQuery()) as QueryResult;
+    console.log(JSON.stringify(d));
+    const games = d.geekgames.geekGames;
     if (this.userService.isLoggedIn()) {
       await this.api.getPersonalData();
     }
     this.loading = false;
-    for (const g of d.games) {
-      this.gameData[g.bggid] = g;
+    for (const g of games) {
+      this.gameData[g.bggid] = { tags: g.tags, bggid: g.bggid, name: g.game.name };
     }
-    const rs = [...d.games];
+    const rs = [...Object.values(this.gameData)];
     rs.sort((g1, g2) => (g1.name < g2.name) ? -1 : (g1.name > g2.name) ? 1 : 0);
     this.rows = rs;
     if (this.userService.isLoggedIn()) await this.refreshUserData();
@@ -113,16 +132,17 @@ export class TagalogueWidget implements AfterViewInit {
 
   async refreshUserData() {
     this.tagService.refresh();
-    this.tagsByGame = await this.userService.get("tagalogue.tagsbygame", {}) || {};
     this.tagGroups = this.tagService.getTagGroups();
     this.recompute();
   }
 
   private recompute() {
     const used = new Set<string>();
-    for (const tags of Object.values(this.tagsByGame)) {
-      for (const t of tags) {
-        used.add(t);
+    for (const row of this.rows) {
+      if (row.tags) {
+        for (const t of row.tags) {
+          used.add(t);
+        }
       }
     }
     this.usedTags = used;
@@ -144,11 +164,11 @@ export class TagalogueWidget implements AfterViewInit {
     }
   }
 
-  async onClick(tag: string, game: string, present: boolean) {
+  async onAdd(tag: string, game: DisplayGame, present: boolean) {
     if (present) {
-      await this.userService.removeTagAndSave(game, tag);
+      game.tags = await this.tagService.removeTagAndSave(game.bggid, tag);
     } else {
-      await this.userService.addTagAndSave(game, tag);
+      game.tags = await this.tagService.addTagAndSave(game.bggid, tag);
     }
     this.recompute();
   }
@@ -170,7 +190,9 @@ export class TagalogueWidget implements AfterViewInit {
   }
 
   protected buildQuery(): string {
-    return `{games(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getLoggedInGeek()}"}]) { name bggid } }`;
+    const geek = this.userService.getLoggedInGeek();
+    return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${geek}"}]) {` +
+      " geekGames { bggid tags game { name }}}}";
   }
 
   protected readonly Object = Object;

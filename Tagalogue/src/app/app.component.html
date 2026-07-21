@@ -15,7 +15,7 @@
     </p>
     <p>
       The Tagalogue is not the place for seeing a nice list of all games with a particular tag.
-      That functionality, along with better support for selectors, will come in a future page called the Catalist.
+      That functionality, along with better support for selectors, is in the Catalist.
     </p>
     @if (loggedIn) {
       <selector-combo (selectorChosen)="onSelectorChosen($event)"></selector-combo>
@@ -75,14 +75,14 @@
       <thead></thead>
       <tbody class="tag-table">
         @for (row of rows; track row.bggid) {
-          @let tags = tagsByGame[row.bggid.toString()] || [];
+          @let tags = row.tags || [];
           <tr>
             <td class="col-game-name">{{row.name}}</td>
             <td>
               @let allTags = currentGroup?.tags || [];
               @for (tag of allTags; track tag) {
                 @let present = tags.indexOf(tag) >= 0;
-                <tagchip [value]="tag" [present]="present" [removable]="false" (click)="onClick(tag, row.bggid.toString(), present)"/>
+                <tagchip [value]="tag" [present]="present" [removable]="false" (add)="onAdd(tag, row, present)"/>
               }
             </td>
           </tr>
