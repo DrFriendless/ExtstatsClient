@@ -7,22 +7,20 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/core": "^20.3.6",
-    "@angular/platform-browser": "^20.3.6",
-    "@ng-bootstrap/ng-bootstrap": "^19.0.1",
-    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.3.15.tgz",
-    "extstats-api": "file:/home/john/projects/repo/extstats-api-3.0.2.tgz",
-    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.5.tgz",
+    "@angular/core": "v21-lts",
+    "@angular/platform-browser": "v21-lts",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.5.4.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-3.0.10.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.6.tgz",
     "extstats-datatable": "file:/home/john/projects/repo/extstats-datatable-4.4.0.tgz",
-    "@angular-slider/ngx-slider": "^20.0.0",
     "ngx-bootstrap": "20.0.2",
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.6",
-    "@angular/cli": "^20.3.6",
-    "@angular/compiler-cli": "^20.3.6",
-    "@types/node": "^24.7.1",
+    "@angular-devkit/build-angular": "v21-lts",
+    "@angular/cli": "v21-lts",
+    "@angular/compiler-cli": "v21-lts",
+    "@types/node": "^26.1.1",
     "ts-node": "~10.9.2",
     "typescript": "~5.9.3"
   }

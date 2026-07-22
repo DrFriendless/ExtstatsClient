@@ -46,9 +46,10 @@ export class ArgEditorComponent {
   designer: Signal<DesignerComboComponent | undefined> = viewChild('designer');
   year: Signal<YearPickerComponent | undefined> = viewChild('year');
   publisher: Signal<PublisherComboComponent | undefined> = viewChild('publisher');
-  metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [] });
+  metadata = input<CatalistMetadata>({ categories: [], mechanics: [], tags: [], taggroups: [] });
   value = input<ParamType | undefined>(undefined);
   tags = model<string | undefined>();
+  taggroups = model<string | undefined>();
   categories = model<string | undefined>();
   mechanics = model<string | undefined>();
   ids = model<string | undefined>();
@@ -91,6 +92,10 @@ export class ArgEditorComponent {
             if (v.value) this.tags.set(v.value);
             break;
           }
+          case "TAGGROUP": {
+            if (v.value) this.taggroups.set(v.value);
+            break;
+          }
           case "GAME_IDS": {
             if (v.value) this.ids.set(v.value.join(","));
             break;
@@ -131,6 +136,11 @@ export class ArgEditorComponent {
       const t = this.tags();
       const p = untracked(this.position);
       if (t && p) this.changes.emit({...p, value: { type: "TAG", value: t }});
+    });
+    effect(() => {
+      const t = this.taggroups();
+      const p = untracked(this.position);
+      if (t && p) this.changes.emit({...p, value: { type: "TAGGROUP", value: t }});
     });
     effect(() => {
       const t = this.categories();

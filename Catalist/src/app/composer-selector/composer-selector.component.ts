@@ -15,7 +15,7 @@ import {CatalistComposerComponent} from "../composer/composer.component";
 })
 export class ComposerSelectorComponent {
   selector = input<Selector | undefined>();
-  metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [] });
+  metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [], taggroups: [] });
   insertionPoint = input<ValuePosition | undefined>();
 
   constructor(private parent: CatalistComposerComponent) {

@@ -19,7 +19,7 @@ import {IdService} from "../id.service";
 export class CatalistComposerComponent {
   name = model<string>("");
   store = input<StoredSelector[]>([]);
-  metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [] });
+  metadata = input<CatalistMetadata>({ mechanics: [], categories: [], tags: [], taggroups: [] });
   run = output<string>();
   save = output<StoredSelector>();
   runnable = computed(() => {

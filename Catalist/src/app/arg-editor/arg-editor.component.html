@@ -52,4 +52,13 @@
       }
     }
   </select>
+} @else if (at === "TAGGROUP") {
+  <select id="taggroup" name="taggroups" [(ngModel)]="taggroups">
+    @let meta = metadata();
+    @if (meta) {
+      @for (entry of meta.taggroups; track entry) {
+        <option value="{{entry}}">{{entry}}</option>
+      }
+    }
+  </select>
 }

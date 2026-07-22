@@ -84,6 +84,11 @@ function argToParamType(arg: { 0: ARG_TYPE, 1: Arg}): ParamType | undefined {
           const noQuotes = u.slice(1, u.length - 1);
           return { type: "TAG", value: noQuotes };
         }
+        case "TAGGROUP": {
+          const u = (arg[1] as StringValue).value;
+          const noQuotes = u.slice(1, u.length - 1);
+          return { type: "TAGGROUP", value: noQuotes };
+        }
         case "USER": {
           const u = (arg[1] as StringValue).value;
           const noQuotes = u.slice(1, u.length - 1);

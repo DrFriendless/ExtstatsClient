@@ -16,6 +16,7 @@ import {
 interface Row {
   bggid: number;
   name: string;
+  tags: string[] | undefined;
 }
 
 @Component({

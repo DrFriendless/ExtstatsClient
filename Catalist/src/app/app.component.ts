@@ -14,6 +14,7 @@ interface RetrieveResult {
   games: {
     bggid: number;
     name: string;
+    tags: string[] | undefined;
   }[];
 }
 
@@ -38,7 +39,7 @@ export class CatalistWidget implements AfterViewInit {
   loading = signal<boolean>(false);
   loggedIn = false;
   showDeployment = false;
-  metadata: WritableSignal<CatalistMetadata> = signal({ tags: [], mechanics: [], categories: [] });
+  metadata: WritableSignal<CatalistMetadata> = signal({ tags: [], mechanics: [], categories: [], taggroups: [] });
   storeData: WritableSignal<StoredSelector[]> = signal([]);
   composer = viewChild<CatalistComposerComponent>('composer');
   results = viewChild<RunResultsComponent>('results');
@@ -85,7 +86,7 @@ export class CatalistWidget implements AfterViewInit {
 
   async run(selector: string) {
     const s = selector.replaceAll('"', '\\"');
-    const query = `{games(selector: "${s}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) { bggid name } }`;
+    const query = `{games(selector: "${s}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) { bggid name tags } }`;
     this.loading.set(true);
     const data = await this.api.retrieve(query) as RetrieveResult;
     if (data && data.games) {
