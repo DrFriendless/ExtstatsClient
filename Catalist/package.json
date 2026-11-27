@@ -9,9 +9,9 @@
   "dependencies": {
     "@angular/core": "v21-lts",
     "@angular/platform-browser": "v21-lts",
-    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.5.4.tgz",
-    "extstats-api": "file:/home/john/projects/repo/extstats-api-3.0.10.tgz",
-    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.6.tgz",
+    "extstats-angular": "file:/home/john/projects/repo/extstats-angular-9.6.0.tgz",
+    "extstats-api": "file:/home/john/projects/repo/extstats-api-3.1.2.tgz",
+    "extstats-core": "file:/home/john/projects/repo/extstats-core-2.0.8.tgz",
     "extstats-datatable": "file:/home/john/projects/repo/extstats-datatable-4.4.0.tgz",
     "ngx-bootstrap": "20.0.2",
     "zone.js": "^0.15.1"
