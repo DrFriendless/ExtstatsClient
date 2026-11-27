@@ -39,7 +39,7 @@
                   @for (game of designer.games; track game.bggid) {
                     <tr class="designer-games">
                       <td class="designer-game">
-                        <boardgame [game]="game" [allTags]="allTags" [tagsForGame]="userService.getTagsForGame(game.bggid)"/>
+                        <boardgame [game]="game" [allTags]="allTags"/>
                       </td>
                       <td class="col-bool">
                         @if (game.owned) {

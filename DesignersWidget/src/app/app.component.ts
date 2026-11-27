@@ -40,6 +40,7 @@ export class DesignersWidget implements AfterViewInit {
     if (geek) {
       this.loading.set(true);
       const data = await this.api.getDesignerInfo(geek);
+      console.log(JSON.stringify(data));
       data.forEach(designer => {
         if (designer.games && designer.games.length > 1) {
           designer.games.sort((g1, g2) => g1.bggid - g2.bggid);

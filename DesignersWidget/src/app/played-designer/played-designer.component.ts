@@ -171,13 +171,14 @@ export class PlayedByDesignerWidget implements AfterViewInit {
     const geek = this.userService.getAGeek();
     if (geek) {
       this.loading.set(true);
-      this.rawData.set(await this.api.retrieve(this.buildQuery()) as RawData);
+      const d = await this.api.retrieve(this.buildQuery()) as RawData;
+      this.rawData.set(d);
       this.loading.set(false);
     }
   }
 
   protected buildQuery(): string {
     return `{geekgames(selector: "${this.selector}", vars: [{name: "ME", value: "${this.userService.getAGeek()}"}]) {` +
-      " geekGames { rating plays game { isExpansion bggid name designers { bggid name } } } } }";
+      " geekGames { rating plays tags game { isExpansion bggid name designers { bggid name } } } } }";
   }
 }
