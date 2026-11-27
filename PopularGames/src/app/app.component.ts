@@ -26,6 +26,7 @@ interface Row {
     maxPlayers: number;
     nickels: number;
     dimes: number;
+    tags: string[];
 }
 
 interface RawRow {
@@ -38,6 +39,7 @@ interface RawRow {
     weight: number;
     minPlayers: number;
     maxPlayers: number;
+    tags: string[];
   };
   nickels: number;
   dimes: number;
@@ -110,8 +112,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
   private async refresh() {
       this.loading = true;
-      const data = await this.api.retrieve(`{mostnickelsanddimes(count: 100) { nickels dimes game { bggid name minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as RawData;
-      this.rows = data.mostnickelsanddimes.map(rr => { return { ...rr, ...rr.game } });
+      const data = await this.api.retrieve(`{mostnickelsanddimes(count: 100) { nickels dimes game { bggid name tags minPlayers maxPlayers yearPublished bggRanking bggRating weight } } }`) as RawData;
+      this.rows = data.mostnickelsanddimes.map(rr => { return { ...rr.game, ...rr } });
       this.loading = false;
   }
 
