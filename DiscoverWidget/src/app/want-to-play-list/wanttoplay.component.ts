@@ -82,7 +82,8 @@ export class WanttoplayComponent implements OnDestroy, AfterViewInit {
         yearPublished: g.yearPublished,
         playerCount: (g.minPlayers === g.maxPlayers) ? g.minPlayers.toString() : `${g.minPlayers}-${g.maxPlayers}`,
         subdomain: g.subdomain,
-        weight: g.weight ? Math.round(g.weight * 100)/100 : undefined
+        weight: g.weight ? Math.round(g.weight * 100)/100 : undefined,
+        tags: gg.tags
       } as BuyListRow;
     })
   }
