@@ -1,9 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { PlaysViewComponent } from "extstats-angular";
-import { makeGamesIndex } from "extstats-core";
 // @ts-ignore
 import embed, { VisualizationSpec } from "vega-embed";
-import { HasYMD, PlaysData, Result } from "../app.component"
+import {GameData, HasYMD, PlaysData, Result} from "../app.component"
+import { makeIndex} from "extstats-core";
 
 @Component({
   selector: 'new-plays',
@@ -31,7 +31,7 @@ export class NewPlaysComponent extends PlaysViewComponent<Result> {
     if (!data || !data.games) return;
     const firstPlays: ChartPlay[] = [];
     const alreadyPlayedByGeek: { [geek: string]: number[] } = {};
-    const gamesIndex = makeGamesIndex(data.games);
+    const gamesIndex: Record<string, GameData> = makeIndex(data.games);
     for (const geek of data.geeks) {
       const plays = data.plays.filter(p => p.geek === geek);
       if (!alreadyPlayedByGeek[geek]) alreadyPlayedByGeek[geek] = [];

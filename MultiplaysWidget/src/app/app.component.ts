@@ -3,14 +3,13 @@ import {
   GeekChipsComponent,
   GeekComboComponent,
   GraphQuerySourceComponent,
-  LoaderComponent,
-  UserDataService
+  LoaderComponent, UserConfigService
 } from "extstats-angular"
 import { HttpParams } from "@angular/common/http";
-import { GameData } from "extstats-core"
 import {ExtstatsApi} from "extstats-api";
 import {NewPlaysComponent} from "./new-plays/new-plays.component";
 import {window} from "ngx-bootstrap/utils";
+import {HasBGGID} from "extstats-core";
 
 export interface HasYMD {
   ymd: number;
@@ -21,6 +20,9 @@ export interface PlayData extends HasYMD {
   year?: number;
   month?: number;
   date?: number;
+}
+export interface GameData extends HasBGGID {
+  name: string;
 }
 export interface PlaysData {
   games: GameData[];
@@ -45,7 +47,7 @@ export class MultiplaysWidget extends GraphQuerySourceComponent<Result> implemen
   @ViewChild('chips') chips!: GeekChipsComponent;
   public geeks: string[] = [];
 
-  constructor(api: ExtstatsApi, private userDataService: UserDataService) {
+  constructor(api: ExtstatsApi, private userService: UserConfigService) {
     super(api);
   }
 
@@ -66,7 +68,7 @@ export class MultiplaysWidget extends GraphQuerySourceComponent<Result> implemen
       const geeks = this.geeks.map(g => `"${g}"`).join(", ");
       return `{plays(geeks: [${geeks}], first: true) { geeks games { bggid name } plays { game { bggid } ymd geek } } }`;
     } else {
-      const geek = this.userDataService.getAGeek();
+      const geek = this.userService.getAGeek();
       if (geek) {
         const geeks = `"${geek}"`;
         return `{plays(geeks: [${geeks}], first: true) { geeks games { bggid name } plays { game { bggid } ymd geek } } }`;
